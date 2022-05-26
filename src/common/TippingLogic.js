@@ -2,7 +2,8 @@ import WalletConnectProvider from "@walletconnect/web3-provider/dist/umd/index.m
 import {CoinbaseWalletProvider} from "@depay/coinbase-wallet-sdk"
 import Web3 from "web3/dist/web3.min.js";
 let oracleAddress=[];
-
+let token = "ETH"//tmp
+let message = "Test"//tmp
 let abiTippingContract = [{
     "anonymous": false,
     "inputs": [{
@@ -270,9 +271,9 @@ export const TippingLogic = {
             contract = await this.loadTippingPolygon(web3);
             let oracle = await this.loadOracle("") // token ticker selected
             // Get value of transaction in wei -> amount
-            priceSt = await this.getPrice(oracle);
-            amount = await this.getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
-
+            // priceSt = await this.getPrice(oracle);
+            // amount = await this.getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
+amount=1
         } else if (network === "ETH") {
             try {
                 await switchtoeth();
@@ -309,7 +310,7 @@ export const TippingLogic = {
 
         // exchanged for redundant multiple get accounts calls
         const accounts = await web3.eth.getAccounts();
-        selectedAccount = accounts[0];
+        let selectedAccount = accounts[0];
 
         // owner account
         console.log(selectedAccount)
@@ -320,8 +321,8 @@ export const TippingLogic = {
             try {
                 // Actual contract call
                 // Spinner showing that plugin is waiting for approval or waiting for txn to go through
-                document.getElementById('Spinner2').style.display = "";
-                document.getElementById('displaySwitch').style.display = "none";
+                //document.getElementById('Spinner2').style.display = "";
+                //document.getElementById('displaySwitch').style.display = "none";
                 // network is the network chosen in plugin popup
                 if (network === "Polygon" && polygonGas) {
                     // check for approval, then send txn
