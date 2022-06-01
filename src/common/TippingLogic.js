@@ -1,9 +1,16 @@
 import WalletConnectProvider from "@walletconnect/web3-provider/dist/umd/index.min.js";
 import {CoinbaseWalletProvider} from "@depay/coinbase-wallet-sdk"
 import Web3 from "web3/dist/web3.min.js";
-let oracleAddress=[];
-let token = "ETH"//tmp
-let message = "Test"//tmp
+
+let oracleAddress = {
+    "ETH": "0xf9680d99d6c9589e2a93a78a04a279e509205945",
+    "BNB": "0x82a6c4af830caa6c97bb504425f6a66165c2c26e",
+    "MATIC": "0xab594600376ec9fd91f8e885dadf0ce036862de0",
+    "USDC": "0xfe4a8cc5b5b2366c1b58bea3858e81843581b2f7",
+    "USDT": "0x0a6513e40db6eb1b165753ad52e80663aea50545",
+    "DAI": "0x4746dec9e833a82ec7c2c1356372ccf2cfcd2f3d"
+};
+
 let abiTippingContract = [{
     "anonymous": false,
     "inputs": [{
@@ -21,7 +28,12 @@ let abiTippingContract = [{
         "internalType": "address",
         "name": "recipientAddress",
         "type": "address"
-    }, {"indexed": false, "internalType": "string", "name": "message", "type": "string"}],
+    }, {"indexed": false, "internalType": "string", "name": "message", "type": "string"}, {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+    }],
     "name": "TipMessage",
     "type": "event"
 }, {
@@ -61,11 +73,11 @@ let abiTippingContract = [{
         "type": "string"
     }], "name": "sendTo", "outputs": [], "stateMutability": "payable", "type": "function"
 }, {
-    "inputs": [{"internalType": "uint256", "name": "amount_", "type": "uint256"}, {
-        "internalType": "address",
-        "name": "tokenContractAddr_",
-        "type": "address"
-    }, {"internalType": "address", "name": "recipient_", "type": "address"}, {
+    "inputs": [{"internalType": "address", "name": "recipient_", "type": "address"}, {
+        "internalType": "uint256",
+        "name": "amount_",
+        "type": "uint256"
+    }, {"internalType": "address", "name": "tokenContractAddr_", "type": "address"}, {
         "internalType": "string",
         "name": "message_",
         "type": "string"
@@ -90,8 +102,8 @@ let abiTippingContract = [{
     "type": "function"
 }]
 let tippingAddressETH = "";
-let tippingAddressPolygon = "";
-let tippingAddressBSC = "";
+let tippingAddressPolygon = "0xA0665e585038f94CD7092611318326102dCf5B5a";
+let tippingAddressBSC = "0x6f0094d82f4FaC3E974174a21Aa795B6F10d28C7";
 
 
 export const TippingLogic = {
@@ -243,7 +255,7 @@ export const TippingLogic = {
             return false
         }
     },
-    async sendTip(recipient, tippingValue, network) {
+    async sendTip(recipient, tippingValue, network, token, message) {
         let contract;
         let priceSt;
         let amount;
@@ -269,24 +281,24 @@ export const TippingLogic = {
             }
             debugger;
             contract = await this.loadTippingPolygon(web3);
-            let oracle = await this.loadOracle("") // token ticker selected
+            let oracle = await this.loadOracle(network) // token ticker selected
             // Get value of transaction in wei -> amount
-            // priceSt = await this.getPrice(oracle);
-            // amount = await this.getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
-amount=1
+            let {price: priceSt, decimals} = await this.getPrice(oracle);
+            amount = await this.getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
+            //amount = 1
         } else if (network === "ETH") {
             try {
-                await switchtoeth();
+                await this.switchtoeth();
             } catch (e) {
                 if (e != "network1") {
                     return e
                 }
             }
-            contract = await loadTippingETH(web3);
-            oracle = await loadOracle("") // token ticker selected
+            contract = await this.loadTippingETH(web3);
+            let oracle = await this.loadOracle(network) // token ticker selected
             // Get value of transaction in wei -> amount
-            priceSt = await getPrice(orcale);
-            amount = await getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
+            let {price: priceSt, decimals} = await this.getPrice(oracle);
+            amount = await this.getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
 
             await fetch('https://gasstation-mainnet.matic.network/v2')
                 .then(response => response.json())
@@ -294,18 +306,18 @@ amount=1
 
         } else {
             try {
-                await switchtobsc();
+                await this.switchtobsc();
             } catch (e) {
                 console.log("Cought error: ", e)
                 if (e != "network1") {
                     return e
                 }
             }
-            contract = await loadTippingBSC(web3);
-            oracle = await loadOracle("") // token ticker selected
+            contract = await this.loadTippingBSC(web3);
+            let oracle = await this.loadOracle(network) // token ticker selected
             // Get value of transaction in wei -> amount
-            priceSt = await getPrice(orcale);
-            amount = await getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
+            let {price: priceSt, decimals} = await this.getPrice(oracle);
+            amount = await this.getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
         }
 
         // exchanged for redundant multiple get accounts calls
@@ -372,38 +384,42 @@ amount=1
                         }
                     }
                 }
-                document.getElementById('Spinner2').style.display = "none";
+                //document.getElementById('Spinner2').style.display = "none";
             } catch (err) {
-                document.getElementById('Spinner2').style.display = "none";
+                //document.getElementById('Spinner2').style.display = "none";
                 console.log("error", err)
                 // Transaction failed or user has denied
                 // catch different errors?
                 // code 4001 user denied
-                console.log("Transaction denied.");
-                ret = "transaction-error"
+                if (err.code == 4001) {
+                    console.log("Transaction denied.");
+                    return false;
+                } else {
+                    throw err;
+                }
             }
+            return true;
         }
     },
     async switchtopolygon() {
-        debugger;
-        const web3 = new Web3(this.provider);
+        //const web3 = new Web3(this.provider);
 
         //  rpc method?
         console.log("Checking chain...")
-        const chainId = await web3.eth.getChainId();
+        const chainId = await this.web3.eth.getChainId();
         console.log(chainId);
 
         // check if correct chain is connected
         console.log("Connected to chain ", chainId)
         if (chainId != 137) {
-            displaySwitch();
+            //displaySwitch();
             console.log("Switch to Polygon requested")
             try {
-                await provider.request({
+                await this.provider.request({
                     method: 'wallet_switchEthereumChain',
                     params: [{chainId: '0x89'}],
                 });
-                document.getElementById("displaySwitch").style.display = "none";
+                //document.getElementById("displaySwitch").style.display = "none";
             } catch (switchError) {
                 if (switchError.message === "JSON RPC response format is invalid") {
                     throw "network1"
@@ -411,7 +427,7 @@ amount=1
                 // This error code indicates that the chain has not been added to MetaMask.
                 if (switchError.code === 4902) {
                     try {
-                        await provider.request({
+                        await this.provider.request({
                             method: 'wallet_addEthereumChain',
                             params: [{
                                 chainId: '0x89',
@@ -427,6 +443,91 @@ amount=1
                 console.log("Please switch to Polygon network.");
                 // disable continue buttons here
                 token = "MATIC";
+                throw "network"
+            }
+        }
+    },
+    async switchtoeth() {
+        //  rpc method?
+        console.log("Checking chain...")
+        const chainId = await this.web3.eth.getChainId();
+        console.log(chainId);
+
+        // check if correct chain is connected
+        console.log("Connected to chain ", chainId)
+        if (chainId != 1) {
+            //displaySwitch();
+            console.log("Switch to Ethereum Mainnet requested")
+            try {
+                await this.provider.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{chainId: '0x1'}],
+                });
+                //document.getElementById("displaySwitch").style.display = "none";
+            } catch (switchError) {
+                if (switchError.message === "JSON RPC response format is invalid") {
+                    throw "network1"
+                }
+                // This error code indicates that the chain has not been added to MetaMask.
+                if (switchError.code === 4902) {
+                    try {
+                        await this.provider.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [{
+                                chainId: '0x1',
+                                chainName: 'Ethereum Mainnet',
+                                rpcUrls: ['https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161']
+                            }],
+                        });
+                    } catch (addError) {
+                        alert("Please add Ethereum network to continue.");
+                    }
+                }
+                console.log("Please switch to Ethereum Mainnet.");
+                // disable continue buttons here or throw error
+                //token = "ETH";
+                throw "network"
+            }
+        }
+    },
+    async switchtobsc() {
+
+        //  rpc method?
+        console.log("Checking chain...")
+        const chainId = await this.web3.eth.getChainId();
+        console.log(chainId);
+
+        // check if correct chain is connected
+        console.log("Connected to chain ", chainId)
+        if (chainId != 56) {
+            //displaySwitch();
+            console.log("Switch to BSC requested")
+            //displaySwitch();
+            try {
+                await this.provider.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x38' }],
+                });
+
+                document.getElementById("displaySwitch").style.display = "none";
+            } catch (switchError) {
+                if (switchError.message === "JSON RPC response format is invalid") {
+                    throw "network1"
+                }
+                // This error code indicates that the chain has not been added to MetaMask.
+                if (switchError.code === 4902) {
+                    try {
+                        await this.provider.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [{ chainId: '0x38', chainName: 'BSC', rpcUrls: ['https://bsc-dataseed.binance.org/'], nativeCurrency: {name: 'BNB', symbol: 'BNB', decimals: 18}}],
+                        });
+                    } catch (addError) {
+                        alert("Please add Binance Smart Chain to continue.");
+                    }
+                }
+                console.log("Please switch to BSC.");
+                // disable continue buttons here
+                //token = "BNB";
                 throw "network"
             }
         }
@@ -664,15 +765,23 @@ amount=1
         }]
         return await new this.web3.eth.Contract(abiOracle, oracleAddress[ticker]); // addresses TBD
     },
-    async loadTippingPolygon(web3) {
+    async loadTippingPolygon() {
         return await new this.web3.eth.Contract(abiTippingContract, tippingAddressPolygon);
+    },
+    async loadTippingETH() {
+        return await new this.web3.eth.Contract(abiTippingContract, tippingAddressETH);
+    },
+    async loadTippingBSC() {
+        return await new this.web3.eth.Contract(abiTippingContract, tippingAddressBSC);
     },
     // calculate price in USD
     async getPrice(oracleContract) {
-        return await oracleContract.methods.latestAnswer().call() / Math.pow(10, oracleContract.methods.decimals().call())
+        let latestAnswer = oracleContract.methods.latestAnswer().call();
+        let decimals = oracleContract.methods.decimals().call();
+        return {price: await latestAnswer / Math.pow(10, await decimals), decimals: await decimals}
     },
     // calculate price in wei (amount needed to send tip)
     async getAmount(tippingValue, tokenPrice, decimals) {
-        return Math.round((tippingValue / tokenPrice)*Math.pow(10, decimals))
+        return Math.round((tippingValue / tokenPrice) * Math.pow(10, decimals))
     }
 }
