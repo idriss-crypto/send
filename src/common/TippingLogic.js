@@ -279,7 +279,6 @@ export const TippingLogic = {
                     //   return e
                 }
             }
-            debugger;
             contract = await this.loadTippingPolygon(web3);
             let oracle = await this.loadOracle(network) // token ticker selected
             // Get value of transaction in wei -> amount
@@ -355,13 +354,13 @@ export const TippingLogic = {
                             gasPrice: polygonGas
                         });
                     } else {
-                        if (checkApproval(tokenContractAddr, amount, network)) {
+                        if (await this.checkApproval(tokenContractAddr, amount, network)) {
                             payment = await contract.methods.sendTokenTo(amount, tokenContractAddr, recipient, message).send({
                                 from: selectedAccount,
                                 gasPrice: polygonGas
                             });
                         } else {
-                            approval = await getApproval(tokenContractAddr, network)
+                            let approval = await this.getApproval(tokenContractAddr, network)
                             payment = await contract.methods.sendTokenTo(amount, tokenContractAddr, recipient, message).send({
                                 from: selectedAccount,
                                 gasPrice: polygonGas
@@ -376,10 +375,10 @@ export const TippingLogic = {
                             value: amount
                         });
                     } else {
-                        if (checkApproval(tokenContractAddr, amount, network)) {
+                        if (await this.checkApproval(tokenContractAddr, amount, network)) {
                             payment = await contract.methods.sendTokenTo(amount, tokenContractAddr, recipient, message).send({from: selectedAccount});
                         } else {
-                            approval = await getApproval(tokenContractAddr, network)
+                            let approval = await this.getApproval(tokenContractAddr, network)
                             payment = await contract.methods.sendTokenTo(amount, tokenContractAddr, recipient, message).send({from: selectedAccount});
                         }
                     }
@@ -442,7 +441,6 @@ export const TippingLogic = {
                 }
                 console.log("Please switch to Polygon network.");
                 // disable continue buttons here
-                token = "MATIC";
                 throw "network"
             }
         }
@@ -506,7 +504,7 @@ export const TippingLogic = {
             try {
                 await this.provider.request({
                     method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x38' }],
+                    params: [{chainId: '0x38'}],
                 });
 
                 document.getElementById("displaySwitch").style.display = "none";
@@ -519,7 +517,12 @@ export const TippingLogic = {
                     try {
                         await this.provider.request({
                             method: 'wallet_addEthereumChain',
-                            params: [{ chainId: '0x38', chainName: 'BSC', rpcUrls: ['https://bsc-dataseed.binance.org/'], nativeCurrency: {name: 'BNB', symbol: 'BNB', decimals: 18}}],
+                            params: [{
+                                chainId: '0x38',
+                                chainName: 'BSC',
+                                rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                                nativeCurrency: {name: 'BNB', symbol: 'BNB', decimals: 18}
+                            }],
                         });
                     } catch (addError) {
                         alert("Please add Binance Smart Chain to continue.");
@@ -531,6 +534,25 @@ export const TippingLogic = {
                 throw "network"
             }
         }
+    },
+    async checkApproval(tokenContractAddr_, amount_, network_) {
+        if (network_ === "Polygon") {
+            await this.switchtopolygon();
+            let tokenContract = await this.loadTokenContract(tokenContractAddr_)
+            let allowance = await tokenContract.methods.allowance(tippingAddressPolygon).call()
+            return allowance >= amount_
+        } else if (network_ === "ETH") {
+            await this.switchtoeth();
+            let tokenContract = await this.loadTokenContract(tokenContractAddr_)
+            let allowance = await tokenContract.methods.allowance(tippingAddressETH).call()
+            return allowance >= amount_
+        } else if (network_ === "BSC") {
+            await this.switchtobsc();
+            let tokenContract = await this.loadTokenContract(tokenContractAddr_)
+            let allowance = await tokenContract.methods.allowance(tippingAddressBSC).call()
+            return allowance >= amount_
+        }
+        return false
     },
     // load oracle price data
     async loadOracle(ticker) {
@@ -783,5 +805,50 @@ export const TippingLogic = {
     // calculate price in wei (amount needed to send tip)
     async getAmount(tippingValue, tokenPrice, decimals) {
         return Math.round((tippingValue / tokenPrice) * Math.pow(10, decimals))
+    },
+    async loadTokenContract(tokenContractAddr_) {
+        let abiERC20 = [{
+            "constant": false,
+            "inputs": [{"name": "_spender", "type": "address"}, {"name": "_value", "type": "uint256"}],
+            "name": "approve",
+            "outputs": [{"name": "", "type": "bool"}],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }, {
+            "constant": true,
+            "inputs": [{"name": "_owner", "type": "address"}],
+            "name": "balanceOf",
+            "outputs": [{"name": "balance", "type": "uint256"}],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        }, {
+            "constant": true,
+            "inputs": [{"name": "_owner", "type": "address"}, {"name": "_spender", "type": "address"}],
+            "name": "allowance",
+            "outputs": [{"name": "", "type": "uint256"}],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        }]
+        return await new this.web3.eth.Contract(abiERC20, tokenContractAddr_);
+    },
+    async getApproval(tokenContractAddr_, network_) {
+        var approveAmount = Math.pow(2, 255);
+
+        if (network_ === "Polygon") {
+            await this.switchtopolygon();
+            let tokenContract = await this.loadTokenContract(tokenContractAddr_)
+            await tokenContract.methods.approve(tippingAddressPolygon, approveAmount).send({from: selectedAccount})
+        } else if (network_ === "ETH") {
+            await this.switchtoeth();
+            let tokenContract = await this.loadTokenContract(tokenContractAddr_)
+            await tokenContract.methods.approve(tippingAddressETH, approveAmount).send({from: selectedAccount})
+        } else if (network_ === "BSC") {
+            await this.switchtobsc();
+            let tokenContract = await this.loadTokenContract(tokenContractAddr_)
+            await tokenContract.methods.approve(tippingAddressBSC, approveAmount).send({from: selectedAccount})
+        }
     }
 }
