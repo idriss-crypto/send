@@ -108,11 +108,12 @@ let tippingAddressBSC = "0x6f0094d82f4FaC3E974174a21Aa795B6F10d28C7";
 
 export const TippingLogic = {
     provider: null,
-    async prepareTip(provider) {
+    async prepareTip(provider, network) {
         console.log('prepareTip')
         this.provider = provider;
         const web3 = new Web3(this.provider);
         this.web3 = web3;
+        await this.switchNetwork(network)
     },
     tallyOpts: {"custom-tally": {
             display: {
@@ -222,13 +223,44 @@ export const TippingLogic = {
             ...this.tallyOpts
         }
     },
-    async calculateAmount(network, tippingValue) {
-        let oracle = await this.loadOracle(network) // token ticker selected
+    async calculateAmount(ticker, tippingValue) {
+        let oracle = await this.loadOracle(ticker) // token ticker selected
         let {price: priceSt, decimals} = await this.getPrice(oracle);
         let integer = this.getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
         let normal = integer / Math.pow(10, decimals) // tippingValue selected in popup, decimals specified in json for token
         return {integer, normal}
     },
+    async switchNetwork(network){
+        if (network === "MATIC") {
+            try {
+                await this.switchtopolygon();
+            } catch (e) {
+                if (e != "network1") {
+                    throw e
+                }
+            }
+        } else if (network === "ETH") {
+            try {
+                await this.switchtoeth();
+            } catch (e) {
+                if (e != "network1") {
+                    throw e
+                }
+            }
+
+        } else if (network === "BSC") {
+            try {
+                await this.switchtobsc();
+            } catch (e) {
+                if (e != "network1") {
+                    throw e
+                }
+            }
+        } else {
+            return false;
+        }
+    },
+
     async sendTip(recipient, amount, network, token, message) {
         let contract;
         let polygonGas;

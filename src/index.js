@@ -27,11 +27,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     popup.append((new TippingWaitingConfirmation(params.get('identifier'), +params.get('tippingValue'), params.get('token'))).html)
     popup.classList.add('tipping-popup');
 
-    await TippingLogic.prepareTip(provider)
+    await TippingLogic.prepareTip(provider, params.get('network'))
     let {
         integer: amountInteger,
         normal: amountNormal
-    } = await TippingLogic.calculateAmount(params.get('network'), +params.get('tippingValue'))
+    } = await TippingLogic.calculateAmount(params.get('token'), +params.get('tippingValue'))
 
     popup.querySelector('.amountCoin').textContent = amountNormal;
     let success = await TippingLogic.sendTip(params.get('recipent'), amountInteger, params.get('network'), params.get('token'), params.get('message') ?? "")
@@ -41,4 +41,3 @@ document.addEventListener('DOMContentLoaded', async () => {
         popup.append((new TippingSuccess(params.get('identifier'))).html)
     }
 });
-//http://localhost:8080/?recipent=0xb794f5ea0ba39494ce839613fffba74279579268&tippingValue=1&network=MATIC&token=ETH&message=test&identifier=@name
