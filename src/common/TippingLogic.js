@@ -266,14 +266,10 @@ export const TippingLogic = {
     },
     async sendTip(recipient, amount, network, token, message) {
         let contract;
-        let priceSt;
         let polygonGas;
         let tokenContractAddr; // get from json
-        // exchange for resolver that you have already initialized
-        // resolver = await loadContract(defaultWeb3);
 
         // make another check if the address selected really belongs to the twitter name selected
-
 
         // switch to selected payment option's network
         // exchange if statement for suitable check depending on selected network in dropdown
@@ -282,37 +278,38 @@ export const TippingLogic = {
                 await this.switchtopolygon();
             } catch (e) {
                 if (e != "network1") {
-                    //   return e
+                    throw e
                 }
             }
-            contract = await this.loadTippingPolygon(this.web3);
+            contract = await this.loadTippingPolygon();
         } else if (network === "ETH") {
             try {
                 await this.switchtoeth();
             } catch (e) {
                 if (e != "network1") {
-                    return e
+                    throw e
                 }
             }
-            contract = await this.loadTippingETH(this.web3);
+            contract = await this.loadTippingETH();
             await fetch('https://gasstation-mainnet.matic.network/v2')
                 .then(response => response.json())
                 .then(json => polygonGas = String(Math.round(json['standard']['maxFee'] * 1000000000)))
 
-        } else {
+        } else if (network === "BSC") {
             try {
                 await this.switchtobsc();
             } catch (e) {
-                console.log("Cought error: ", e)
                 if (e != "network1") {
-                    return e
+                    throw e
                 }
             }
-            contract = await this.loadTippingBSC(this.web3);
+            contract = await this.loadTippingBSC();
+        } else {
+            return false;
         }
 
         // exchanged for redundant multiple get accounts calls
-        const accounts = await web3.eth.getAccounts();
+        const accounts = await this.web3.eth.getAccounts();
         let selectedAccount = accounts[0];
 
 
@@ -321,9 +318,6 @@ export const TippingLogic = {
 
             try {
                 // Actual contract call
-                // Spinner showing that plugin is waiting for approval or waiting for txn to go through
-                //document.getElementById('Spinner2').style.display = "";
-                //document.getElementById('displaySwitch').style.display = "none";
                 // network is the network chosen in plugin popup
                 if (network === "Polygon" && polygonGas) {
                     // check for approval, then send txn
@@ -344,18 +338,13 @@ export const TippingLogic = {
                             gasPrice: polygonGas
                         });
                     } else {
-                        if (await this.checkApproval(tokenContractAddr, amount, network)) {
-                            payment = await contract.methods.sendTokenTo(amount, tokenContractAddr, recipient, message).send({
-                                from: selectedAccount,
-                                gasPrice: polygonGas
-                            });
-                        } else {
+                        if (!await this.checkApproval(tokenContractAddr, amount, network)) {
                             let approval = await this.getApproval(tokenContractAddr, network)
-                            payment = await contract.methods.sendTokenTo(amount, tokenContractAddr, recipient, message).send({
-                                from: selectedAccount,
-                                gasPrice: polygonGas
-                            });
                         }
+                        payment = await contract.methods.sendTokenTo(amount, tokenContractAddr, recipient, message).send({
+                            from: selectedAccount,
+                            gasPrice: polygonGas
+                        });
                     }
                 } else {
                     // same comments as above apply, this section uses default gas values, suggested by the wallet that is connected
@@ -365,17 +354,13 @@ export const TippingLogic = {
                             value: amount
                         });
                     } else {
-                        if (await this.checkApproval(tokenContractAddr, amount, network)) {
-                            payment = await contract.methods.sendTokenTo(amount, tokenContractAddr, recipient, message).send({from: selectedAccount});
-                        } else {
+                        if (!await this.checkApproval(tokenContractAddr, amount, network)) {
                             let approval = await this.getApproval(tokenContractAddr, network)
-                            payment = await contract.methods.sendTokenTo(amount, tokenContractAddr, recipient, message).send({from: selectedAccount});
                         }
+                        payment = await contract.methods.sendTokenTo(amount, tokenContractAddr, recipient, message).send({from: selectedAccount});
                     }
                 }
-                //document.getElementById('Spinner2').style.display = "none";
             } catch (err) {
-                //document.getElementById('Spinner2').style.display = "none";
                 console.log("error", err)
                 // Transaction failed or user has denied
                 // catch different errors?
@@ -391,8 +376,6 @@ export const TippingLogic = {
         }
     },
     async switchtopolygon() {
-        //const web3 = new Web3(this.provider);
-
         //  rpc method?
         console.log("Checking chain...")
         const chainId = await this.web3.eth.getChainId();
@@ -408,7 +391,6 @@ export const TippingLogic = {
                     method: 'wallet_switchEthereumChain',
                     params: [{chainId: '0x89'}],
                 });
-                //document.getElementById("displaySwitch").style.display = "none";
             } catch (switchError) {
                 if (switchError.message === "JSON RPC response format is invalid") {
                     throw "network1"
@@ -430,7 +412,6 @@ export const TippingLogic = {
                     }
                 }
                 console.log("Please switch to Polygon network.");
-                // disable continue buttons here
                 throw "network"
             }
         }
@@ -444,14 +425,12 @@ export const TippingLogic = {
         // check if correct chain is connected
         console.log("Connected to chain ", chainId)
         if (chainId != 1) {
-            //displaySwitch();
             console.log("Switch to Ethereum Mainnet requested")
             try {
                 await this.provider.request({
                     method: 'wallet_switchEthereumChain',
                     params: [{chainId: '0x1'}],
                 });
-                //document.getElementById("displaySwitch").style.display = "none";
             } catch (switchError) {
                 if (switchError.message === "JSON RPC response format is invalid") {
                     throw "network1"
@@ -473,13 +452,11 @@ export const TippingLogic = {
                 }
                 console.log("Please switch to Ethereum Mainnet.");
                 // disable continue buttons here or throw error
-                //token = "ETH";
                 throw "network"
             }
         }
     },
     async switchtobsc() {
-
         //  rpc method?
         console.log("Checking chain...")
         const chainId = await this.web3.eth.getChainId();
@@ -488,16 +465,12 @@ export const TippingLogic = {
         // check if correct chain is connected
         console.log("Connected to chain ", chainId)
         if (chainId != 56) {
-            //displaySwitch();
             console.log("Switch to BSC requested")
-            //displaySwitch();
             try {
                 await this.provider.request({
                     method: 'wallet_switchEthereumChain',
                     params: [{chainId: '0x38'}],
                 });
-
-                document.getElementById("displaySwitch").style.display = "none";
             } catch (switchError) {
                 if (switchError.message === "JSON RPC response format is invalid") {
                     throw "network1"
@@ -520,7 +493,6 @@ export const TippingLogic = {
                 }
                 console.log("Please switch to BSC.");
                 // disable continue buttons here
-                //token = "BNB";
                 throw "network"
             }
         }

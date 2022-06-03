@@ -33,13 +33,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     popup.classList.add('tipping-popup');
 
     await TippingLogic.prepareTip()
-    let {integer:amountInteger, normal:amountNormal} = await TippingLogic.calculateAmount(params.get('network'), +params.get('tippingValue'))
+    let {
+        integer: amountInteger,
+        normal: amountNormal
+    } = await TippingLogic.calculateAmount(params.get('network'), +params.get('tippingValue'))
 
     popup.querySelector('.amountCoin').textContent = amountNormal;
-    let success = await TippingLogic.sendTip(params.get('recipent'), amountInteger, params.get('network'), params.get('token'), params.get('message'))
+    let success = await TippingLogic.sendTip(params.get('recipent'), amountInteger, params.get('network'), params.get('token'), params.get('message') ?? "")
 
     popup.firstElementChild.remove();
-    if (success===true) {
+    if (success === true) {
         popup.append((new TippingSuccess(params.get('identifier'))).html)
     }
 });
