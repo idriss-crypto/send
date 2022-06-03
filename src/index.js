@@ -5,6 +5,7 @@ import {create} from "fast-creator";
 import css from "!!css-loader!sass-loader!./common/tippingStyle.scss";
 import {TippingWaitingConfirmation} from "./common/tippingWaitingConfirmation";
 import {TippingSuccess} from "./common/tippingSuccess";
+import {TippingWaitingApproval} from "./common/tippingWaitingApproval";
 
 document.addEventListener('DOMContentLoaded', async () => {
     //
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await web3Modal.clearCachedProvider();
     let provider = await web3Modal.connect();
     console.log({provider})
+
     let params = new URL(document.location).searchParams;
     let div = document.createElement('div')
     document.body.append(div);
@@ -24,10 +26,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     div.shadowRoot.append(create('style', {text: css}));
     let popup = create('section.tipping-popup')
     div.shadowRoot.append(popup);
-    popup.append((new TippingWaitingConfirmation(params.get('identifier'), +params.get('tippingValue'), params.get('token'))).html)
     popup.classList.add('tipping-popup');
+    popup.append(new TippingWaitingApproval().html);
 
     await TippingLogic.prepareTip(provider, params.get('network'))
+    popup.firstElementChild.remove();
+    popup.append((new TippingWaitingConfirmation(params.get('identifier'), +params.get('tippingValue'), params.get('token'))).html)
     let {
         integer: amountInteger,
         normal: amountNormal
