@@ -110,7 +110,6 @@ export const TippingLogic = {
     provider: null,
     async prepareTip(chain, coin, address, amountUSD) {
         console.log('prepareTip')
-        console.log('dddddd')
         if (typeof window.ethereum !== 'undefined') {
             let providers = window.ethereum.providers;
             if (providers) {
@@ -127,6 +126,10 @@ export const TippingLogic = {
             throw new Error("No MetaMask Wallet found");
         }
         console.log("MetaMask provider", this.provider);
+
+
+        const web3 = new Web3(this.provider);
+        this.web3 = web3;
     },
     tallyOpts: {
         "custom-tally": {
@@ -187,7 +190,6 @@ export const TippingLogic = {
                 // }
 
                 let provider = null;
-                console.log('dddddd')
                 window.ethereum = await getPageVar('ethereum')
                 if (typeof window.ethereum !== 'undefined') {
                     let providers = window.ethereum.providers;
@@ -255,14 +257,18 @@ export const TippingLogic = {
             return false
         }
     },
-    async sendTip(recipient, tippingValue, network, token, message) {
+    async calculateAmount(network, tippingValue) {
+        let oracle = await this.loadOracle(network) // token ticker selected
+        let {price: priceSt, decimals} = await this.getPrice(oracle);
+        let integer = this.getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
+        let normal = integer / Math.pow(10, decimals) // tippingValue selected in popup, decimals specified in json for token
+        return {integer, normal}
+    },
+    async sendTip(recipient, amount, network, token, message) {
         let contract;
         let priceSt;
-        let amount;
         let polygonGas;
         let tokenContractAddr; // get from json
-        const web3 = new Web3(this.provider);
-        this.web3 = web3;
         // exchange for resolver that you have already initialized
         // resolver = await loadContract(defaultWeb3);
 
@@ -279,12 +285,7 @@ export const TippingLogic = {
                     //   return e
                 }
             }
-            contract = await this.loadTippingPolygon(web3);
-            let oracle = await this.loadOracle(network) // token ticker selected
-            // Get value of transaction in wei -> amount
-            let {price: priceSt, decimals} = await this.getPrice(oracle);
-            amount = await this.getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
-            //amount = 1
+            contract = await this.loadTippingPolygon(this.web3);
         } else if (network === "ETH") {
             try {
                 await this.switchtoeth();
@@ -293,12 +294,7 @@ export const TippingLogic = {
                     return e
                 }
             }
-            contract = await this.loadTippingETH(web3);
-            let oracle = await this.loadOracle(network) // token ticker selected
-            // Get value of transaction in wei -> amount
-            let {price: priceSt, decimals} = await this.getPrice(oracle);
-            amount = await this.getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
-
+            contract = await this.loadTippingETH(this.web3);
             await fetch('https://gasstation-mainnet.matic.network/v2')
                 .then(response => response.json())
                 .then(json => polygonGas = String(Math.round(json['standard']['maxFee'] * 1000000000)))
@@ -312,19 +308,13 @@ export const TippingLogic = {
                     return e
                 }
             }
-            contract = await this.loadTippingBSC(web3);
-            let oracle = await this.loadOracle(network) // token ticker selected
-            // Get value of transaction in wei -> amount
-            let {price: priceSt, decimals} = await this.getPrice(oracle);
-            amount = await this.getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
+            contract = await this.loadTippingBSC(this.web3);
         }
 
         // exchanged for redundant multiple get accounts calls
         const accounts = await web3.eth.getAccounts();
         let selectedAccount = accounts[0];
 
-        // owner account
-        console.log(selectedAccount)
 
         if (accounts.length > 0) {
             let payment;
@@ -803,7 +793,7 @@ export const TippingLogic = {
         return {price: await latestAnswer / Math.pow(10, await decimals), decimals: await decimals}
     },
     // calculate price in wei (amount needed to send tip)
-    async getAmount(tippingValue, tokenPrice, decimals) {
+    getAmount(tippingValue, tokenPrice, decimals) {
         return Math.round((tippingValue / tokenPrice) * Math.pow(10, decimals))
     },
     async loadTokenContract(tokenContractAddr_) {
