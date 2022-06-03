@@ -233,7 +233,7 @@ export const TippingLogic = {
         return {integer, normal}
     },
     async switchNetwork(network){
-        if (network === "MATIC") {
+        if (network === "Polygon") {
             try {
                 await this.switchtopolygon();
             } catch (e) {
@@ -272,7 +272,7 @@ export const TippingLogic = {
 
         // switch to selected payment option's network
         // exchange if statement for suitable check depending on selected network in dropdown
-        if (network === "MATIC") {
+        if (network === "Polygon") {
             try {
                 await this.switchtopolygon();
             } catch (e) {
@@ -401,7 +401,7 @@ export const TippingLogic = {
                             method: 'wallet_addEthereumChain',
                             params: [{
                                 chainId: '0x89',
-                                chainName: 'Matic',
+                                chainName: 'Polygon',
                                 rpcUrls: ['https://polygon-rpc.com/'],
                                 nativeCurrency: {name: 'MATIC', symbol: 'MATIC', decimals: 18}
                             }],
