@@ -337,10 +337,10 @@ export const TippingLogic = {
                             gasPrice: polygonGas
                         });
                     } else {
-                        if (!await this.checkApproval(tokenContractAddr, amount, network)) {
+                        if (!await this.checkApproval(selectedAccount, tokenContractAddr, amount, network)) {
                             let approval = await this.getApproval(tokenContractAddr, network)
                         }
-                        payment = await contract.methods.sendTokenTo(amount, tokenContractAddr, recipient, message).send({
+                        payment = await contract.methods.sendTokenTo(recipient, amount, tokenContractAddr, message).send({
                             from: selectedAccount,
                             gasPrice: polygonGas
                         });
@@ -353,10 +353,10 @@ export const TippingLogic = {
                             value: amount
                         });
                     } else {
-                        if (!await this.checkApproval(tokenContractAddr, amount, network)) {
+                        if (!await this.checkApproval(selectedAccount, tokenContractAddr, amount, network)) {
                             let approval = await this.getApproval(tokenContractAddr, network)
                         }
-                        payment = await contract.methods.sendTokenTo(amount, tokenContractAddr, recipient, message).send({from: selectedAccount});
+                        payment = await contract.methods.sendTokenTo(recipient, amount, tokenContractAddr, message).send({from: selectedAccount});
                     }
                 }
             } catch (err) {
@@ -496,21 +496,21 @@ export const TippingLogic = {
             }
         }
     },
-    async checkApproval(tokenContractAddr_, amount_, network_) {
+    async checkApproval(selectedAccount_, tokenContractAddr_, amount_, network_) {
         if (network_ === "Polygon") {
             await this.switchtopolygon();
             let tokenContract = await this.loadTokenContract(tokenContractAddr_)
-            let allowance = await tokenContract.methods.allowance(tippingAddressPolygon).call()
+            let allowance = await tokenContract.methods.allowance(selectedAccount_, tippingAddressPolygon).call()
             return allowance >= amount_
         } else if (network_ === "ETH") {
             await this.switchtoeth();
             let tokenContract = await this.loadTokenContract(tokenContractAddr_)
-            let allowance = await tokenContract.methods.allowance(tippingAddressETH).call()
+            let allowance = await tokenContract.methods.allowance(selectedAccount_, tippingAddressETH).call()
             return allowance >= amount_
         } else if (network_ === "BSC") {
             await this.switchtobsc();
             let tokenContract = await this.loadTokenContract(tokenContractAddr_)
-            let allowance = await tokenContract.methods.allowance(tippingAddressBSC).call()
+            let allowance = await tokenContract.methods.allowance(selectedAccount_, tippingAddressBSC).call()
             return allowance >= amount_
         }
         return false
