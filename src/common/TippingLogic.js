@@ -2,6 +2,8 @@ import WalletConnectProvider from "@walletconnect/web3-provider/dist/umd/index.m
 import {CoinbaseWalletProvider} from "@depay/coinbase-wallet-sdk"
 import Web3 from "web3/dist/web3.min.js";
 
+const defaultWeb3 = new Web3(new Web3.providers.HttpProvider("https://rpc-mainnet.maticvigil.com"));
+
 let oracleAddress = {
     "ETH": "0xf9680d99d6c9589e2a93a78a04a279e509205945",
     "BNB": "0x82a6c4af830caa6c97bb504425f6a66165c2c26e",
@@ -744,7 +746,7 @@ export const TippingLogic = {
             "stateMutability": "view",
             "type": "function"
         }]
-        return await new this.web3.eth.Contract(abiOracle, oracleAddress[ticker]); // addresses TBD
+        return await new defaultWeb3.eth.Contract(abiOracle, oracleAddress[ticker]);
     },
     async loadTippingPolygon() {
         return await new this.web3.eth.Contract(abiTippingContract, tippingAddressPolygon);
