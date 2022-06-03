@@ -108,31 +108,13 @@ let tippingAddressBSC = "0x6f0094d82f4FaC3E974174a21Aa795B6F10d28C7";
 
 export const TippingLogic = {
     provider: null,
-    async prepareTip(chain, coin, address, amountUSD) {
+    async prepareTip(provider) {
         console.log('prepareTip')
-        if (typeof window.ethereum !== 'undefined') {
-            let providers = window.ethereum.providers;
-            if (providers) {
-                this.provider = providers.find(p => p.isMetaMask);
-            } else {
-                this.provider = window.ethereum
-            }
-            try {
-                await this.provider.request({method: 'eth_requestAccounts'});
-            } catch (error) {
-                throw new Error("User Rejected");
-            }
-        } else {
-            throw new Error("No MetaMask Wallet found");
-        }
-        console.log("MetaMask provider", this.provider);
-
-
+        this.provider = provider;
         const web3 = new Web3(this.provider);
         this.web3 = web3;
     },
-    tallyOpts: {
-        "custom-tally": {
+    tallyOpts: {"custom-tally": {
             display: {
                 logo: "../static/images/tally.svg",
                 name: "Tally",
@@ -140,7 +122,7 @@ export const TippingLogic = {
             },
             package: true,
             connector: async () => {
-                if (!TippingLogic.isTallyInstalled()) {
+                if (!window.ethereum?.isTally) {
                     window.open("https://tally.cash/community-edition", '_blank'); // <-- LOOK HERE
                     throw new Error("Tally not supported yet.");
                 }
@@ -175,8 +157,7 @@ export const TippingLogic = {
             }
         }
     },
-    metaMaskOpts: {
-        "custom-metamask": {
+    metaMaskOpts: {"custom-metamask": {
             display: {
                 logo: "../static/images/metamask-logo.svg",
                 name: "MetaMask",
@@ -184,22 +165,21 @@ export const TippingLogic = {
             },
             package: true,
             connector: async () => {
-                // if (!TippingLogic.isMetaMaskInstalled()) {
-                //     window.open("https://metamask.io/download/", '_blank'); // <-- LOOK HERE
-                //     return;
-                // }
+                if (!window.ethereum?.isMetaMask) {
+                    window.open("https://metamask.io/download/", '_blank'); // <-- LOOK HERE
+                    return;
+                }
 
                 let provider = null;
-                window.ethereum = await getPageVar('ethereum')
                 if (typeof window.ethereum !== 'undefined') {
                     let providers = window.ethereum.providers;
-                    if (providers) {
+                    if (providers){
                         provider = providers.find(p => p.isMetaMask);
                     } else {
                         provider = window.ethereum
                     }
                     try {
-                        await provider.request({method: 'eth_requestAccounts'});
+                        await provider.request({ method: 'eth_requestAccounts' });
                     } catch (error) {
                         throw new Error("User Rejected");
                     }
@@ -211,8 +191,7 @@ export const TippingLogic = {
             }
         }
     },
-    walletLinkOpts: {
-        'custom-walletlink': {
+    walletLinkOpts: {'custom-walletlink': {
             display: {
                 logo: '../static/images/coinbase.svg',
                 name: 'Coinbase',
@@ -223,9 +202,9 @@ export const TippingLogic = {
                 rpc: "https://eth-mainnet.alchemyapi.io/v2/NcZapwC9N6OhvtRKvjGhc23st5VmG2hB",
                 chainId: 1
             },
-            package: CoinbaseWalletProvider,
+            package: WalletLink,
             connector: async (_, options) => {
-                const {appName, networkUrl, chainId} = options
+                const { appName, networkUrl, chainId } = options
                 const walletLink = new WalletLink({
                     appName
                 });
@@ -241,20 +220,6 @@ export const TippingLogic = {
             ...this.walletLinkOpts,
             ...this.metaMaskOpts,
             ...this.tallyOpts
-        }
-    },
-    isMetaMaskInstalled() {
-        if (window.ethereum?.isMetaMask) {
-            return true
-        } else {
-            return false
-        }
-    },
-    isTallyInstalled() {
-        if (window.ethereum?.isTally) {
-            return true
-        } else {
-            return false
         }
     },
     async calculateAmount(network, tippingValue) {

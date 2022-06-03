@@ -8,20 +8,15 @@ import {TippingSuccess} from "./common/tippingSuccess";
 
 document.addEventListener('DOMContentLoaded', async () => {
     //
-    // const web3Modal = new Web3Modal({
-    //     network: 'mainnet',
-    //     cacheProvider: false, // optional
-    //     providerOptions: TippingLogic.providerOptions, // required
-    //     disableInjectedProvider: false,
-    // });
-    // await web3Modal.clearCachedProvider();
-    // let provider = await web3Modal.connect();
-    // console.log({provider})
-    // const web3 = new Web3(provider);
-    // let accounts = await web3.eth.getAccounts();
-    // let account = accounts[0];
-    // console.log(account)
-    //
+    const web3Modal = new Web3Modal({
+        network: 'mainnet',
+        cacheProvider: false, // optional
+        providerOptions: TippingLogic.providerOptions, // required
+        disableInjectedProvider: true,
+    });
+    await web3Modal.clearCachedProvider();
+    let provider = await web3Modal.connect();
+    console.log({provider})
     let params = new URL(document.location).searchParams;
     let div = document.createElement('div')
     document.body.append(div);
@@ -32,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     popup.append((new TippingWaitingConfirmation(params.get('identifier'), +params.get('tippingValue'), params.get('token'))).html)
     popup.classList.add('tipping-popup');
 
-    await TippingLogic.prepareTip()
+    await TippingLogic.prepareTip(provider)
     let {
         integer: amountInteger,
         normal: amountNormal
