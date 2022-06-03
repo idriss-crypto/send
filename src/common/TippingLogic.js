@@ -281,6 +281,9 @@ export const TippingLogic = {
                 }
             }
             contract = await this.loadTippingPolygon();
+            await fetch('https://gasstation-mainnet.matic.network/v2')
+                .then(response => response.json())
+                .then(json => polygonGas = String(Math.round(json['standard']['maxFee'] * 1000000000)))
         } else if (network === "ETH") {
             try {
                 await this.switchtoeth();
@@ -290,10 +293,6 @@ export const TippingLogic = {
                 }
             }
             contract = await this.loadTippingETH();
-            await fetch('https://gasstation-mainnet.matic.network/v2')
-                .then(response => response.json())
-                .then(json => polygonGas = String(Math.round(json['standard']['maxFee'] * 1000000000)))
-
         } else if (network === "BSC") {
             try {
                 await this.switchtobsc();
