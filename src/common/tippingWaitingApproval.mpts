@@ -4,7 +4,7 @@
 <main>
     <div class="loader"/>
     <h2>Waiting for Approval</h2>
-    <p class="subtitle">Allow <strong>IDriss</strong> to use your ETH</p>
+    <p class="subtitle">Allow <strong>IDriss</strong> to use your {{token}}</p>
     <p>Confirm this transaction in your wallet</p>
 </main>
 <footer>

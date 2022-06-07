@@ -8,6 +8,7 @@ const defaultWeb3 = new Web3(new Web3.providers.HttpProvider("https://rpc-mainne
 
 let oracleAddress = {
     "ETH": "0xf9680d99d6c9589e2a93a78a04a279e509205945",
+    "WETH": "0xf9680d99d6c9589e2a93a78a04a279e509205945",
     "BNB": "0x82a6c4af830caa6c97bb504425f6a66165c2c26e",
     "MATIC": "0xab594600376ec9fd91f8e885dadf0ce036862de0",
     "USDC": "0xfe4a8cc5b5b2366c1b58bea3858e81843581b2f7",

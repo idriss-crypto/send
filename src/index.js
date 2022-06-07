@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     div.shadowRoot.append(popup);
     popup.classList.add('tipping-popup');
     try {
-        popup.append(new TippingWaitingApproval().html);
+        popup.append(new TippingWaitingApproval(params.get('token')).html);
 
         await TippingLogic.prepareTip(provider, params.get('network'))
         popup.firstElementChild.remove();
@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log({success})
         }
     } catch (e) {
+        popup.firstElementChild?.remove();
         popup.append((new TippingError()).html)
         console.error(e)
     }
