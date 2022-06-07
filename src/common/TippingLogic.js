@@ -1,6 +1,8 @@
 import WalletConnectProvider from "@walletconnect/web3-provider/dist/umd/index.min.js";
 import {CoinbaseWalletProvider} from "@depay/coinbase-wallet-sdk"
 import Web3 from "web3/dist/web3.min.js";
+import {tokens} from "./tippingUtils";
+import metamaskLogo from "!!url-loader!./img/metamask.svg"
 
 const defaultWeb3 = new Web3(new Web3.providers.HttpProvider("https://rpc-mainnet.maticvigil.com"));
 
@@ -162,7 +164,7 @@ export const TippingLogic = {
     },
     metaMaskOpts: {"custom-metamask": {
             display: {
-                logo: "../static/images/metamask-logo.svg",
+                logo: metamaskLogo,
                 name: "MetaMask",
                 description: "Connect to your MetaMask Wallet"
             },
@@ -266,7 +268,7 @@ export const TippingLogic = {
     async sendTip(recipient, amount, network, token, message) {
         let contract;
         let polygonGas;
-        let tokenContractAddr; // get from json
+        let tokenContractAddr = tokens.filter(x=>x.symbol==token && x.network==network)[0]?.address; // get from json
 
         // make another check if the address selected really belongs to the twitter name selected
 
@@ -337,7 +339,7 @@ export const TippingLogic = {
                         });
                     } else {
                         if (!await this.checkApproval(selectedAccount, tokenContractAddr, amount, network)) {
-                            let approval = await this.getApproval(tokenContractAddr, network)
+                            let approval = await this.getApproval(tokenContractAddr, network, selectedAccount)
                         }
                         payment = await contract.methods.sendTokenTo(recipient, amount, tokenContractAddr, message).send({
                             from: selectedAccount,
@@ -353,7 +355,7 @@ export const TippingLogic = {
                         });
                     } else {
                         if (!await this.checkApproval(selectedAccount, tokenContractAddr, amount, network)) {
-                            let approval = await this.getApproval(tokenContractAddr, network)
+                            let approval = await this.getApproval(tokenContractAddr, network, selectedAccount)
                         }
                         payment = await contract.methods.sendTokenTo(recipient, amount, tokenContractAddr, message).send({from: selectedAccount});
                     }
@@ -794,8 +796,8 @@ export const TippingLogic = {
         }]
         return await new this.web3.eth.Contract(abiERC20, tokenContractAddr_);
     },
-    async getApproval(tokenContractAddr_, network_) {
-        var approveAmount = Math.pow(2, 255);
+    async getApproval(tokenContractAddr_, network_, selectedAccount) {
+        var approveAmount = 2n**255n;
 
         if (network_ === "Polygon") {
             await this.switchtopolygon();
