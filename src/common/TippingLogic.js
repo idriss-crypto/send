@@ -3,6 +3,8 @@ import {CoinbaseWalletProvider} from "@depay/coinbase-wallet-sdk"
 import Web3 from "web3/dist/web3.min.js";
 import {tokens} from "./tippingUtils";
 import metamaskLogo from "!!url-loader!./img/metamask.svg"
+import tallyLogo from "!!url-loader!./img/tally.svg"
+import coinbaseLogo from "!!url-loader!./img/coinbase.svg"
 
 const defaultWeb3 = new Web3(new Web3.providers.HttpProvider("https://rpc-mainnet.maticvigil.com"));
 
@@ -120,9 +122,10 @@ export const TippingLogic = {
         this.web3 = web3;
         await this.switchNetwork(network)
     },
-    tallyOpts: {"custom-tally": {
+    tallyOpts: {
+        "custom-tally": {
             display: {
-                logo: "../static/images/tally.svg",
+                logo: tallyLogo,
                 name: "Tally",
                 description: "Coming Soon"
             },
@@ -163,7 +166,8 @@ export const TippingLogic = {
             }
         }
     },
-    metaMaskOpts: {"custom-metamask": {
+    metaMaskOpts: {
+        "custom-metamask": {
             display: {
                 logo: metamaskLogo,
                 name: "MetaMask",
@@ -179,13 +183,13 @@ export const TippingLogic = {
                 let provider = null;
                 if (typeof window.ethereum !== 'undefined') {
                     let providers = window.ethereum.providers;
-                    if (providers){
+                    if (providers) {
                         provider = providers.find(p => p.isMetaMask);
                     } else {
                         provider = window.ethereum
                     }
                     try {
-                        await provider.request({ method: 'eth_requestAccounts' });
+                        await provider.request({method: 'eth_requestAccounts'});
                     } catch (error) {
                         throw new Error("User Rejected");
                     }
@@ -197,9 +201,10 @@ export const TippingLogic = {
             }
         }
     },
-    walletLinkOpts: {'custom-walletlink': {
+    walletLinkOpts: {
+        'custom-walletlink': {
             display: {
-                logo: '../static/images/coinbase.svg',
+                logo: coinbaseLogo,
                 name: 'Coinbase',
                 description: 'Scan with WalletLink to connect',
             },
@@ -210,7 +215,7 @@ export const TippingLogic = {
             },
             package: WalletLink,
             connector: async (_, options) => {
-                const { appName, networkUrl, chainId } = options
+                const {appName, networkUrl, chainId} = options
                 const walletLink = new WalletLink({
                     appName
                 });
@@ -230,12 +235,13 @@ export const TippingLogic = {
     },
     async calculateAmount(ticker, tippingValue) {
         let oracle = await this.loadOracle(ticker) // token ticker selected
-        let {price: priceSt, decimals} = await this.getPrice(oracle);
+        let priceSt = await this.getPrice(oracle);
+        let decimals = tokens.filter(x => x.symbol == ticker)[0]?.decimals
         let integer = this.getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
         let normal = integer / Math.pow(10, decimals) // tippingValue selected in popup, decimals specified in json for token
         return {integer, normal}
     },
-    async switchNetwork(network){
+    async switchNetwork(network) {
         if (network === "Polygon") {
             try {
                 await this.switchtopolygon();
@@ -269,7 +275,7 @@ export const TippingLogic = {
     async sendTip(recipient, amount, network, token, message) {
         let contract;
         let polygonGas;
-        let tokenContractAddr = tokens.filter(x=>x.symbol==token && x.network==network)[0]?.address; // get from json
+        let tokenContractAddr = tokens.filter(x => x.symbol == token && x.network == network)[0]?.address; // get from json
 
         // make another check if the address selected really belongs to the twitter name selected
 
@@ -763,7 +769,7 @@ export const TippingLogic = {
     async getPrice(oracleContract) {
         let latestAnswer = oracleContract.methods.latestAnswer().call();
         let decimals = oracleContract.methods.decimals().call();
-        return {price: await latestAnswer / Math.pow(10, await decimals), decimals: await decimals}
+        return await latestAnswer / Math.pow(10, await decimals)
     },
     // calculate price in wei (amount needed to send tip)
     getAmount(tippingValue, tokenPrice, decimals) {
@@ -798,7 +804,7 @@ export const TippingLogic = {
         return await new this.web3.eth.Contract(abiERC20, tokenContractAddr_);
     },
     async getApproval(tokenContractAddr_, network_, selectedAccount) {
-        var approveAmount = 2n**255n;
+        var approveAmount = 2n ** 255n;
 
         if (network_ === "Polygon") {
             await this.switchtopolygon();
