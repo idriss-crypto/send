@@ -4,7 +4,7 @@ import twitter from "!!url-loader!./img/twitter.svg"
 import {create} from "fast-creator";
 
 export class TippingWaitingConfirmation {
-    constructor(identifier, amountUSD, coin) {
-        this.html = create('div', {}, template({identifier, close, twitter, amountUSD, coin}));
+    constructor(identifier, amountUSD, token) {
+        this.html = create('div', {}, template({identifier, close, twitter, amountUSD, token}));
     }
 }
