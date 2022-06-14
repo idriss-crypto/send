@@ -344,7 +344,7 @@ export const TippingLogic = {
                         });
                     } else {
                         if (!await this.checkApproval(selectedAccount, tokenContractAddr, amount, network)) {
-                            let approval = await this.getApproval(tokenContractAddr, network, selectedAccount)
+                            let approval = await this.getApproval(tokenContractAddr, network, selectedAccount, polygonGas)
                         }
                         payment = await contract.methods.sendTokenTo(recipient, amount, tokenContractAddr, message).send({
                             from: selectedAccount,
@@ -801,13 +801,13 @@ export const TippingLogic = {
         }]
         return await new this.web3.eth.Contract(abiERC20, tokenContractAddr_);
     },
-    async getApproval(tokenContractAddr_, network_, selectedAccount) {
+    async getApproval(tokenContractAddr_, network_, selectedAccount, polygonGas) {
         var approveAmount = 2n ** 255n;
 
         if (network_ === "Polygon") {
             await this.switchtopolygon();
             let tokenContract = await this.loadTokenContract(tokenContractAddr_)
-            await tokenContract.methods.approve(tippingAddressPolygon, approveAmount).send({from: selectedAccount})
+            await tokenContract.methods.approve(tippingAddressPolygon, approveAmount).send({from: selectedAccount, gasPrice:polygonGas})
         } else if (network_ === "ETH") {
             await this.switchtoeth();
             let tokenContract = await this.loadTokenContract(tokenContractAddr_)
