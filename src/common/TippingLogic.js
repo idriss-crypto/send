@@ -108,7 +108,7 @@ let abiTippingContract = [{
     "stateMutability": "nonpayable",
     "type": "function"
 }]
-let tippingAddressETH = "";
+let tippingAddressETH = "0x561f1b5145897A52A6E94E4dDD4a29Ea5dFF6f64";
 let tippingAddressPolygon = "0xA0665e585038f94CD7092611318326102dCf5B5a";
 let tippingAddressBSC = "0x6f0094d82f4FaC3E974174a21Aa795B6F10d28C7";
 
