@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } = await TippingLogic.calculateAmount(params.get('token'), +params.get('tippingValue'))
 
         popup.querySelector('.amountCoin').textContent = amountNormal;
-        let success = await TippingLogic.sendTip(params.get('recipent'), amountInteger, params.get('network'), params.get('token'), params.get('message') ?? "")
+        let success = await TippingLogic.sendTip(params.get('recipient'), amountInteger, params.get('network'), params.get('token'), params.get('message') ?? "")
 
         popup.firstElementChild.remove();
         if (success === true) {
