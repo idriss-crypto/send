@@ -6,7 +6,7 @@ import metamaskLogo from "!!url-loader!./img/metamask.svg"
 import tallyLogo from "!!url-loader!./img/tally.svg"
 import coinbaseLogo from "!!url-loader!./img/coinbase.svg"
 
-const defaultWeb3 = new Web3(new Web3.providers.HttpProvider("https://rpc-mainnet.maticvigil.com"));
+const defaultWeb3 = new Web3(new Web3.providers.HttpProvider("https://polygon-rpc.com/"));
 
 let oracleAddress = {
     "ETH": "0xf9680d99d6c9589e2a93a78a04a279e509205945",
