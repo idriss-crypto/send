@@ -18,6 +18,17 @@ let oracleAddress = {
     "DAI": "0x4746dec9e833a82ec7c2c1356372ccf2cfcd2f3d"
 };
 
+
+let coingeckoId = {
+    "ETH": "ethereum",
+    "WETH": "ethereum",
+    "BNB": "",
+    "MATIC": "",
+    "USDC": "",
+    "USDT": "",
+    "DAI": ""
+};
+
 let abiTippingContract = [{
     "anonymous": false,
     "inputs": [{
@@ -234,8 +245,17 @@ export const TippingLogic = {
         }
     },
     async calculateAmount(ticker, tippingValue) {
-        let oracle = await this.loadOracle(ticker) // token ticker selected
-        let priceSt = await this.getPrice(oracle);
+
+        let priceSt
+
+        if (oracleAddress[ticker]) {
+            let oracle = await this.loadOracle(ticker) // token ticker selected
+            let priceSt = await this.getPrice(oracle);
+        } else {
+            let response = await (await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId[ticker]}&vs_currencies=USD`)).json()
+            priceSt = Object.values(Object.values(response)[0])[0]
+        }
+
         let decimals = tokens.filter(x => x.symbol == ticker)[0]?.decimals
         let integer = this.getAmount(tippingValue, priceSt, decimals) // tippingValue selected in popup, decimals specified in json for token
         let normal = integer / Math.pow(10, decimals) // tippingValue selected in popup, decimals specified in json for token
@@ -377,7 +397,7 @@ export const TippingLogic = {
                     throw err;
                 }
             }
-            console.log('payment',payment)
+            console.log('payment', payment)
             return payment;
         }
     },
@@ -808,7 +828,10 @@ export const TippingLogic = {
         if (network_ === "Polygon") {
             await this.switchtopolygon();
             let tokenContract = await this.loadTokenContract(tokenContractAddr_)
-            await tokenContract.methods.approve(tippingAddressPolygon, approveAmount).send({from: selectedAccount, gasPrice:polygonGas})
+            await tokenContract.methods.approve(tippingAddressPolygon, approveAmount).send({
+                from: selectedAccount,
+                gasPrice: polygonGas
+            })
         } else if (network_ === "ETH") {
             await this.switchtoeth();
             let tokenContract = await this.loadTokenContract(tokenContractAddr_)
