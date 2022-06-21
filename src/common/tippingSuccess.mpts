@@ -4,7 +4,7 @@
 <main>
     <img src=success alt="" class="success"/>
     <h2>Transaction Submitted🥳</h2>
-    <p class="subtitle"><a href="https://etherscan.io/">View on Explorer<img src=link alt="" class="linkIcon"/></a></p>
+    <p class="subtitle"><a href=explorerLink>View on Explorer<img src=link alt="" class="linkIcon"/></a></p>
 </main>
 <footer>
     <button type="button" class="close">

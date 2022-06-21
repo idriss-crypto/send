@@ -377,7 +377,8 @@ export const TippingLogic = {
                     throw err;
                 }
             }
-            return true;
+            console.log('payment',payment)
+            return payment;
         }
     },
     async switchtopolygon() {

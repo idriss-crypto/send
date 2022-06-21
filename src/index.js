@@ -31,9 +31,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let params = new URL(document.location).searchParams;
     let div = document.createElement('div')
-    document.body.append(div);
+    document.querySelector('.container').append(div);
     div.attachShadow({mode: 'open'})
-    div.shadowRoot.addEventListener('close', ()=>document.location='https://idriss.xyz/')
+    div.shadowRoot.addEventListener('close', () => document.location = 'https://idriss.xyz/')
     div.shadowRoot.append(create('style', {text: css}));
     let popup = create('section.tipping-popup')
     div.shadowRoot.append(popup);
@@ -53,8 +53,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         let success = await TippingLogic.sendTip(params.get('recipient'), amountInteger, params.get('network'), params.get('token'), params.get('message') ?? "")
 
         popup.firstElementChild.remove();
-        if (success === true) {
-            popup.append((new TippingSuccess(params.get('identifier'))).html)
+        if (success) {
+            let explorerLink;
+            if (params.get('network') == 'ETH')
+                explorerLink = `https://etherscan.io/tx/${success.transactionHash}`
+            else if (params.get('network') == 'BSC')
+                explorerLink = `https://bscscan.com/tx/${success.transactionHash}`
+            else if (params.get('network') == 'Polygon')
+                explorerLink = `https://polygonscan.com/tx/${success.transactionHash}`
+            popup.append((new TippingSuccess(params.get('identifier'), explorerLink)).html)
         } else {
             popup.append((new TippingError()).html)
             console.log({success})
