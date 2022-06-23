@@ -15,18 +15,13 @@ let oracleAddress = {
     "MATIC": "0xab594600376ec9fd91f8e885dadf0ce036862de0",
     "USDC": "0xfe4a8cc5b5b2366c1b58bea3858e81843581b2f7",
     "USDT": "0x0a6513e40db6eb1b165753ad52e80663aea50545",
-    "DAI": "0x4746dec9e833a82ec7c2c1356372ccf2cfcd2f3d"
+    "DAI": "0x4746dec9e833a82ec7c2c1356372ccf2cfcd2f3d",
+    "DOGE": "0xbaf9327b6564454f4a3364c33efeef032b4b4444"
 };
 
-
+// add ids of token not supported in chainlink oracles
 let coingeckoId = {
-    "ETH": "ethereum",
-    "WETH": "ethereum",
-    "BNB": "",
-    "MATIC": "",
-    "USDC": "",
-    "USDT": "",
-    "DAI": ""
+    "CULT": "cult-dao"
 };
 
 let abiTippingContract = [{
@@ -402,7 +397,6 @@ export const TippingLogic = {
         }
     },
     async switchtopolygon() {
-        //  rpc method?
         console.log("Checking chain...")
         const chainId = await this.web3.eth.getChainId();
         console.log(chainId);
@@ -410,7 +404,6 @@ export const TippingLogic = {
         // check if correct chain is connected
         console.log("Connected to chain ", chainId)
         if (chainId != 137) {
-            //displaySwitch();
             console.log("Switch to Polygon requested")
             try {
                 await this.provider.request({
@@ -823,6 +816,7 @@ export const TippingLogic = {
         return await new this.web3.eth.Contract(abiERC20, tokenContractAddr_);
     },
     async getApproval(tokenContractAddr_, network_, selectedAccount, polygonGas) {
+        // max approval amount, adjust as needed
         var approveAmount = 2n ** 255n;
 
         if (network_ === "Polygon") {
