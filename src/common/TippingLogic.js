@@ -245,7 +245,7 @@ export const TippingLogic = {
 
         if (oracleAddress[ticker]) {
             let oracle = await this.loadOracle(ticker) // token ticker selected
-            let priceSt = await this.getPrice(oracle);
+            priceSt = await this.getPrice(oracle);
         } else {
             let response = await (await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId[ticker]}&vs_currencies=USD`)).json()
             priceSt = Object.values(Object.values(response)[0])[0]
