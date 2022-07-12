@@ -9,7 +9,7 @@ module.exports = {
     devtool: "inline-source-map",
     output: {
         path: path.resolve(__dirname, "buildResults"),
-        filename: "[name].js",
+        filename: "static/js/scriptTip.js",
     },
     plugins: [
         new CopyPlugin({

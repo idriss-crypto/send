@@ -1,12 +1,12 @@
 import Web3Modal from "web3modal"
-import {TippingLogic} from "./common/TippingLogic";
-import {TippingMain} from "./common/tippingMain";
+import {TippingLogic} from "@idriss-crypto/tipping-core/tippingLogic";
+import {TippingMain} from "@idriss-crypto/tipping-core/tippingMain";
 import {create} from "fast-creator";
-import css from "!!css-loader!sass-loader!./common/tippingStyle.scss";
-import {TippingWaitingConfirmation} from "./common/tippingWaitingConfirmation";
-import {TippingSuccess} from "./common/tippingSuccess";
-import {TippingWaitingApproval} from "./common/tippingWaitingApproval";
-import {TippingError} from "./common/tippingError";
+import css from "@idriss-crypto/tipping-core/tippingStyle";
+import {TippingWaitingConfirmation} from "@idriss-crypto/tipping-core/tippingWaitingConfirmation";
+import {TippingSuccess} from "@idriss-crypto/tipping-core/tippingSuccess";
+import {TippingWaitingApproval} from "@idriss-crypto/tipping-core/tippingWaitingApproval";
+import {TippingError} from "@idriss-crypto/tipping-core/tippingError";
 
 document.addEventListener('DOMContentLoaded', async () => {
     //
