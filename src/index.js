@@ -1,6 +1,7 @@
 import Web3Modal from "web3modal"
 import {TippingLogic} from "@idriss-crypto/tipping-core/tippingLogic";
 import {TippingMain} from "@idriss-crypto/tipping-core/tippingMain";
+import {TippingAddress} from "@idriss-crypto/tipping-core/tippingAddress";
 import {create} from "fast-creator";
 import css from "@idriss-crypto/tipping-core/tippingStyle";
 import {TippingWaitingConfirmation} from "@idriss-crypto/tipping-core/tippingWaitingConfirmation";
@@ -35,6 +36,8 @@ async function getProvider() {
 document.addEventListener('DOMContentLoaded', async () => {
 
     let params = new URL(document.location).searchParams;
+    let identifier = params.get('identifier');
+    let recipient = params.get('recipient');
     let token = params.get('token');
     let tippingValue = +params.get('tippingValue');
     let network = params.get('network');
@@ -48,8 +51,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     div.shadowRoot.append(popup);
     popup.classList.add('tipping-popup');
     try {
+        console.log('aaaa')
+        if (!identifier || !recipient) {
+            popup.append(new TippingAddress().html);
+            await new Promise(res => {
+                popup.addEventListener('next', e => {
+                    console.log(e);
+                    identifier = e.identifier;
+                    recipient = e.recipient;
+                    res()
+                })
+            });
+        }
         if (!token || !tippingValue || !network) {
-            popup.append(new TippingMain(token).html);
+            popup.firstElementChild?.remove();
+            popup.append(new TippingMain(identifier).html);
             await new Promise(res => {
                 popup.addEventListener('sendMoney', e => {
                     console.log(e);
@@ -66,14 +82,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         await TippingLogic.prepareTip(provider, network)
         popup.firstElementChild.remove();
-        popup.append((new TippingWaitingConfirmation(params.get('identifier'), tippingValue, token)).html)
+        popup.append((new TippingWaitingConfirmation(identifier, tippingValue, token)).html)
         let {
             integer: amountInteger,
             normal: amountNormal
         } = await TippingLogic.calculateAmount(token, tippingValue)
 
         popup.querySelector('.amountCoin').textContent = amountNormal;
-        let success = await TippingLogic.sendTip(params.get('recipient'), amountInteger, network, token, params.get('message') ?? "")
+        let success = await TippingLogic.sendTip(recipient, amountInteger, network, token, params.get('message') ?? "")
 
         popup.firstElementChild.remove();
         if (success) {
@@ -84,7 +100,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 explorerLink = `https://bscscan.com/tx/${success.transactionHash}`
             else if (network == 'Polygon')
                 explorerLink = `https://polygonscan.com/tx/${success.transactionHash}`
-            popup.append((new TippingSuccess(params.get('identifier'), explorerLink)).html)
+            popup.append((new TippingSuccess(identifier, explorerLink)).html)
         } else {
             popup.append((new TippingError()).html)
             console.log({success})
