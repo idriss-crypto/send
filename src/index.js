@@ -23,10 +23,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         provider = await web3Modal.connect();
         console.log({provider})
     } catch (ex) {
+        console.error(ex)
+    }
+    if (!provider) {
         provider = window.ethereum?.providers[0]
-        if (!provider) {
-            window.open('https://metamask.io/download/')
-        }
+    }
+    if (!provider) {
+        window.open('https://metamask.io/download/')
     }
 
     let params = new URL(document.location).searchParams;
