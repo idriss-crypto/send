@@ -8,9 +8,7 @@ import {TippingSuccess} from "@idriss-crypto/tipping-core/tippingSuccess";
 import {TippingWaitingApproval} from "@idriss-crypto/tipping-core/tippingWaitingApproval";
 import {TippingError} from "@idriss-crypto/tipping-core/tippingError";
 
-document.addEventListener('DOMContentLoaded', async () => {
-    //
-
+async function getProvider() {
     const web3Modal = new Web3Modal({
         network: 'mainnet',
         cacheProvider: false, // optional
@@ -31,8 +29,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!provider) {
         window.open('https://metamask.io/download/')
     }
+    return provider;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
 
     let params = new URL(document.location).searchParams;
+    let token = params.get('token');
+    let tippingValue = +params.get('tippingValue');
+    let network = params.get('network');
+
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
     div.attachShadow({mode: 'open'})
@@ -42,27 +48,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     div.shadowRoot.append(popup);
     popup.classList.add('tipping-popup');
     try {
-        popup.append(new TippingWaitingApproval(params.get('token')).html);
+        if (!token || !tippingValue || !network) {
+            popup.append(new TippingMain(token).html);
+            await new Promise(res => {
+                popup.addEventListener('sendMoney', e => {
+                    console.log(e);
+                    network = e.network;
+                    token = e.token;
+                    tippingValue = +e.amount;
+                    res()
+                })
+            });
+        }
+        let provider = await getProvider();
+        popup.firstElementChild?.remove();
+        popup.append(new TippingWaitingApproval(token).html);
 
-        await TippingLogic.prepareTip(provider, params.get('network'))
+        await TippingLogic.prepareTip(provider, network)
         popup.firstElementChild.remove();
-        popup.append((new TippingWaitingConfirmation(params.get('identifier'), +params.get('tippingValue'), params.get('token'))).html)
+        popup.append((new TippingWaitingConfirmation(params.get('identifier'), tippingValue, token)).html)
         let {
             integer: amountInteger,
             normal: amountNormal
-        } = await TippingLogic.calculateAmount(params.get('token'), +params.get('tippingValue'))
+        } = await TippingLogic.calculateAmount(token, tippingValue)
 
         popup.querySelector('.amountCoin').textContent = amountNormal;
-        let success = await TippingLogic.sendTip(params.get('recipient'), amountInteger, params.get('network'), params.get('token'), params.get('message') ?? "")
+        let success = await TippingLogic.sendTip(params.get('recipient'), amountInteger, network, token, params.get('message') ?? "")
 
         popup.firstElementChild.remove();
         if (success) {
             let explorerLink;
-            if (params.get('network') == 'ETH')
+            if (network == 'ETH')
                 explorerLink = `https://etherscan.io/tx/${success.transactionHash}`
-            else if (params.get('network') == 'BSC')
+            else if (network == 'BSC')
                 explorerLink = `https://bscscan.com/tx/${success.transactionHash}`
-            else if (params.get('network') == 'Polygon')
+            else if (network == 'Polygon')
                 explorerLink = `https://polygonscan.com/tx/${success.transactionHash}`
             popup.append((new TippingSuccess(params.get('identifier'), explorerLink)).html)
         } else {
