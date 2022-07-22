@@ -5,7 +5,7 @@
     "dev": "webpack-dev-server"
   },
   "dependencies": {
-    "@idriss-crypto/tipping-core": "^1.2.0-beta.4",
+    "@idriss-crypto/tipping-core": "^2.0.0",
     "@walletconnect/web3-provider": "^1.7.8",
     "fast-creator": "^1.6.0",
     "web3": "^1.7.0",
