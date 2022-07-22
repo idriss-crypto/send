@@ -1,40 +1,17 @@
-import Web3Modal from "web3modal"
-import {TippingLogic} from "@idriss-crypto/tipping-core/tippingLogic";
-import {TippingMain} from "@idriss-crypto/tipping-core/tippingMain";
-import {TippingAddress} from "@idriss-crypto/tipping-core/tippingAddress";
 import {create} from "fast-creator";
 import css from "@idriss-crypto/tipping-core/tippingStyle";
-import {TippingWaitingConfirmation} from "@idriss-crypto/tipping-core/tippingWaitingConfirmation";
-import {TippingSuccess} from "@idriss-crypto/tipping-core/tippingSuccess";
-import {TippingWaitingApproval} from "@idriss-crypto/tipping-core/tippingWaitingApproval";
-import {TippingError} from "@idriss-crypto/tipping-core/tippingError";
-
-async function getProvider() {
-    const web3Modal = new Web3Modal({
-        network: 'mainnet',
-        cacheProvider: false, // optional
-        providerOptions: TippingLogic.providerOptions, // required
-        disableInjectedProvider: true,
-    });
-    await web3Modal.clearCachedProvider();
-    let provider
-    try {
-        provider = await web3Modal.connect();
-        console.log({provider})
-    } catch (ex) {
-        console.error(ex)
-    }
-    if (!provider) {
-        provider = window.ethereum?.providers[0]
-    }
-    if (!provider) {
-        window.open('https://metamask.io/download/')
-    }
-    return provider;
-}
+import {
+    TippingSuccess,
+    TippingWaitingConfirmation,
+    TippingWaitingApproval,
+    TippingError,
+    TippingMain,
+    TippingAddress
+} from "@idriss-crypto/tipping-core/subpages";
 
 document.addEventListener('DOMContentLoaded', async () => {
-
+    const tippingLogicPromise = await import ("@idriss-crypto/tipping-core/tippingLogic")
+    const getProviderPromise = import("@idriss-crypto/tipping-core/getWeb3Provider")
     let params = new URL(document.location).searchParams;
     let identifier = params.get('identifier');
     let recipient = params.get('recipient');
@@ -45,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
     div.attachShadow({mode: 'open'})
-    div.shadowRoot.addEventListener('close', () => document.location = 'https://idriss.xyz/')
+    div.shadowRoot.addEventListener('popupClose', () => document.location = 'https://idriss.xyz/')
     div.shadowRoot.append(create('style', {text: css}));
     let popup = create('section.tipping-popup')
     div.shadowRoot.append(popup);
@@ -76,10 +53,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 })
             });
         }
+        const {getProvider} = await getProviderPromise;
         let provider = await getProvider();
         popup.firstElementChild?.remove();
         popup.append(new TippingWaitingApproval(token).html);
-
+        const {TippingLogic} = await tippingLogicPromise
         await TippingLogic.prepareTip(provider, network)
         popup.firstElementChild.remove();
         popup.append((new TippingWaitingConfirmation(identifier, tippingValue, token)).html)

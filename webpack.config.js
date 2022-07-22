@@ -1,15 +1,17 @@
 const path = require('path');
 const CopyPlugin = require("copy-webpack-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     mode: "development", // "production" | "development" | "none"
     entry: {
-        "script": "./src/index.js",
+       "scriptTip": "./src/index.js",
+        "idrissTippingSDK": "./src/idrissTippingSDK/idrissTippingSDK.js",
     },
     devtool: "inline-source-map",
     output: {
         path: path.resolve(__dirname, "buildResults"),
-        filename: "static/js/scriptTip.js",
+        filename: "static/js/[name].js",
     },
     plugins: [
         new CopyPlugin({
@@ -18,6 +20,7 @@ module.exports = {
 
             ],
         }),
+        //new BundleAnalyzerPlugin()
     ],
     module: {
         rules: [
@@ -35,5 +38,8 @@ module.exports = {
                 ]
             }
         ]
-    }
+    },
+    optimization: {
+        //runtimeChunk: 'single',
+    },
 }
