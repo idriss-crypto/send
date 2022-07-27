@@ -12,6 +12,8 @@ import {
 document.addEventListener('DOMContentLoaded', async () => {
     const tippingLogicPromise = await import ("@idriss-crypto/tipping-core/tippingLogic")
     const getProviderPromise = import("@idriss-crypto/tipping-core/getWeb3Provider")
+
+
     let params = new URL(document.location).searchParams;
     let identifier = params.get('identifier');
     let recipient = params.get('recipient');
@@ -22,7 +24,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
     div.attachShadow({mode: 'open'})
-    div.shadowRoot.addEventListener('popupClose', () => document.location = 'https://idriss.xyz/')
+    div.shadowRoot.addEventListener('close', () => {
+        if (params.get('back') == 'close')
+            window.close()
+        else if (params.get('back'))
+            return document.location = params.get('back');
+        else
+            return document.location = 'https://idriss.xyz/';
+    })
     div.shadowRoot.append(create('style', {text: css}));
     let popup = create('section.tipping-popup')
     div.shadowRoot.append(popup);
