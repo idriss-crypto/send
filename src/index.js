@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let token = params.get('token');
     let tippingValue = +params.get('tippingValue');
     let network = params.get('network');
+    let message = params.get('message')||'';
 
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
@@ -37,7 +38,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     div.shadowRoot.append(popup);
     popup.classList.add('tipping-popup');
     try {
-        console.log('aaaa')
         if (!identifier || !recipient) {
             popup.append(new TippingAddress().html);
             await new Promise(res => {
@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     network = e.network;
                     token = e.token;
                     tippingValue = +e.amount;
+                    message = e.message;
                     res()
                 })
             });
@@ -76,7 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } = await TippingLogic.calculateAmount(token, tippingValue)
 
         popup.querySelector('.amountCoin').textContent = amountNormal;
-        let success = await TippingLogic.sendTip(recipient, amountInteger, network, token, params.get('message') ?? "")
+        let success = await TippingLogic.sendTip(recipient, amountInteger, network, token, message)
 
         popup.firstElementChild.remove();
         if (success) {

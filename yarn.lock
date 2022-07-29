@@ -475,9 +475,9 @@
     "@ethersproject/strings" "^5.6.1"
 
 "@idriss-crypto/tipping-core@^2.0.0":
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/@idriss-crypto/tipping-core/-/tipping-core-2.0.5.tgz#152ef90bc1955477c9aa6b9b134b787757c57b13"
-  integrity sha512-tbKxbne/8/2J6KKti4u3VBxCpIzZoU5N8PHLgx+rrnhozAAdmm+NtX4MxUDvDv4t7kVyxV5sUODtCRvrIDh/cA==
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@idriss-crypto/tipping-core/-/tipping-core-2.1.0.tgz#828656afd42f3bf58334cc7da2a084e8c3e2e619"
+  integrity sha512-IHXbSGjVlqOzl/MPb1v4wD0/zaPWEw9pu5MQcU9MBMU717juXzipXZvRWj9g7v3MCNACJMQv9zqx9gjvns+Z9Q==
   dependencies:
     "@depay/coinbase-wallet-sdk" "^1.0.5"
     "@walletconnect/web3-provider" "^1.7.8"
@@ -4104,21 +4104,21 @@ mock-fs@^4.1.0:
   resolved "https://registry.yarnpkg.com/mock-fs/-/mock-fs-4.14.0.tgz#ce5124d2c601421255985e6e94da80a7357b1b18"
   integrity sha512-qYvlv/exQ4+svI3UOvPUpLDF0OMX5euvUH0Ny4N5QyRyhNdgAgUrVH3iUINSzEPLvx0kbo/Bp28GJKIqvE7URw==
 
-mpts-core@^1.0.0-beta.1:
-  version "1.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/mpts-core/-/mpts-core-1.0.0-beta.3.tgz#1af4896c1cee44dc79671a4fead2f80abe039e88"
-  integrity sha512-CyTFV26tRsyk2K6HJOYs+hlFMRKNkbib8flrmqtuwjdqgO6ns132D0F0g3z05pOBmPGDX7wzOiXxcwpNFfEWNQ==
+mpts-core@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mpts-core/-/mpts-core-1.0.1.tgz#fd879a22c7eb7d154a9c4b1212c14a34b53aca0a"
+  integrity sha512-cS6W2Hz5Q+WjsvC9NabbjicGcOlNeOhS6baqms/PDtVCZkmQ/R9O1wll8sTjEVBr2ex32O07/FovQyfuda56Yg==
   dependencies:
     "@babel/core" "^7.17.8"
     "@babel/runtime" "^7.17.8"
     he "^1.2.0"
 
 mpts-loader@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/mpts-loader/-/mpts-loader-1.0.0.tgz#575b4a4a218ea1e80f3db3921bee9a63394909b2"
-  integrity sha512-f0t0uS6lrgo2vSCT1etWVT5jM/URVW9Mh4+xMAJpfcosMKRoCBj2glkNofvQiMD0gsmQD4PTQKZTOniRzqEkWg==
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mpts-loader/-/mpts-loader-1.0.1.tgz#e7ec5608fca27d7d85b9b6c2203f95b5ff010574"
+  integrity sha512-G6w7c4MAKAGrdEzr5qVzRd1jfgAllJMLdmBeWOAaGQgiKWuZC2MbPCIWNdatm9MsOR+TW+R2qYHVzYDxOICnxQ==
   dependencies:
-    mpts-core "^1.0.0-beta.1"
+    mpts-core "^1.0.0"
 
 mrmime@^1.0.0:
   version "1.0.1"
