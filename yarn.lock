@@ -3460,9 +3460,14 @@ idna-uts46-hx@^2.3.1:
   dependencies:
     punycode "2.1.0"
 
-"idriss-crypto@link:../ts-library":
-  version "0.0.0"
-  uid ""
+idriss-crypto@^1.7.1-experimental:
+  version "1.7.1-experimental"
+  resolved "https://registry.yarnpkg.com/idriss-crypto/-/idriss-crypto-1.7.1-experimental.tgz#ffc401e4a634a5a22c5a156613f47f765fbb65de"
+  integrity sha512-bbVeKDsAxBgBpjUCjBvs6sNAcuYfKDFNb/8LgPIthnsc4YJuKft5BHSaQqzBN5QL5GjoGrZ0HsIVw+f5qHoQwA==
+  dependencies:
+    "@types/node-fetch" "^2.5.12"
+    node-fetch "^2.6.7"
+    web3 "^1.7.4"
 
 ieee754@^1.1.13, ieee754@^1.2.1:
   version "1.2.1"
@@ -3821,6 +3826,11 @@ json-buffer@3.0.1, json-buffer@~3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/json-buffer/-/json-buffer-3.0.1.tgz#9338802a30d3b6605fbe0613e094008ca8c05a13"
   integrity sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==
+
+json-loader@^0.5.7:
+  version "0.5.7"
+  resolved "https://registry.yarnpkg.com/json-loader/-/json-loader-0.5.7.tgz#dca14a70235ff82f0ac9a3abeb60d337a365185d"
+  integrity sha512-QLPs8Dj7lnf3e3QYS1zkCo+4ZwqOiF9d/nZnYozTISxXWCfNs9yuky5rJw4/W34s7POaNlbZmQGaB5NiXCbP4w==
 
 json-parse-even-better-errors@^2.3.1:
   version "2.3.1"

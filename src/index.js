@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const sendToAnyoneLogicPromise = await import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneLogic")
     const getProviderPromise = import("@idriss-crypto/send-to-anyone-core/getWeb3Provider")
 
-
     let params = new URL(document.location).searchParams;
     let identifier = params.get('identifier');
     let recipient = params.get('recipient');
