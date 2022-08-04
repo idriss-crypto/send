@@ -1,5 +1,5 @@
 import {create} from "fast-creator";
-import css from "@idriss-crypto/send-to-anyone-core/sendToAnyoneStyle.mjs";
+import css from "@idriss-crypto/send-to-anyone-core/sendToAnyoneStyle";
 import {
     SendToAnyoneSuccess,
     SendToAnyoneWaitingConfirmation,
@@ -7,11 +7,11 @@ import {
     SendToAnyoneError,
     SendToAnyoneMain,
     SendToAnyoneAddress
-} from "@idriss-crypto/send-to-anyone-core/subpages.mjs";
+} from "@idriss-crypto/send-to-anyone-core/subpages";
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const sendToAnyoneLogicPromise = await import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneLogic.mjs")
-    const getProviderPromise = import("@idriss-crypto/send-to-anyone-core/getWeb3Provider.mjs")
+    const sendToAnyoneLogicPromise = await import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneLogic")
+    const getProviderPromise = import("@idriss-crypto/send-to-anyone-core/getWeb3Provider")
 
 
     let params = new URL(document.location).searchParams;
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
 
         popup.querySelector('.amountCoin').textContent = amountNormal;
-        let success = await SendToAnyoneLogic.sendSendToAnyone(recipient, amountInteger, network, token, message)
+        let success = await SendToAnyoneLogic.sendToAnyone(recipient, amountInteger, network, token, message)
 
         popup.firstElementChild.remove();
         if (success) {

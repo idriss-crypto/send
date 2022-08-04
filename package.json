@@ -7,7 +7,7 @@
   "dependencies": {
     "@walletconnect/web3-provider": "^1.7.8",
     "fast-creator": "^1.6.0",
-    "@idriss-crypto/send-to-anyone-core": "link:../send-to-anyone-core/dist",
+    "@idriss-crypto/send-to-anyone-core": "link:../send-to-anyone-core",
     "web3": "^1.7.0",
     "web3modal": "^1.9.7"
   },
