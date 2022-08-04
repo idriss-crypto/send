@@ -1,24 +1,24 @@
 import {create} from "fast-creator";
-import css from "@idriss-crypto/tipping-core/tippingStyle";
+import css from "@idriss-crypto/send-to-anyone-core/sendToAnyoneStyle.mjs";
 import {
-    TippingSuccess,
-    TippingWaitingConfirmation,
-    TippingWaitingApproval,
-    TippingError,
-    TippingMain,
-    TippingAddress
-} from "@idriss-crypto/tipping-core/subpages";
+    SendToAnyoneSuccess,
+    SendToAnyoneWaitingConfirmation,
+    SendToAnyoneWaitingApproval,
+    SendToAnyoneError,
+    SendToAnyoneMain,
+    SendToAnyoneAddress
+} from "@idriss-crypto/send-to-anyone-core/subpages.mjs";
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const tippingLogicPromise = await import ("@idriss-crypto/tipping-core/tippingLogic")
-    const getProviderPromise = import("@idriss-crypto/tipping-core/getWeb3Provider")
+    const sendToAnyoneLogicPromise = await import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneLogic.mjs")
+    const getProviderPromise = import("@idriss-crypto/send-to-anyone-core/getWeb3Provider.mjs")
 
 
     let params = new URL(document.location).searchParams;
     let identifier = params.get('identifier');
     let recipient = params.get('recipient');
     let token = params.get('token');
-    let tippingValue = +params.get('tippingValue');
+    let sendToAnyoneValue = +params.get('sendToAnyoneValue');
     let network = params.get('network');
     let message = params.get('message')||'';
 
@@ -34,12 +34,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             return document.location = 'https://idriss.xyz/';
     })
     div.shadowRoot.append(create('style', {text: css}));
-    let popup = create('section.tipping-popup')
+    let popup = create('section.sendToAnyone-popup')
     div.shadowRoot.append(popup);
-    popup.classList.add('tipping-popup');
+    popup.classList.add('sendToAnyone-popup');
     try {
         if (!identifier || !recipient) {
-            popup.append(new TippingAddress().html);
+            popup.append(new SendToAnyoneAddress().html);
             await new Promise(res => {
                 popup.addEventListener('next', e => {
                     console.log(e);
@@ -49,15 +49,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 })
             });
         }
-        if (!token || !tippingValue || !network) {
+        if (!token || !sendToAnyoneValue || !network) {
             popup.firstElementChild?.remove();
-            popup.append(new TippingMain(identifier).html);
+            popup.append(new SendToAnyoneMain(identifier).html);
             await new Promise(res => {
                 popup.addEventListener('sendMoney', e => {
                     console.log(e);
                     network = e.network;
                     token = e.token;
-                    tippingValue = +e.amount;
+                    sendToAnyoneValue = +e.amount;
                     message = e.message;
                     res()
                 })
@@ -66,18 +66,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         const {getProvider} = await getProviderPromise;
         let provider = await getProvider();
         popup.firstElementChild?.remove();
-        popup.append(new TippingWaitingApproval(token).html);
-        const {TippingLogic} = await tippingLogicPromise
-        await TippingLogic.prepareTip(provider, network)
+        popup.append(new SendToAnyoneWaitingApproval(token).html);
+        const {SendToAnyoneLogic} = await sendToAnyoneLogicPromise
+        await SendToAnyoneLogic.prepareSendToAnyone(provider, network)
         popup.firstElementChild.remove();
-        popup.append((new TippingWaitingConfirmation(identifier, tippingValue, token)).html)
+        popup.append((new SendToAnyoneWaitingConfirmation(identifier, sendToAnyoneValue, token)).html)
         let {
             integer: amountInteger,
             normal: amountNormal
-        } = await TippingLogic.calculateAmount(token, tippingValue)
+        } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
 
         popup.querySelector('.amountCoin').textContent = amountNormal;
-        let success = await TippingLogic.sendTip(recipient, amountInteger, network, token, message)
+        let success = await SendToAnyoneLogic.sendSendToAnyone(recipient, amountInteger, network, token, message)
 
         popup.firstElementChild.remove();
         if (success) {
@@ -88,14 +88,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 explorerLink = `https://bscscan.com/tx/${success.transactionHash}`
             else if (network == 'Polygon')
                 explorerLink = `https://polygonscan.com/tx/${success.transactionHash}`
-            popup.append((new TippingSuccess(identifier, explorerLink)).html)
+            popup.append((new SendToAnyoneSuccess(identifier, explorerLink)).html)
         } else {
-            popup.append((new TippingError()).html)
+            popup.append((new SendToAnyoneError()).html)
             console.log({success})
         }
     } catch (e) {
         popup.firstElementChild?.remove();
-        popup.append((new TippingError()).html)
+        popup.append((new SendToAnyoneError()).html)
         console.error(e)
     }
 });

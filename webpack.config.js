@@ -5,9 +5,9 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 module.exports = {
     mode: "development", // "production" | "development" | "none"
     entry: {
-        "scriptTip": "./src/index.js",
-        "generateTipCode": "./src/generateTipCode.js",
-        "idrissTippingSDK": "./src/idrissTippingSDK/idrissTippingSDK.js",
+        "scriptSendToAnyone": "./src/index.js",
+        "generateSendToAnyoneCode": "./src/generateSendToAnyoneCode.js",
+        "idrissSendToAnyoneSDK": "./src/idrissSendToAnyoneSDK/idrissSendToAnyoneSDK.js",
     },
     devtool: "inline-source-map",
     output: {
@@ -17,8 +17,8 @@ module.exports = {
     plugins: [
         new CopyPlugin({
             patterns: [
-                {from: "./src/tip.html", to: "."},
-                {from: "./src/generateTipCode.html", to: "."},
+                {from: "./src/send-to-anyone.html", to: "."},
+                {from: "./src/generateSendToAnyoneCode.html", to: "."},
 
             ],
         }),
