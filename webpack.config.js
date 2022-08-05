@@ -6,11 +6,25 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const setup = (mode) => {
     if (mode === 'production') {
         return {
-            SEND_TO_HASH_CONTRACT_ADDRESS: `'senttohashconPROD'`
+            POLYGON_RPC_ENDPOINT: `'https://polygon-rpc.com/'`,
+            POLYGON_CHAIN_ID: `'137'`,
+            POLYGON_BLOCK_EXPLORER_ADDRESS: `'https://polygonscan.com'`,
+            IDRISS_HOMEPAGE: `'https://idriss.xyz'`,
+        }
+    } else if (mode === 'none') {
+        return {
+            POLYGON_RPC_ENDPOINT: `'http://localhost:8545'`,
+            POLYGON_CHAIN_ID: `'1337'`,
+            POLYGON_BLOCK_EXPLORER_ADDRESS: `'https://mumbai.polygonscan.com'`,
+            IDRISS_HOMEPAGE: `'http://localhost'`,
         }
     } else {
         return {
-            SEND_TO_HASH_CONTRACT_ADDRESS: `'senttohashconDEV'`
+            // Mumbai - Polygon testnet
+            POLYGON_RPC_ENDPOINT: `'https://rpc-mumbai.matic.today'`,
+            POLYGON_CHAIN_ID: `'80001'`,
+            POLYGON_BLOCK_EXPLORER_ADDRESS: `'https://mumbai.polygonscan.com'`,
+            IDRISS_HOMEPAGE: `'https://idriss.xyz'`,
         }
     }
 }

@@ -76,25 +76,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
 
         popup.querySelector('.amountCoin').textContent = amountNormal;
-        let success = await SendToAnyoneLogic.sendToAnyone(recipient, amountInteger, network, token, message)
+        //TODO: check price calculation + if it adds $fee properly
+        let success = await SendToAnyoneLogic.sendToAnyone(identifier, `${amountInteger}`, network, token, message)
+        console.log(success)
 
         popup.firstElementChild.remove();
         if (success) {
             let explorerLink;
             if (network == 'ETH')
-                explorerLink = `https://etherscan.io/tx/${success.transactionHash}`
+                explorerLink = `https://etherscan.io/tx/${success.transactionReceipt.transactionHash}`
             else if (network == 'BSC')
-                explorerLink = `https://bscscan.com/tx/${success.transactionHash}`
+                explorerLink = `https://bscscan.com/tx/${success.transactionReceipt.transactionHash}`
             else if (network == 'Polygon')
-                explorerLink = `https://polygonscan.com/tx/${success.transactionHash}`
-            popup.append((new SendToAnyoneSuccess(identifier, explorerLink)).html)
+                explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${success.transactionReceipt.transactionHash}`
+            console.log(explorerLink)
+            popup.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword)).html)
         } else {
-            popup.append((new SendToAnyoneError()).html)
+            popup.append((new SendToAnyoneError({name: 'Reverted', message: 'Transaction was not successful'})).html)
             console.log({success})
         }
     } catch (e) {
         popup.firstElementChild?.remove();
-        popup.append((new SendToAnyoneError()).html)
+        popup.append((new SendToAnyoneError(e)).html)
         console.error(e)
     }
 });

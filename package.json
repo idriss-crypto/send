@@ -1,10 +1,11 @@
 {
   "scripts": {
     "build": "webpack --watch --mode development",
+    "build-local": "webpack --mode none",
     "build-dev": "webpack --mode development",
     "build-prod": "webpack --mode production",
     "buildOnce": "webpack --mode development",
-    "dev": "webpack-dev-server --mode development"
+    "dev": "webpack-dev-server --mode none"
   },
   "dependencies": {
     "@idriss-crypto/send-to-anyone-core": "link:../send-to-anyone-core",
