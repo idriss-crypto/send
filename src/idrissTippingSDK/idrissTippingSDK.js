@@ -2,12 +2,12 @@ console.log('Idriss tipping script')
 
 export async function idrissShowTippingPopup(config, e) {
     e.preventDefault();
-    const {idrissShowTippingPopup} = await import(/* webpackPrefetch: true */"@idriss-crypto/tipping-core");
-    return idrissShowTippingPopup(config, e);
+    const {idrissShowSendToAnyonePopup} = await import(/* webpackPrefetch: true */"@idriss-crypto/send-to-anyone-core");
+    return idrissShowSendToAnyonePopup(config, e);
 }
 
 export async function idrissLoadTippingWidget() {
-    return (await import(/* webpackPrefetch: true */"@idriss-crypto/tipping-core")).IdrissTippingWidget;
+    return (await import(/* webpackPrefetch: true */"@idriss-crypto/send-to-anyone-core")).IdrissSendToAnyoneWidget;
 }
 
 window.idrissShowTippingPopup = idrissShowTippingPopup;
