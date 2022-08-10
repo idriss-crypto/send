@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     div.shadowRoot.append(popup);
     try {
         if (!identifier || !recipient) {
-            popup.append(new TippingAddress().html);
+            popup.append(new SendToAnyoneAddress().html);
             await new Promise(res => {
                 popup.addEventListener('next', e => {
                     console.log(e);
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     } catch (e) {
         popup.firstElementChild?.remove();
-        popup.append((new SendToAnyoneError()).html)
+        popup.append((new SendToAnyoneError({name: 'Reverted', message: 'Transaction was not successful'})).html)
         console.error(e)
     }
 });
