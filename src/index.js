@@ -20,6 +20,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     let sendToAnyoneValue = +params.get('sendToAnyoneValue');
     let network = params.get('network');
     let message = params.get('message')||'';
+    let isIDrissRegistered;
+    let assetType;
+    let assetAmount;
+    let assetAddress;
+    let assetId;
 
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
@@ -44,6 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     console.log(e);
                     identifier = e.identifier;
                     recipient = e.recipient;
+                    isIDrissRegistered = e.isIDrissRegistered;
                     res()
                 })
             });
@@ -58,6 +64,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     token = e.token;
                     sendToAnyoneValue = +e.amount;
                     message = e.message;
+                    assetType = e.assetType;
+                    assetAmount = e.assetAmount;
+                    assetAddress = e.assetAddress;
+                    assetId = e.assetId;
                     res()
                 })
             });
@@ -77,7 +87,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         popup.querySelector('.amountCoin').textContent = amountNormal;
         //TODO: check price calculation + if it adds $fee properly
-        let success = await SendToAnyoneLogic.sendToAnyone(identifier, `${amountInteger}`, network, token, message)
+        let success = await SendToAnyoneLogic.sendToAnyone(identifier, `${amountInteger}`, network, token, message,
+            assetType, assetAmount, assetAddress, assetId)
         console.log(success)
 
         popup.firstElementChild.remove();
@@ -90,7 +101,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             else if (network == 'Polygon')
                 explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${success.transactionReceipt.transactionHash}`
             console.log(explorerLink)
-            popup.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword)).html)
+            popup.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
+                            assetAmount, assetId, assetType, assetAddress)).html)
         } else {
             popup.append((new SendToAnyoneError({name: 'Reverted', message: 'Transaction was not successful'})).html)
             console.log({success})
