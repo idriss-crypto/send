@@ -79,13 +79,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         const {SendToAnyoneLogic} = await sendToAnyoneLogicPromise
         await SendToAnyoneLogic.prepareSendToAnyone(provider, network)
         popup.firstElementChild.remove();
-        popup.append((new SendToAnyoneWaitingConfirmation(identifier, sendToAnyoneValue, token)).html)
+        popup.append((new SendToAnyoneWaitingConfirmation(identifier, sendToAnyoneValue, token, assetAmount, assetId, assetType)).html)
         let {
             integer: amountInteger,
             normal: amountNormal
         } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
 
-        popup.querySelector('.amountCoin').textContent = amountNormal;
+        let amountToDisplay = assetType === 'native' ? amountNormal : assetAmount
+        popup.querySelector('.amountCoin').textContent = amountToDisplay;
         //TODO: check price calculation + if it adds $fee properly
         let success = await SendToAnyoneLogic.sendToAnyone(identifier, `${amountInteger}`, network, token, message,
             assetType, assetAmount, assetAddress, assetId)
