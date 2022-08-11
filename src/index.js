@@ -8,7 +8,7 @@ import {
     SendToAnyoneMain,
     SendToAnyoneAddress
 } from "@idriss-crypto/send-to-anyone-core/subpages";
-
+let addressNFTs
 document.addEventListener('DOMContentLoaded', async () => {
     const sendToAnyoneLogicPromise = await import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneLogic")
     const getProviderPromise = import("@idriss-crypto/send-to-anyone-core/getWeb3Provider")
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log(SendToAnyoneLogic.web3)
         const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
         let selectedAccount = accounts[0];
-        const addressNFTs = getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY)
+        addressNFTs = getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY)
         //TODO: end ^^^^^
 
         if (!identifier || !recipient) {
@@ -69,15 +69,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         if (!token || !sendToAnyoneValue || !network) {
             popup.firstElementChild?.remove();
+            // ToDo: Filter for exsting v.title
             const nfts = (await addressNFTs).ownedNfts.map((v, i, a) => {
                 return {
                     name: v.title,
                     address: v.contract.address,
-                    id: v.id.tokenId,
-                    image: v.metadata.image,
+                    id: v.tokenId,
+                    image: v.media[0].gateway,
                 }
             })
-
+            console.log(addressNFTs)
             console.log(nfts)
 
             popup.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts).html);
