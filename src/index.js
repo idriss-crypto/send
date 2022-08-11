@@ -21,6 +21,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     let tippingValue = +params.get('tippingValue');
     let network = params.get('network');
     let message = params.get('message')||'';
+    let coinFilter = null;
+    try{
+        coinFilter=JSON.parse(params.get('coinFilter'))
+    }catch(ex){}
+    if(window.configJSON){
+        recipient=configJSON.basics?.address
+        identifier=configJSON.addData?.name
+        coinFilter=window.configJSON?.basics?.currencies;
+    }
 
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
@@ -51,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         if (!token || !tippingValue || !network) {
             popup.firstElementChild?.remove();
-            popup.append(new TippingMain(identifier).html);
+            popup.append(new TippingMain(identifier,true,coinFilter).html);
             await new Promise(res => {
                 popup.addEventListener('sendMoney', e => {
                     console.log(e);
