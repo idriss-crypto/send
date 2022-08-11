@@ -12,6 +12,7 @@ import {
 document.addEventListener('DOMContentLoaded', async () => {
     const sendToAnyoneLogicPromise = await import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneLogic")
     const getProviderPromise = import("@idriss-crypto/send-to-anyone-core/getWeb3Provider")
+    const sendToAnyoneUtilsPromise = import("@idriss-crypto/send-to-anyone-core/sendToAnyoneUtils")
 
     let params = new URL(document.location).searchParams;
     let identifier = params.get('identifier');
@@ -42,6 +43,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     div.shadowRoot.append(popup);
     popup.classList.add('sendToAnyone-popup');
     try {
+        //TODO: wrap this into additional subpage with connect button
+        const {getProvider} = await getProviderPromise;
+        const {getNFTsForAddress} = await sendToAnyoneUtilsPromise;
+        let provider = await getProvider();
+        const {SendToAnyoneLogic} = await sendToAnyoneLogicPromise
+        await SendToAnyoneLogic.prepareSendToAnyone(provider, network ?? 'Polygon', ALCHEMY_API_KEY)
+        console.log(SendToAnyoneLogic.web3)
+        const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
+        let selectedAccount = accounts[0];
+        const addressNFTs = getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY)
+        //TODO: end ^^^^^
+
         if (!identifier || !recipient) {
             popup.append(new SendToAnyoneAddress().html);
             await new Promise(res => {
@@ -56,7 +69,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         if (!token || !sendToAnyoneValue || !network) {
             popup.firstElementChild?.remove();
-            popup.append(new SendToAnyoneMain(identifier).html);
+            const nfts = (await addressNFTs).ownedNfts.map((v, i, a) => {
+                return {
+                    name: v.title,
+                    address: v.contract.address,
+                    id: v.id.tokenId,
+                    image: v.metadata.image,
+                }
+            })
+
+            console.log(nfts)
+
+            popup.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts).html);
             await new Promise(res => {
                 popup.addEventListener('sendMoney', e => {
                     console.log(e);
@@ -72,12 +96,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 })
             });
         }
-        const {getProvider} = await getProviderPromise;
-        let provider = await getProvider();
         popup.firstElementChild?.remove();
         popup.append(new SendToAnyoneWaitingApproval(token).html);
-        const {SendToAnyoneLogic} = await sendToAnyoneLogicPromise
-        await SendToAnyoneLogic.prepareSendToAnyone(provider, network)
         popup.firstElementChild.remove();
         popup.append((new SendToAnyoneWaitingConfirmation(identifier, sendToAnyoneValue, token, assetAmount, assetId, assetType)).html)
         let {
@@ -85,8 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             normal: amountNormal
         } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
 
-        let amountToDisplay = assetType === 'native' ? amountNormal : assetAmount
-        popup.querySelector('.amountCoin').textContent = amountToDisplay;
+        popup.querySelector('.amountCoin').textContent = amountNormal;
         //TODO: check price calculation + if it adds $fee properly
         let success = await SendToAnyoneLogic.sendToAnyone(identifier, `${amountInteger}`, network, token, message,
             assetType, assetAmount, assetAddress, assetId)

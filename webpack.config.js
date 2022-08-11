@@ -10,6 +10,7 @@ const setup = (mode) => {
             POLYGON_CHAIN_ID: `'137'`,
             POLYGON_BLOCK_EXPLORER_ADDRESS: `'https://polygonscan.com'`,
             IDRISS_HOMEPAGE: `'https://idriss.xyz'`,
+            ALCHEMY_API_KEY: `'k9tHd_GSazWwIVyu4lkeZz1EVDjg2qwN'`,
         }
     } else if (mode === 'none') {
         return {
@@ -17,6 +18,7 @@ const setup = (mode) => {
             POLYGON_CHAIN_ID: `'1337'`,
             POLYGON_BLOCK_EXPLORER_ADDRESS: `'https://mumbai.polygonscan.com'`,
             IDRISS_HOMEPAGE: `'http://localhost'`,
+            ALCHEMY_API_KEY: `'k9tHd_GSazWwIVyu4lkeZz1EVDjg2qwN'`,
         }
     } else {
         return {
@@ -25,6 +27,7 @@ const setup = (mode) => {
             POLYGON_CHAIN_ID: `'80001'`,
             POLYGON_BLOCK_EXPLORER_ADDRESS: `'https://mumbai.polygonscan.com'`,
             IDRISS_HOMEPAGE: `'https://idriss.xyz'`,
+            ALCHEMY_API_KEY: `'k9tHd_GSazWwIVyu4lkeZz1EVDjg2qwN'`,
         }
     }
 }
