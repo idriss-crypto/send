@@ -69,8 +69,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         if (!token || !sendToAnyoneValue || !network) {
             popup.firstElementChild?.remove();
-            // ToDo: Filter for exsting v.title
-            const nfts = (await addressNFTs).ownedNfts.map((v, i, a) => {
+            // filter erc721 and existing titles
+            const nfts = (await addressNFTs).ownedNfts.filter((v, i, a) => v.title != "").filter((v, i, a) => v.tokenType == "ERC721").map((v, i, a) => {
                 return {
                     name: v.title,
                     address: v.contract.address,
