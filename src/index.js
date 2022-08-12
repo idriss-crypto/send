@@ -6,6 +6,7 @@ import {
     SendToAnyoneWaitingApproval,
     SendToAnyoneError,
     SendToAnyoneMain,
+    SendToAnyoneConnect,
     SendToAnyoneAddress
 } from "@idriss-crypto/send-to-anyone-core/subpages";
 
@@ -43,17 +44,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     div.shadowRoot.append(popup);
     popup.classList.add('sendToAnyone-popup');
     try {
-        //TODO: wrap this into additional subpage with connect button
         const {getProvider} = await getProviderPromise;
         const {getNFTsForAddress} = await sendToAnyoneUtilsPromise;
-        let provider = await getProvider();
-        const {SendToAnyoneLogic} = await sendToAnyoneLogicPromise
-        await SendToAnyoneLogic.prepareSendToAnyone(provider, network ?? 'Polygon', ALCHEMY_API_KEY)
-        console.log(SendToAnyoneLogic.web3)
-        const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
-        let selectedAccount = accounts[0];
-        const addressNFTs = getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY)
-        //TODO: end ^^^^^
+        const {SendToAnyoneLogic} = await sendToAnyoneLogicPromise;
 
         if (!identifier || !recipient) {
             popup.append(new SendToAnyoneAddress().html);
@@ -69,30 +62,59 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         if (!token || !sendToAnyoneValue || !network) {
             popup.firstElementChild?.remove();
-            // filter erc721 and existing titles
-            const nfts = (await addressNFTs).ownedNfts.filter((v, i, a) => v.title != "").filter((v, i, a) => v.tokenType == "ERC721").map((v, i, a) => {
-                return {
-                    name: v.title,
-                    address: v.contract.address,
-                    id: v.tokenId,
-                    image: v.media[0].gateway,
-                }
-            })
-            console.log(addressNFTs)
-            console.log(nfts)
-
-            popup.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts).html);
+            popup.append(new SendToAnyoneConnect(identifier, isIDrissRegistered).html);
+            let addressNFTs;
             await new Promise(res => {
-                popup.addEventListener('sendMoney', e => {
-                    console.log(e);
-                    network = e.network;
-                    token = e.token;
-                    sendToAnyoneValue = +e.amount;
-                    message = e.message;
-                    assetType = e.assetType;
-                    assetAmount = e.assetAmount;
-                    assetAddress = e.assetAddress;
-                    assetId = e.assetId;
+                popup.addEventListener('connectWallet', async e => {
+                    console.log(e)
+                    let provider = await getProvider();
+                    await SendToAnyoneLogic.prepareSendToAnyone(provider, network ?? 'Polygon', ALCHEMY_API_KEY)
+                    console.log(SendToAnyoneLogic.web3)
+                    const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
+                    let selectedAccount = accounts[0];
+                    if (e.method == "connect") {
+                        addressNFTs = getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY)
+                        // filter erc721 and existing titles
+                        console.log(SendToAnyoneLogic.web3)
+                        const nfts = (await addressNFTs).ownedNfts.filter((v, i, a) => v.title != "").filter((v, i, a) => v.tokenType == "ERC721").map((v, i, a) => {
+                            return {
+                                name: v.title,
+                                address: v.contract.address,
+                                id: v.tokenId,
+                                image: v.media[0].gateway,
+                            }
+                        })
+                        console.log(addressNFTs)
+                        console.log(nfts)
+
+                        popup.firstElementChild?.remove();
+
+                        popup.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts).html);
+                        await new Promise(res => {
+                            popup.addEventListener('sendMoney', e => {
+                                console.log(e);
+                                network = e.network;
+                                token = e.token;
+                                sendToAnyoneValue = +e.amount;
+                                message = e.message;
+                                assetType = e.assetType;
+                                assetAmount = e.assetAmount;
+                                assetAddress = e.assetAddress;
+                                assetId = e.assetId;
+                                res()
+                            })
+                        });
+                    } else {
+                        network = e.network;
+                        token = e.token;
+                        sendToAnyoneValue = +e.amount;
+                        message = e.message;
+                        assetType = e.assetType;
+                        assetAmount = e.assetAmount;
+                        assetAddress = e.assetAddress;
+                        assetId = e.assetId;
+                        res()
+                    }
                     res()
                 })
             });
