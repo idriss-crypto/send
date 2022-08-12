@@ -69,15 +69,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         if (!token || !sendToAnyoneValue || !network) {
             popup.firstElementChild?.remove();
-            const nfts = (await addressNFTs).ownedNfts.map((v, i, a) => {
+            // filter erc721 and existing titles
+            const nfts = (await addressNFTs).ownedNfts.filter((v, i, a) => v.title != "").filter((v, i, a) => v.tokenType == "ERC721").map((v, i, a) => {
                 return {
                     name: v.title,
                     address: v.contract.address,
-                    id: v.id.tokenId,
-                    image: v.metadata.image,
+                    id: v.tokenId,
+                    image: v.media[0].gateway,
                 }
             })
-
+            console.log(addressNFTs)
             console.log(nfts)
 
             popup.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts).html);

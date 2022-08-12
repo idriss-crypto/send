@@ -48,10 +48,5 @@
 <div class="container">
 </div>
 <script src="../static/js/scriptSendToAnyone.js"></script>
-{% if configCreator %}
-    <script>
-        var configJSON = JSON.parse({{configCreator|tojson}}) ;
-    </script>
-{% endif %}
 </body>
 </html>
