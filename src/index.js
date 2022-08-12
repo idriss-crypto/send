@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${success.transactionReceipt.transactionHash}`
             console.log(explorerLink)
             popup.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
-                            assetAmount, assetId, assetType, assetAddress)).html)
+                            assetAmount, assetId, assetType, assetAddress, token)).html)
         } else {
             popup.append((new SendToAnyoneError({name: 'Reverted', message: 'Transaction was not successful'})).html)
             console.log({success})
