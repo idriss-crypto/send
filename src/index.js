@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     let assetAmount;
     let assetAddress;
     let assetId;
+    let selectedNFT;
+    let nftName;
 
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
@@ -101,6 +103,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 assetAmount = e.assetAmount;
                                 assetAddress = e.assetAddress;
                                 assetId = e.assetId;
+                                selectedNFT = nfts.filter(nft => nft.address == assetAddress).filter(nft => nft.id == assetId)
+                                nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
                                 res()
                             })
                         });
@@ -113,6 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         assetAmount = e.assetAmount;
                         assetAddress = e.assetAddress;
                         assetId = e.assetId;
+                        nftName = "";
                         res()
                     }
                     res()
@@ -122,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         popup.firstElementChild?.remove();
         popup.append(new SendToAnyoneWaitingApproval(token).html);
         popup.firstElementChild.remove();
-        popup.append((new SendToAnyoneWaitingConfirmation(identifier, sendToAnyoneValue, token, assetAmount, assetId, assetType)).html)
+        popup.append((new SendToAnyoneWaitingConfirmation(identifier, sendToAnyoneValue, token, assetAmount, assetId, assetType, nftName)).html)
         let {
             integer: amountInteger,
             normal: amountNormal
