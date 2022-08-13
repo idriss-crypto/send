@@ -135,6 +135,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         popup.querySelector('.amountCoin').textContent = amountNormal;
         //TODO: check price calculation + if it adds $fee properly
+        console.log(identifier, `${amountInteger}`, network, token, message,
+            assetType, assetAmount, assetAddress, assetId)
         let success = await SendToAnyoneLogic.sendToAnyone(identifier, `${amountInteger}`, network, token, message,
             assetType, assetAmount, assetAddress, assetId)
         console.log(success)
