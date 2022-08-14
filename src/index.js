@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let success = await SendToAnyoneLogic.sendToAnyone(identifier, `${amountInteger}`, network, token, message,
             assetType, assetAmount, assetAddress, assetId)
         console.log(success)
-
+        let blockNumber = success.transactionReceipt.blockNumber;
         popup.firstElementChild.remove();
         if (success) {
             let explorerLink;
@@ -151,8 +151,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             else if (network == 'Polygon')
                 explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${success.transactionReceipt.transactionHash}`
             console.log(explorerLink)
+            // add success.transactionReceipt.blockNumber to url so we don't have to query
             popup.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
-                            assetAmount, assetId, assetType, assetAddress, token)).html)
+                            assetAmount, assetId, assetType, assetAddress, token, blockNumber)).html)
         } else {
             popup.append((new SendToAnyoneError({name: 'Reverted', message: 'Transaction was not successful'})).html)
             console.log({success})
