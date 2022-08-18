@@ -639,16 +639,16 @@
     "@ethersproject/properties" "^5.6.0"
     "@ethersproject/strings" "^5.6.1"
 
-"@idriss-crypto/send-to-anyone-core@^0.1.15":
-  version "0.1.15"
-  resolved "https://registry.yarnpkg.com/@idriss-crypto/send-to-anyone-core/-/send-to-anyone-core-0.1.15.tgz#d5c6c8b11e6c9e350f0f3c79dc17efee05d10d5a"
-  integrity sha512-nIgtKC6ULS4Wcqc6OWu/uNPNqtKoDBQejuF2i1JbuE9mHmJxyiAbqOTxv1f8mDlA0aUKCAQfemCD/ctPoIssuw==
+"@idriss-crypto/send-to-anyone-core@^0.1.16":
+  version "0.1.16"
+  resolved "https://registry.yarnpkg.com/@idriss-crypto/send-to-anyone-core/-/send-to-anyone-core-0.1.16.tgz#22d991b6a5afebff6be7c98a31d346731a825a22"
+  integrity sha512-jb3LJ9vzWvas8fQoDEhd1yB5U39dC6/UCgUemKJes7j3tBfivaTyVB/yhFoEM6lupMHcd87Jq14WxKaimRl4Ew==
   dependencies:
     "@depay/coinbase-wallet-sdk" "^1.0.5"
     "@walletconnect/web3-provider" "^1.7.8"
     alchemy-sdk "^2.0.2"
     fast-creator "^1.6.0"
-    idriss-crypto "1.7.6-experimental"
+    idriss-crypto "1.7.9-experimental"
     web3 "^1.7.0"
     web3modal "^1.9.7"
 
@@ -3701,10 +3701,10 @@ idna-uts46-hx@^2.3.1:
   dependencies:
     punycode "2.1.0"
 
-idriss-crypto@1.7.6-experimental:
-  version "1.7.6-experimental"
-  resolved "https://registry.yarnpkg.com/idriss-crypto/-/idriss-crypto-1.7.6-experimental.tgz#1ec2c0f8834c422a6fbdd06aacdb9134f3bddd20"
-  integrity sha512-0eKtmoUMkWHuqOaEWGo9T7aTQQfFbozKWpEjMxgTk0WcuMd0jwWB9RxpO3Uz45faMQRCyER/YJYC36EK3kaQCw==
+idriss-crypto@1.7.9-experimental:
+  version "1.7.9-experimental"
+  resolved "https://registry.yarnpkg.com/idriss-crypto/-/idriss-crypto-1.7.9-experimental.tgz#99d2af01caa56f1e81c88709c4efe082b9d20b86"
+  integrity sha512-WZg/3svCjMlSISdq7EEub4my55aCLi1ezgtlBrK/ioJ/Os23wBiBw01n8PG9dHHWI9DUmyq79Izrkn9SeY1u0A==
   dependencies:
     "@types/node-fetch" "^2.5.12"
     node-fetch "^2.6.7"
