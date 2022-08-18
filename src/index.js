@@ -124,6 +124,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 })
             });
         }
+        // ToDo: approval screen will never be rendered completely as it is overwritten by the waitingConfirmation screen
         popup.firstElementChild?.remove();
         popup.append(new SendToAnyoneWaitingApproval(token).html);
         popup.firstElementChild.remove();
