@@ -474,10 +474,10 @@
     "@ethersproject/properties" "^5.6.0"
     "@ethersproject/strings" "^5.6.1"
 
-"@idriss-crypto/tipping-core@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@idriss-crypto/tipping-core/-/tipping-core-2.2.0.tgz#c32afc2b19bc8cd0feabec7f447a448262791b86"
-  integrity sha512-83Z93XGX0P2iAAjUksZsvP143tZ0HVJAZk5UdhR7+cQFSWOB+3GPtZnHv7q1oeKcHMTR8qu16/zzbGXju2HjgA==
+"@idriss-crypto/tipping-core@^2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@idriss-crypto/tipping-core/-/tipping-core-2.2.3.tgz#8f9dfa577e53a1d483e484b483727cca8549d6a6"
+  integrity sha512-iJd8JU1LXzmYFLzWOcFXDOaijxmnNvs3wsxP8eFj5Z+vX92kvG55z2C39ERnP7pcK0OOm4izng4/L7kx+wcqHg==
   dependencies:
     "@depay/coinbase-wallet-sdk" "^1.0.5"
     "@walletconnect/web3-provider" "^1.7.8"
