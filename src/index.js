@@ -41,6 +41,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         else
             return document.location = 'https://idriss.xyz/';
     })
+    div.shadowRoot.addEventListener('closeError', () => {
+        return document.location = 'https://idriss.xyz/sendToAnyone';
+    })
+    div.shadowRoot.addEventListener('discordSendError', () => {
+        const url =  'https://discord.gg/VMcJ9uF6u8';
+        window.open(url, '_blank');
+    })
     div.shadowRoot.append(create('style', {text: css}));
     let popup = create('section.sendToAnyone-popup')
     div.shadowRoot.append(popup);
@@ -160,6 +167,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log({success})
         }
     } catch (e) {
+        // ToDo: catch different error types here
+        // Errors will be reported on Discord
         popup.firstElementChild?.remove();
         popup.append((new SendToAnyoneError(e)).html)
         console.error(e)
