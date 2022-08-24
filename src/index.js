@@ -148,9 +148,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         let success = await SendToAnyoneLogic.sendToAnyone(identifier, `${amountInteger}`, network, token, message,
             assetType, assetAmount, assetAddress, assetId)
         console.log(success)
-        let blockNumber = success.transactionReceipt.blockNumber;
         popup.firstElementChild.remove();
+        let blockNumber;
+        let txnHash;
         if (success) {
+            blockNumber = success.transactionReceipt.blockNumber;
+            txnHash = success.transactionReceipt.transactionHash;
             let explorerLink;
             if (network == 'ETH')
                 explorerLink = `https://etherscan.io/tx/${success.transactionReceipt.transactionHash}`
@@ -161,7 +164,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log(explorerLink)
             // add success.transactionReceipt.blockNumber to url so we don't have to query
             popup.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
-                            assetAmount, assetId, assetType, assetAddress, token, blockNumber)).html)
+                            assetAmount, assetId, assetType, assetAddress, token, blockNumber, txnHash)).html)
         } else {
             popup.append((new SendToAnyoneError({name: 'Reverted', message: 'Transaction was not successful'})).html)
             console.log({success})
