@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return document.location = 'https://idriss.xyz/';
     })
     div.shadowRoot.addEventListener('closeError', () => {
-        return document.location = 'https://idriss.xyz/sendToAnyone';
+        return document.location = 'https://idriss.xyz/send';
     })
     div.shadowRoot.addEventListener('discordSendError', () => {
         const url =  'https://discord.gg/VMcJ9uF6u8';

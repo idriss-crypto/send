@@ -639,10 +639,10 @@
     "@ethersproject/properties" "^5.6.0"
     "@ethersproject/strings" "^5.6.1"
 
-"@idriss-crypto/send-to-anyone-core@^0.1.22":
-  version "0.1.22"
-  resolved "https://registry.yarnpkg.com/@idriss-crypto/send-to-anyone-core/-/send-to-anyone-core-0.1.22.tgz#1a98f306301ef1aeb6e0b0e7bd857b9696e9ee34"
-  integrity sha512-8O57etBaHTAL6mQF35GZwN5bzKxCVRB51sEy5ao7MjwSVA0EPbS3KSnCEY8PBMhN+aQC/P+vwNG9fMn6Tq9v5A==
+"@idriss-crypto/send-to-anyone-core@^0.1.27":
+  version "0.1.27"
+  resolved "https://registry.yarnpkg.com/@idriss-crypto/send-to-anyone-core/-/send-to-anyone-core-0.1.27.tgz#fa570d80fd5d598a090d62af797b891415528867"
+  integrity sha512-mootAYlOoHBGNPSdrYQcw9JGMn4mZ0Mu34afnJoXuYErYdwCSjM/Lk4cRIZy0QJZB9yzmMSHHppZpamBN6INyg==
   dependencies:
     "@depay/coinbase-wallet-sdk" "^1.0.5"
     "@walletconnect/web3-provider" "^1.7.8"
