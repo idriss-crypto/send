@@ -1,4 +1,6 @@
 {
+  "name": "@idriss-crypto/send-to-anyone-page",
+  "version": "0.1.0",
   "scripts": {
     "build": "webpack --watch --mode development",
     "build-local": "webpack --mode none",
