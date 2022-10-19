@@ -85,13 +85,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                         addressNFTs = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY)
                         // filter erc721 and existing titles
                         console.log(SendToAnyoneLogic.web3)
-                        const nfts = (await addressNFTs).ownedNfts.filter((v, i, a) => v.title != "").filter((v, i, a) => v.tokenType == "ERC721").map((v, i, a) => {
-                            return {
-                                name: v.title,
-                                address: v.contract.address,
-                                id: v.tokenId,
-                                image: v.media[0].gateway,
-                            }
+                        const nfts = addressNFTs.ownedNfts
+                            .filter((v, i, a) => v.title != "")
+                            .filter((v, i, a) => v.id.tokenMetadata.tokenType == "ERC721" || v.id.tokenMetadata.tokenType == "ERC1155")
+                            .map((v, i, a) => {
+                                let image = v.metadata.avatar ? v.metadata.avatar : v.media[0].gateway
+                                if (image.startsWith('ipfs://')) image = image.replace('ipfs://', 'https://ipfs.io/ipfs/')
+                                return {
+                                    name: v.title,
+                                    address: v.contract.address,
+                                    id: BigInt(v.id.tokenId).toString(10),
+                                    type: v.id.tokenMetadata.tokenType,
+                                    image: image,
+                                }
                         })
                         console.log(addressNFTs)
                         console.log(nfts)
