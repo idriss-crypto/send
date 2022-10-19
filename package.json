@@ -10,7 +10,7 @@
     "dev": "webpack-dev-server --mode none"
   },
   "dependencies": {
-    "@idriss-crypto/send-to-anyone-core": "^0.1.27",
+    "@idriss-crypto/send-to-anyone-core": "^0.1.28",
     "@walletconnect/web3-provider": "^1.7.8",
     "fast-creator": "^1.6.0",
     "web3": "^1.7.0",
