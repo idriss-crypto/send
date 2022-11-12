@@ -10,10 +10,12 @@ import {
     SendToAnyoneAddress
 } from "@idriss-crypto/send-to-anyone-core/subpages";
 
+
 document.addEventListener('DOMContentLoaded', async () => {
     const sendToAnyoneLogicPromise = await import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneLogic")
     const getProviderPromise = import("@idriss-crypto/send-to-anyone-core/getWeb3Provider")
     const sendToAnyoneUtilsPromise = import("@idriss-crypto/send-to-anyone-core/sendToAnyoneUtils")
+
 
     let params = new URL(document.location).searchParams;
     let identifier = params.get('identifier');
@@ -52,6 +54,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     let popup = create('section.sendToAnyone-popup')
     div.shadowRoot.append(popup);
     popup.classList.add('sendToAnyone-popup');
+
+
+    document.querySelector('#triggerSuccessButton').addEventListener('click', () => {
+        popup.firstElementChild.remove();
+        let identifier=
+        popup.append((new SendToAnyoneSuccess("@testID", "https://www.idriss.xyz", "abc", false, 1, 1, 1, "0x", "Matic", 1, "0x")).html);
+    });
+
+
     try {
         const {getProvider} = await getProviderPromise;
         const {getNFTsForAddress} = await sendToAnyoneUtilsPromise;
