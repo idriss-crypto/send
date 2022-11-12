@@ -58,8 +58,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.querySelector('#triggerSuccessButton').addEventListener('click', () => {
         popup.firstElementChild.remove();
-        let identifier=
         popup.append((new SendToAnyoneSuccess("@testID", "https://www.idriss.xyz", "abc", false, 1, 1, 1, "0x", "Matic", 1, "0x")).html);
+    });
+
+    document.querySelector('#triggerErrorButton').addEventListener('click', () => {
+        popup.firstElementChild.remove();
+        popup.append((new SendToAnyoneError({name: 'Reverted', message: 'Transaction was not successful'})).html)
     });
 
 
