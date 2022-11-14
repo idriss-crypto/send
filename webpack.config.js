@@ -51,8 +51,8 @@ module.exports = (env, argv) => {
         plugins: [
             new CopyPlugin({
                 patterns: [
-                    {from: "./src/send-to-anyone.html", to: "../../IDriss/templates"},
-                    {from: "./src/generateSendToAnyoneCode.html", to: "../../IDriss/templates"},
+                    {from: "./src/send-to-anyone.html", to: "../../templates"},
+                    {from: "./src/generateSendToAnyoneCode.html", to: "../../templates"},
 
                 ],
             }),
