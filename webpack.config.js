@@ -44,14 +44,15 @@ module.exports = (env, argv) => {
         },
         devtool: "inline-source-map",
         output: {
-            path: path.resolve(__dirname, "buildResults"),
-            filename: "static/js/[name].js",
+            path: path.resolve(__dirname, "../IDriss/static/js/"),
+            publicPath: "auto",
+            filename: "[name].js",
         },
         plugins: [
             new CopyPlugin({
                 patterns: [
-                    {from: "./src/send-to-anyone.html", to: "."},
-                    {from: "./src/generateSendToAnyoneCode.html", to: "."},
+                    {from: "./src/send-to-anyone.html", to: "../../IDriss/templates"},
+                    {from: "./src/generateSendToAnyoneCode.html", to: "../../IDriss/templates"},
 
                 ],
             }),

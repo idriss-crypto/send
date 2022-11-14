@@ -10,11 +10,13 @@ import {
     SendToAnyoneAddress
 } from "@idriss-crypto/send-to-anyone-core/subpages";
 
+console.log("test1");
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const sendToAnyoneLogicPromise = await import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneLogic")
+    const sendToAnyoneLogicPromise = await import("@idriss-crypto/send-to-anyone-core/sendToAnyoneLogic")
     const getProviderPromise = import("@idriss-crypto/send-to-anyone-core/getWeb3Provider")
     const sendToAnyoneUtilsPromise = import("@idriss-crypto/send-to-anyone-core/sendToAnyoneUtils")
+
 
 
     let params = new URL(document.location).searchParams;
@@ -41,10 +43,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         else if (params.get('back'))
             return document.location = params.get('back');
         else
-            return document.location = 'https://idriss.xyz/';
+            return document.location = '/send';
     })
     div.shadowRoot.addEventListener('closeError', () => {
-        return document.location = 'https://idriss.xyz/send';
+        return document.location = '/send';
     })
     div.shadowRoot.addEventListener('discordSendError', () => {
         const url =  'https://discord.gg/VMcJ9uF6u8';
@@ -58,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.querySelector('#triggerSuccessButton').addEventListener('click', () => {
         popup.firstElementChild.remove();
-        popup.append((new SendToAnyoneSuccess("@testID", "https://www.idriss.xyz", "abc", false, 1, 1, 1, "0x", "Matic", 1, "0x")).html);
+        popup.append((new SendToAnyoneSuccess("@test", "https://www.idriss.xyz", "abc", false, 1, 1, 1, "0x", "Matic", 1, "0x")).html);
     });
 
     document.querySelector('#triggerErrorButton').addEventListener('click', () => {
