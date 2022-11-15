@@ -62,19 +62,26 @@ document.addEventListener('DOMContentLoaded', async() => {
     div.shadowRoot.append(create('style', {
         text: css
     }));
-    let popup = create('section.sendToAnyone-popup')
-    div.shadowRoot.append(popup);
-    popup.classList.add('sendToAnyone-popup');
+
+    let popupToken = create('section.sendToAnyone-popup')
+    popupToken.id = "popupToken"
+    div.shadowRoot.append(popupToken);
+    popupToken.classList.add('sendToAnyone-popup');
+    let popupNFT = create('section.sendToAnyone-popup')
+    popupNFT.id = "popupNFT"
+    popupNFT.style.display='none';
+    div.shadowRoot.append(popupNFT);
+    popupNFT.classList.add('sendToAnyone-popup');
 
 
     document.querySelector('#triggerSuccessButton').addEventListener('click', () => {
-        popup.firstElementChild.remove();
-        popup.append((new SendToAnyoneSuccess("@test", "https://www.idriss.xyz", "abc", false, 1, 1, 1, "0x", "Matic", 1, "0x")).html);
+        popupToken.firstElementChild.remove();
+        popupToken.append((new SendToAnyoneSuccess("@test", "https://www.idriss.xyz", "abc", false, 1, 1, 1, "0x", "Matic", 1, "0x")).html);
     });
 
     document.querySelector('#triggerErrorButton').addEventListener('click', () => {
-        popup.firstElementChild.remove();
-        popup.append((new SendToAnyoneError({
+        popupToken.firstElementChild.remove();
+        popupToken.append((new SendToAnyoneError({
             name: 'Reverted',
             message: 'Transaction was not successful'
         })).html)
@@ -92,24 +99,29 @@ document.addEventListener('DOMContentLoaded', async() => {
             SendToAnyoneLogic
         } = await sendToAnyoneLogicPromise;
 
+        let popups = { 'selected': popupToken, 'deselected': popupNFT }
+
+        console.log(popups)
 
         async function showInputWidget() {
-            if (!identifier || !recipient) {
-                popup.firstElementChild?.remove();
-                popup.append(new SendToAnyoneAddress().html);
-                return await new Promise(res => {
-                    popup.addEventListener('next', e => {
-                        console.log(e);
-                        identifier = e.identifier;
-                        recipient = e.recipient;
-                        isIDrissRegistered = e.isIDrissRegistered;
-                        res()
-                    })
-                });
-            }
+            popups.selected.firstElementChild?.remove();
+            popups.selected.append(new SendToAnyoneAddress().html);
+            return await new Promise(res => {
+                popups.selected.addEventListener('next', e => {
+                    console.log(e);
+                    identifier = e.identifier;
+                    recipient = e.recipient;
+                    isIDrissRegistered = e.isIDrissRegistered;
+                    res()
+                })
+            });
         }
+
         async function handleNFTclick() {
             console.log("NFT button clicked")
+            popups.selected = popupNFT
+            popupToken.style.display='none';
+            popupNFT.style.display='block';
             await showInputWidget();
             // connect wallet when needed
             let provider = await getProvider();
@@ -129,10 +141,10 @@ document.addEventListener('DOMContentLoaded', async() => {
             });
             console.log(nfts)
 
-            popup.firstElementChild?.remove();
+            popupNFT.firstElementChild?.remove();
 
-            popup.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts, true, null, true).html);
-            popup.addEventListener('sendMoney', e => {
+            popupNFT.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts, true, null, true).html);
+            popupNFT.addEventListener('sendMoney', e => {
                                 console.log(e);
                                 network = e.network;
                                 token = e.token;
@@ -148,12 +160,15 @@ document.addEventListener('DOMContentLoaded', async() => {
         }
         async function handleTokenClick() {
             console.log("Token button clicked")
+            popupNFT.style.display='none';
+            popupToken.style.display='block';
+            popups.selected = popupToken;
             await showInputWidget();
-            popup.firstElementChild?.remove();
+            popupToken.firstElementChild?.remove();
             let nfts=[]
-            popup.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts).html);
+            popupToken.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts).html);
             // probably not await, as code stops
-            popup.addEventListener('sendMoney', e => {
+            popupToken.addEventListener('sendMoney', e => {
                                 console.log(e);
                                 network = e.network;
                                 token = e.token;
@@ -165,6 +180,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                                 assetId = e.assetId;
                                 selectedNFT = nfts.filter(nft => nft.address == assetAddress).filter(nft => nft.id == assetId)
                                 nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
+                                // make call to display all the other popus below
                             });
         }
 
@@ -172,138 +188,70 @@ document.addEventListener('DOMContentLoaded', async() => {
         // handle nft button click
         let nftButton = document.querySelector('#nftSelectButton');
         nftButton.addEventListener('click', async e => {
-            handleNFTclick();
+            return await handleNFTclick();
         })
 
         // handle token button click
         let tokenButton = document.querySelector('#tokenSelectButton');
         tokenButton.addEventListener('click', async e => {
-            handleTokenClick();
+            return await handleTokenClick();
         })
 
-        if (!identifier || !recipient) {
-            popup.append(new SendToAnyoneAddress().html);
-            await new Promise(res => {
-                popup.addEventListener('next', e => {
-                    console.log(e);
-                    identifier = e.identifier;
-                    recipient = e.recipient;
-                    isIDrissRegistered = e.isIDrissRegistered;
-                    res()
+        await tokenButton.click()
+
+        async function handleRest() {
+
+            // ToDo: approval screen will never be rendered completely as it is overwritten by the waitingConfirmation screen
+            popups.selected.firstElementChild?.remove();
+            popups.selected.append(new SendToAnyoneWaitingApproval(token).html);
+            popups.selected.firstElementChild.remove();
+            popups.selected.append((new SendToAnyoneWaitingConfirmation(identifier, sendToAnyoneValue, token, assetAmount, assetId, assetType, nftName)).html)
+            let {
+                integer: amountInteger,
+                normal: amountNormal
+            } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
+
+
+            popups.selected.querySelector('.amountCoin').textContent = amountNormal;
+            //TODO: check price calculation + if it adds $fee properly
+            console.log(identifier, `${amountInteger}`, network, token, message,
+                assetType, assetAmount, assetAddress, assetId)
+            let success = await SendToAnyoneLogic.sendToAnyone(identifier, `${amountInteger}`, network, token, message,
+                assetType, assetAmount, assetAddress, assetId)
+            console.log(success)
+            popups.selected.firstElementChild.remove();
+            let blockNumber;
+            let txnHash;
+            if (success) {
+                blockNumber = success.transactionReceipt.blockNumber;
+                txnHash = success.transactionReceipt.transactionHash;
+                let explorerLink;
+                if (network == 'ETH')
+                    explorerLink = `https://etherscan.io/tx/${success.transactionReceipt.transactionHash}`
+                else if (network == 'BSC')
+                    explorerLink = `https://bscscan.com/tx/${success.transactionReceipt.transactionHash}`
+                else if (network == 'Polygon')
+                    explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${success.transactionReceipt.transactionHash}`
+                console.log(explorerLink)
+                    // add success.transactionReceipt.blockNumber to url so we don't have to query
+                popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
+                    assetAmount, assetId, assetType, assetAddress, token, blockNumber, txnHash)).html)
+            } else {
+                popups.selected.append((new SendToAnyoneError({
+                    name: 'Reverted',
+                    message: 'Transaction was not successful'
+                })).html)
+                console.log({
+                    success
                 })
-            });
-        }
-
-        if (!token || !sendToAnyoneValue || !network) {
-            popup.firstElementChild?.remove();
-            popup.append(new SendToAnyoneConnect(identifier, isIDrissRegistered).html);
-            let addressNFTs;
-            await new Promise(res => {
-                popup.addEventListener('connectWallet', async e => {
-                    console.log(e)
-                    let provider = await getProvider();
-                    await SendToAnyoneLogic.prepareSendToAnyone(provider, network ?? 'Polygon', ALCHEMY_API_KEY)
-                    console.log(SendToAnyoneLogic.web3)
-                    const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
-                    let selectedAccount = accounts[0];
-                    if (e.method == "connect") {
-                        addressNFTs = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY)
-                            // filter erc721 and existing titles
-                        console.log(SendToAnyoneLogic.web3)
-                        const nfts = (await addressNFTs).ownedNfts.filter((v, i, a) => v.title != "").filter((v, i, a) => v.tokenType == "ERC721").map((v, i, a) => {
-                            return {
-                                name: v.title,
-                                address: v.contract.address,
-                                id: v.tokenId,
-                                image: v.media[0].gateway,
-                            }
-                        })
-                        console.log(addressNFTs)
-                        console.log(nfts)
-
-                        popup.firstElementChild?.remove();
-
-                        popup.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts).html);
-                        await new Promise(res => {
-                            popup.addEventListener('sendMoney', e => {
-                                console.log(e);
-                                network = e.network;
-                                token = e.token;
-                                sendToAnyoneValue = +e.amount;
-                                message = e.message;
-                                assetType = e.assetType;
-                                assetAmount = e.assetAmount;
-                                assetAddress = e.assetAddress;
-                                assetId = e.assetId;
-                                selectedNFT = nfts.filter(nft => nft.address == assetAddress).filter(nft => nft.id == assetId)
-                                nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
-                                res()
-                            })
-                        });
-                    } else {
-                        network = e.network;
-                        token = e.token;
-                        sendToAnyoneValue = +e.amount;
-                        message = e.message;
-                        assetType = e.assetType;
-                        assetAmount = e.assetAmount;
-                        assetAddress = e.assetAddress;
-                        assetId = e.assetId;
-                        nftName = "";
-                        res()
-                    }
-                    res()
-                })
-            });
-        }
-        // ToDo: approval screen will never be rendered completely as it is overwritten by the waitingConfirmation screen
-        popup.firstElementChild?.remove();
-        popup.append(new SendToAnyoneWaitingApproval(token).html);
-        popup.firstElementChild.remove();
-        popup.append((new SendToAnyoneWaitingConfirmation(identifier, sendToAnyoneValue, token, assetAmount, assetId, assetType, nftName)).html)
-        let {
-            integer: amountInteger,
-            normal: amountNormal
-        } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
-
-        popup.querySelector('.amountCoin').textContent = amountNormal;
-        //TODO: check price calculation + if it adds $fee properly
-        console.log(identifier, `${amountInteger}`, network, token, message,
-            assetType, assetAmount, assetAddress, assetId)
-        let success = await SendToAnyoneLogic.sendToAnyone(identifier, `${amountInteger}`, network, token, message,
-            assetType, assetAmount, assetAddress, assetId)
-        console.log(success)
-        popup.firstElementChild.remove();
-        let blockNumber;
-        let txnHash;
-        if (success) {
-            blockNumber = success.transactionReceipt.blockNumber;
-            txnHash = success.transactionReceipt.transactionHash;
-            let explorerLink;
-            if (network == 'ETH')
-                explorerLink = `https://etherscan.io/tx/${success.transactionReceipt.transactionHash}`
-            else if (network == 'BSC')
-                explorerLink = `https://bscscan.com/tx/${success.transactionReceipt.transactionHash}`
-            else if (network == 'Polygon')
-                explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${success.transactionReceipt.transactionHash}`
-            console.log(explorerLink)
-                // add success.transactionReceipt.blockNumber to url so we don't have to query
-            popup.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
-                assetAmount, assetId, assetType, assetAddress, token, blockNumber, txnHash)).html)
-        } else {
-            popup.append((new SendToAnyoneError({
-                name: 'Reverted',
-                message: 'Transaction was not successful'
-            })).html)
-            console.log({
-                success
-            })
+            }
         }
     } catch (e) {
+        console.log(e)
         // ToDo: catch different error types here
         // Errors will be reported on Discord
-        popup.firstElementChild?.remove();
-        popup.append((new SendToAnyoneError(e)).html)
+        popups.selected.firstElementChild?.remove();
+        popups.selected.append((new SendToAnyoneError(e)).html)
         console.error(e)
     }
 });
