@@ -10,20 +10,19 @@
       <link rel="shortcut icon" type="image/png" href="../static/images/favicon32.png"/>
 	  <link rel="icon" type="image/png" sizes="32x32" href="../static/images/favicon32.png"/>
 	  <link rel="icon" type="image/png" sizes="16x16" href="../static/images/favicon16.png"/>
-      <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .banner{
-            z-index: 10;
-            position: absolute;
-            width: 100%;
+        <style>
+            .banner{
+                z-index: 10;
+                position: absolute;
+                width: 100%;
+                }
+            .container{
+                display: grid;
+                justify-content: center;
+                align-content: center;
+                height: 100vh;
             }
-        .container{
-            display: grid;
-            justify-content: center;
-            align-content: center;
-            height: 100vh;
-        }
-    </style>
+        </style>
 </head>
 <body>
 <div class="bg-indigo-600">
@@ -58,15 +57,14 @@
                 <div class="">
                     <div class="ml-4 sm:ml-10 flex items-baseline space-x-1 sm:space-x-4">
                         <a
-                            id="ButtonManageIDrissTab"
-                            onclick="manageIDrissTab()"
+                            id="tokenSelectButton"
                             class="text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
                             aria-current="page"
                         >
                             Token
                         </a>
-                        <a id="ButtonRewardsTab" onclick="rewardsTab()" class="self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer">NFT</a>
-                        <a id="ButtonLeaderboardTab" onclick="leaderboardTab()" class="hidden self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer">MultiSend</a>
+                        <a id="nftSelectButton" class="self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer">NFT</a>
+                        <a id="multiSendSelectButton" class="hidden self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer">MultiSend</a>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,6 @@
-import {create} from "fast-creator";
+import {
+    create
+} from "fast-creator";
 import css from "@idriss-crypto/send-to-anyone-core/sendToAnyoneStyle";
 import {
     SendToAnyoneSuccess,
@@ -12,10 +14,13 @@ import {
 
 console.log("test1");
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const sendToAnyoneLogicPromise = await import("@idriss-crypto/send-to-anyone-core/sendToAnyoneLogic")
-    const getProviderPromise = import("@idriss-crypto/send-to-anyone-core/getWeb3Provider")
-    const sendToAnyoneUtilsPromise = import("@idriss-crypto/send-to-anyone-core/sendToAnyoneUtils")
+document.addEventListener('DOMContentLoaded', async() => {
+    const sendToAnyoneLogicPromise = await
+    import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneLogic")
+    const getProviderPromise =
+        import ("@idriss-crypto/send-to-anyone-core/getWeb3Provider")
+    const sendToAnyoneUtilsPromise =
+        import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneUtils")
 
 
 
@@ -25,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let token = params.get('token');
     let sendToAnyoneValue = +params.get('sendToAnyoneValue');
     let network = params.get('network');
-    let message = params.get('message')||'';
+    let message = params.get('message') || '';
     let isIDrissRegistered;
     let assetType;
     let assetAmount;
@@ -36,7 +41,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
-    div.attachShadow({mode: 'open'})
+    div.attachShadow({
+        mode: 'open'
+    })
     div.shadowRoot.addEventListener('close', () => {
         if (params.get('back') == 'close')
             window.close()
@@ -49,10 +56,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         return document.location = '/send';
     })
     div.shadowRoot.addEventListener('discordSendError', () => {
-        const url =  'https://discord.gg/VMcJ9uF6u8';
+        const url = 'https://discord.gg/VMcJ9uF6u8';
         window.open(url, '_blank');
     })
-    div.shadowRoot.append(create('style', {text: css}));
+    div.shadowRoot.append(create('style', {
+        text: css
+    }));
     let popup = create('section.sendToAnyone-popup')
     div.shadowRoot.append(popup);
     popup.classList.add('sendToAnyone-popup');
@@ -65,14 +74,112 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.querySelector('#triggerErrorButton').addEventListener('click', () => {
         popup.firstElementChild.remove();
-        popup.append((new SendToAnyoneError({name: 'Reverted', message: 'Transaction was not successful'})).html)
+        popup.append((new SendToAnyoneError({
+            name: 'Reverted',
+            message: 'Transaction was not successful'
+        })).html)
     });
 
 
     try {
-        const {getProvider} = await getProviderPromise;
-        const {getNFTsForAddress} = await sendToAnyoneUtilsPromise;
-        const {SendToAnyoneLogic} = await sendToAnyoneLogicPromise;
+        const {
+            getProvider
+        } = await getProviderPromise;
+        const {
+            getNFTsForAddress
+        } = await sendToAnyoneUtilsPromise;
+        const {
+            SendToAnyoneLogic
+        } = await sendToAnyoneLogicPromise;
+
+
+        async function showInputWidget() {
+            if (!identifier || !recipient) {
+                popup.firstElementChild?.remove();
+                popup.append(new SendToAnyoneAddress().html);
+                return await new Promise(res => {
+                    popup.addEventListener('next', e => {
+                        console.log(e);
+                        identifier = e.identifier;
+                        recipient = e.recipient;
+                        isIDrissRegistered = e.isIDrissRegistered;
+                        res()
+                    })
+                });
+            }
+        }
+        async function handleNFTclick() {
+            console.log("NFT button clicked")
+            await showInputWidget();
+            // connect wallet when needed
+            let provider = await getProvider();
+            await SendToAnyoneLogic.prepareSendToAnyone(provider, network ?? 'Polygon', ALCHEMY_API_KEY);
+            console.log(SendToAnyoneLogic.web3)
+            const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
+            let selectedAccount = accounts[0];
+            let addressNFTs = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY)
+
+            const nfts = (await addressNFTs).ownedNfts.filter((v, i, a) => v.title != "").filter((v, i, a) => v.tokenType == "ERC721").map((v, i, a) => {
+                return {
+                    name: v.title,
+                    address: v.contract.address,
+                    id: v.tokenId,
+                    image: v.media[0].gateway,
+                }
+            });
+            console.log(nfts)
+
+            popup.firstElementChild?.remove();
+
+            popup.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts, true, null, true).html);
+            popup.addEventListener('sendMoney', e => {
+                                console.log(e);
+                                network = e.network;
+                                token = e.token;
+                                sendToAnyoneValue = +e.amount;
+                                message = e.message;
+                                assetType = e.assetType;
+                                assetAmount = e.assetAmount;
+                                assetAddress = e.assetAddress;
+                                assetId = e.assetId;
+                                selectedNFT = nfts.filter(nft => nft.address == assetAddress).filter(nft => nft.id == assetId)
+                                nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
+                            });
+        }
+        async function handleTokenClick() {
+            console.log("Token button clicked")
+            await showInputWidget();
+            popup.firstElementChild?.remove();
+            let nfts=[]
+            popup.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts).html);
+            // probably not await, as code stops
+            popup.addEventListener('sendMoney', e => {
+                                console.log(e);
+                                network = e.network;
+                                token = e.token;
+                                sendToAnyoneValue = +e.amount;
+                                message = e.message;
+                                assetType = e.assetType;
+                                assetAmount = e.assetAmount;
+                                assetAddress = e.assetAddress;
+                                assetId = e.assetId;
+                                selectedNFT = nfts.filter(nft => nft.address == assetAddress).filter(nft => nft.id == assetId)
+                                nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
+                            });
+        }
+
+
+        // handle nft button click
+        let nftButton = document.querySelector('#nftSelectButton');
+        nftButton.addEventListener('click', async e => {
+            handleNFTclick();
+        })
+
+        // handle token button click
+        let tokenButton = document.querySelector('#tokenSelectButton');
+        tokenButton.addEventListener('click', async e => {
+            handleTokenClick();
+        })
 
         if (!identifier || !recipient) {
             popup.append(new SendToAnyoneAddress().html);
@@ -86,6 +193,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 })
             });
         }
+
         if (!token || !sendToAnyoneValue || !network) {
             popup.firstElementChild?.remove();
             popup.append(new SendToAnyoneConnect(identifier, isIDrissRegistered).html);
@@ -100,7 +208,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     let selectedAccount = accounts[0];
                     if (e.method == "connect") {
                         addressNFTs = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY)
-                        // filter erc721 and existing titles
+                            // filter erc721 and existing titles
                         console.log(SendToAnyoneLogic.web3)
                         const nfts = (await addressNFTs).ownedNfts.filter((v, i, a) => v.title != "").filter((v, i, a) => v.tokenType == "ERC721").map((v, i, a) => {
                             return {
@@ -179,12 +287,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             else if (network == 'Polygon')
                 explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${success.transactionReceipt.transactionHash}`
             console.log(explorerLink)
-            // add success.transactionReceipt.blockNumber to url so we don't have to query
+                // add success.transactionReceipt.blockNumber to url so we don't have to query
             popup.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
-                            assetAmount, assetId, assetType, assetAddress, token, blockNumber, txnHash)).html)
+                assetAmount, assetId, assetType, assetAddress, token, blockNumber, txnHash)).html)
         } else {
-            popup.append((new SendToAnyoneError({name: 'Reverted', message: 'Transaction was not successful'})).html)
-            console.log({success})
+            popup.append((new SendToAnyoneError({
+                name: 'Reverted',
+                message: 'Transaction was not successful'
+            })).html)
+            console.log({
+                success
+            })
         }
     } catch (e) {
         // ToDo: catch different error types here
