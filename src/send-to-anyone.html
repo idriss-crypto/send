@@ -24,8 +24,8 @@
             }
         </style>
 </head>
-<body>
-<div class="bg-indigo-600">
+<body style="transform: unset; background: radial-gradient(100% 100% at 50% 0%, rgba(88, 101, 242, 0.2) 0%, rgba(238, 242, 255, 0.05) 52.6%, rgba(0, 0, 0, 0) 100%), rgb(255, 255, 255);">
+<div class="bg-indigo-600" style="display:none;">
   <div class="max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between flex-wrap">
       <div class="w-0 flex-1 flex items-center">
@@ -45,7 +45,7 @@
     </div>
   </div>
 </div>
-<nav>
+<nav class="w-full absolute">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             <div class="flex items-center">
@@ -89,11 +89,11 @@
         </div>
     </div>
 </nav>
-<button id="triggerSuccessButton" class="ml-8 mt-20 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-[#11dd74] hover:bg-[#11cc74]">
-    Success Page
+<button id="triggerSuccessButton" class="absolute ml-8 mt-20 whitespace-nowrap items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gray-300 hover:bg-gray-200">
+    Success
 </button>
-<button id="triggerErrorButton" class="ml-8 mt-20 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-[#11dd74] hover:bg-[#11cc74]">
-    Error Page
+<button id="triggerErrorButton" class="absolute ml-8 mt-32 whitespace-nowrap items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gray-300 hover:bg-gray-200">
+    Error
 </button>
 <div class="container mx-auto">
 </div>
