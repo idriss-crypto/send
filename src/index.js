@@ -12,7 +12,6 @@ import {
     SendToAnyoneAddress
 } from "@idriss-crypto/send-to-anyone-core/subpages";
 
-console.log("test1");
 
 document.addEventListener('DOMContentLoaded', async() => {
     const sendToAnyoneLogicPromise = await
@@ -38,6 +37,7 @@ document.addEventListener('DOMContentLoaded', async() => {
     let assetId;
     let selectedNFT;
     let nftName;
+    let provider;
 
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
@@ -101,31 +101,47 @@ document.addEventListener('DOMContentLoaded', async() => {
 
         let popups = { 'selected': popupToken, 'deselected': popupNFT }
 
-        console.log(popups)
+
+        async function connectWallet() {
+            provider = await getProvider();
+            await SendToAnyoneLogic.prepareSendToAnyone(provider, network ?? 'Polygon', ALCHEMY_API_KEY)
+        }
+
+        document.querySelector('#connectWallet').addEventListener('click', async () => {
+            await connectWallet();
+        });
 
         async function showInputWidget() {
-            popups.selected.firstElementChild?.remove();
             popups.selected.append(new SendToAnyoneAddress().html);
-            return await new Promise(res => {
-                popups.selected.addEventListener('next', e => {
+            return await new Promise((res) => {
+
+                async function nextEventHandler(e) {
                     console.log(e);
                     identifier = e.identifier;
                     recipient = e.recipient;
                     isIDrissRegistered = e.isIDrissRegistered;
                     res()
-                })
+                }
+
+                popups.selected.firstElementChild.addEventListener('next', nextEventHandler);
             });
         }
 
         async function handleNFTclick() {
-            console.log("NFT button clicked")
-            popups.selected = popupNFT
+
+            document.querySelector('#nftSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            document.querySelector('#tokenSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+
+            popups.selected.firstElementChild?.remove();
             popupToken.style.display='none';
             popupNFT.style.display='block';
+            popups.selected = popupNFT
             await showInputWidget();
             // connect wallet when needed
-            let provider = await getProvider();
-            await SendToAnyoneLogic.prepareSendToAnyone(provider, network ?? 'Polygon', ALCHEMY_API_KEY);
+            if (!provider) {
+                provider = await getProvider();
+                await SendToAnyoneLogic.prepareSendToAnyone(provider, network ?? 'Polygon', ALCHEMY_API_KEY)
+            }
             console.log(SendToAnyoneLogic.web3)
             const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
             let selectedAccount = accounts[0];
@@ -156,10 +172,15 @@ document.addEventListener('DOMContentLoaded', async() => {
                                 assetId = e.assetId;
                                 selectedNFT = nfts.filter(nft => nft.address == assetAddress).filter(nft => nft.id == assetId)
                                 nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
+                                handleRest();
                             });
         }
         async function handleTokenClick() {
-            console.log("Token button clicked")
+
+            document.querySelector('#tokenSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            document.querySelector('#nftSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+
+            popups.selected.firstElementChild?.remove();
             popupNFT.style.display='none';
             popupToken.style.display='block';
             popups.selected = popupToken;
@@ -181,6 +202,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                                 selectedNFT = nfts.filter(nft => nft.address == assetAddress).filter(nft => nft.id == assetId)
                                 nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
                                 // make call to display all the other popus below
+                                handleRest();
                             });
         }
 
@@ -200,6 +222,13 @@ document.addEventListener('DOMContentLoaded', async() => {
         await tokenButton.click()
 
         async function handleRest() {
+
+            if (!provider) {
+                provider = await getProvider();
+                await SendToAnyoneLogic.prepareSendToAnyone(provider, network ?? 'Polygon', ALCHEMY_API_KEY)
+            }
+            console.log(SendToAnyoneLogic.web3)
+            const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
 
             // ToDo: approval screen will never be rendered completely as it is overwritten by the waitingConfirmation screen
             popups.selected.firstElementChild?.remove();
@@ -246,8 +275,10 @@ document.addEventListener('DOMContentLoaded', async() => {
                 })
             }
         }
+
+
     } catch (e) {
-        console.log(e)
+        console.log("Caught error:", e)
         // ToDo: catch different error types here
         // Errors will be reported on Discord
         popups.selected.firstElementChild?.remove();
