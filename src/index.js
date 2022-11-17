@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                 assetType, assetAmount, assetAddress, assetId)
             let success = await SendToAnyoneLogic.sendToAnyone(identifier, `${amountInteger}`, network, token, message,
                 assetType, assetAmount, assetAddress, assetId)
-            console.log(success)
+            console.log("Success is: ", success)
             popups.selected.firstElementChild.remove();
             let blockNumber;
             let txnHash;
@@ -275,8 +275,6 @@ document.addEventListener('DOMContentLoaded', async() => {
                 })
             }
         }
-
-
     } catch (e) {
         console.log("Caught error:", e)
         // ToDo: catch different error types here
