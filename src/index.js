@@ -111,8 +111,8 @@ document.addEventListener('DOMContentLoaded', async() => {
             await connectWallet();
         });
 
-        async function showInputWidget() {
-            popups.selected.append(new SendToAnyoneAddress().html);
+        async function showInputWidget(type) {
+            popups.selected.append(new SendToAnyoneAddress(type).html);
             return await new Promise((res) => {
 
                 async function nextEventHandler(e) {
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             popupToken.style.display='none';
             popupNFT.style.display='block';
             popups.selected = popupNFT
-            await showInputWidget();
+            await showInputWidget("nft");
             // connect wallet when needed
             if (!provider) {
                 provider = await getProvider();
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             popupNFT.style.display='none';
             popupToken.style.display='block';
             popups.selected = popupToken;
-            await showInputWidget();
+            await showInputWidget("token");
             popupToken.firstElementChild?.remove();
             let nfts=[]
             popupToken.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts).html);
