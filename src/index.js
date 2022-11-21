@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
                     let selectedAccount = accounts[0];
                     if (e.method == "connect") {
-                        addressNFTs = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY)
+                        addressNFTs = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY, network ?? 'Polygon')
                         // filter erc721 and existing titles
                         console.log(SendToAnyoneLogic.web3)
                         const nfts = addressNFTs.ownedNfts
