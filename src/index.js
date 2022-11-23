@@ -145,17 +145,26 @@ document.addEventListener('DOMContentLoaded', async() => {
             console.log(SendToAnyoneLogic.web3)
             const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
             let selectedAccount = accounts[0];
-            let addressNFTs = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY)
+            let addressNFTs = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY, network ?? 'Polygon')
 
-            const nfts = (await addressNFTs).ownedNfts.filter((v, i, a) => v.title != "").filter((v, i, a) => v.tokenType == "ERC721").map((v, i, a) => {
-                return {
-                    name: v.title,
-                    address: v.contract.address,
-                    id: v.tokenId,
-                    image: v.media[0].gateway,
-                }
-            });
-            console.log(nfts)
+            console.log(addressNFTs)
+
+            const nfts = addressNFTs.ownedNfts
+                            .filter((v, i, a) => v.title != "")
+                            .filter((v, i, a) => v.tokenType == "ERC721" || v.tokenType == "ERC1155")
+                            .map((v, i, a) => {
+                                let image = v.media[0].gateway ? v.media[0].gateway : ""
+                                if (image.startsWith('ipfs://')) image = image.replace('ipfs://', 'https://ipfs.io/ipfs/')
+                                return {
+                                    name: v.title,
+                                    address: v.contract.address,
+                                    id: BigInt(v.tokenId).toString(10),
+                                    type: v.tokenType,
+                                    image: image,
+                                }
+                        })
+                        console.log(addressNFTs)
+                        console.log(nfts)
 
             popupNFT.firstElementChild?.remove();
 
@@ -252,17 +261,17 @@ document.addEventListener('DOMContentLoaded', async() => {
             let blockNumber;
             let txnHash;
             if (success) {
-                blockNumber = success.transactionReceipt.blockNumber;
-                txnHash = success.transactionReceipt.transactionHash;
+                blockNumber = success.blockNumber;
+                txnHash = success.transactionHash;
                 let explorerLink;
                 if (network == 'ETH')
-                    explorerLink = `https://etherscan.io/tx/${success.transactionReceipt.transactionHash}`
+                    explorerLink = `https://etherscan.io/tx/${success.transactionHash}`
                 else if (network == 'BSC')
-                    explorerLink = `https://bscscan.com/tx/${success.transactionReceipt.transactionHash}`
+                    explorerLink = `https://bscscan.com/tx/${success.transactionHash}`
                 else if (network == 'Polygon')
-                    explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${success.transactionReceipt.transactionHash}`
+                    explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${success.transactionHash}`
                 console.log(explorerLink)
-                    // add success.transactionReceipt.blockNumber to url so we don't have to query
+                    // add success.blockNumber to url so we don't have to query
                 popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
                     assetAmount, assetId, assetType, assetAddress, token, blockNumber, txnHash)).html)
             } else {
