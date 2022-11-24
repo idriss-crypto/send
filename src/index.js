@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', async() => {
     let selectedNFT;
     let nftName;
     let provider;
+    let walletTag;
 
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
@@ -120,6 +121,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                     identifier = e.identifier;
                     recipient = e.recipient;
                     isIDrissRegistered = e.isIDrissRegistered;
+                    walletTag = e.walletTag ? e.walletTag : "Public ETH";
                     res()
                 }
 
@@ -145,26 +147,35 @@ document.addEventListener('DOMContentLoaded', async() => {
             console.log(SendToAnyoneLogic.web3)
             const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
             let selectedAccount = accounts[0];
-            let addressNFTs = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY, network ?? 'Polygon')
 
-            console.log(addressNFTs)
+            let addressNFTsPolygon = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY, 'Polygon')
+            let addressNFTsEthereum = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY, 'Ethereum')
 
-            const nfts = addressNFTs.ownedNfts
-                            .filter((v, i, a) => v.title != "")
-                            .filter((v, i, a) => v.tokenType == "ERC721" || v.tokenType == "ERC1155")
-                            .map((v, i, a) => {
-                                let image = v.media[0].gateway ? v.media[0].gateway : ""
-                                if (image.startsWith('ipfs://')) image = image.replace('ipfs://', 'https://ipfs.io/ipfs/')
-                                return {
-                                    name: v.title,
-                                    address: v.contract.address,
-                                    id: BigInt(v.tokenId).toString(10),
-                                    type: v.tokenType,
-                                    image: image,
-                                }
-                        })
-                        console.log(addressNFTs)
-                        console.log(nfts)
+            console.log(addressNFTsPolygon)
+            console.log(addressNFTsEthereum)
+
+            function appendNFTs(addressNFTs, network) {
+                return addressNFTs.ownedNfts
+                    .filter((v, i, a) => v.title != "")
+                    .filter((v, i, a) => v.tokenType == "ERC721" || v.tokenType == "ERC1155")
+                    .map((v, i, a) => {
+                        let image = v.media[0].gateway ? v.media[0].gateway : "";
+                        if (image.startsWith("ipfs://")) image = image.replace("ipfs://", "https://ipfs.io/ipfs/");
+                        return {
+                            name: v.title,
+                            address: v.contract.address,
+                            id: BigInt(v.tokenId).toString(10),
+                            type: v.tokenType,
+                            image: image,
+                            network: network,
+                        };
+                    });
+            }
+
+            let nfts = appendNFTs(addressNFTsPolygon, "Polygon");
+            nfts = nfts.concat(appendNFTs(addressNFTsEthereum, "ETH"));
+
+            console.log(nfts)
 
             popupNFT.firstElementChild?.remove();
 
@@ -210,7 +221,6 @@ document.addEventListener('DOMContentLoaded', async() => {
                                 assetId = e.assetId;
                                 selectedNFT = nfts.filter(nft => nft.address == assetAddress).filter(nft => nft.id == assetId)
                                 nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
-                                // make call to display all the other popus below
                                 handleRest();
                             });
         }
@@ -234,8 +244,10 @@ document.addEventListener('DOMContentLoaded', async() => {
 
             if (!provider) {
                 provider = await getProvider();
-                await SendToAnyoneLogic.prepareSendToAnyone(provider, network ?? 'Polygon', ALCHEMY_API_KEY)
             }
+
+            await SendToAnyoneLogic.prepareSendToAnyone(provider, network ?? 'Polygon', ALCHEMY_API_KEY)
+
             console.log(SendToAnyoneLogic.web3)
             const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
 
@@ -255,7 +267,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             console.log(identifier, `${amountInteger}`, network, token, message,
                 assetType, assetAmount, assetAddress, assetId)
             let success = await SendToAnyoneLogic.sendToAnyone(identifier, `${amountInteger}`, network, token, message,
-                assetType, assetAmount, assetAddress, assetId)
+                assetType, assetAmount, assetAddress, assetId, walletTag)
             console.log("Success is: ", success)
             popups.selected.firstElementChild.remove();
             let blockNumber;
