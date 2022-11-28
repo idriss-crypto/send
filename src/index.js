@@ -9,7 +9,8 @@ import {
     SendToAnyoneError,
     SendToAnyoneMain,
     SendToAnyoneConnect,
-    SendToAnyoneAddress
+    SendToAnyoneAddress,
+    MultiSendToAnyone
 } from "@idriss-crypto/send-to-anyone-core/subpages";
 
 
@@ -73,6 +74,11 @@ document.addEventListener('DOMContentLoaded', async() => {
     popupNFT.style.display='none';
     div.shadowRoot.append(popupNFT);
     popupNFT.classList.add('sendToAnyone-popup');
+    let popupMulti = create('section.sendToAnyone-popup')
+    popupMulti.id = "popupMulti"
+    popupMulti.style.display='none';
+    div.shadowRoot.append(popupMulti);
+    popupMulti.classList.add('multiSendToAnyone-popup');
 
 
     document.querySelector('#triggerSuccessButton').addEventListener('click', () => {
@@ -100,7 +106,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             SendToAnyoneLogic
         } = await sendToAnyoneLogicPromise;
 
-        let popups = { 'selected': popupToken, 'deselected': popupNFT }
+        let popups = { 'selected': popupToken }
 
 
         async function connectWallet() {
@@ -133,9 +139,11 @@ document.addEventListener('DOMContentLoaded', async() => {
 
             document.querySelector('#nftSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
             document.querySelector('#tokenSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            document.querySelector('#multiSendSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
 
             popups.selected.firstElementChild?.remove();
             popupToken.style.display='none';
+            popupMulti.style.display='none';
             popupNFT.style.display='block';
             popups.selected = popupNFT
             await showInputWidget("nft");
@@ -199,9 +207,11 @@ document.addEventListener('DOMContentLoaded', async() => {
 
             document.querySelector('#tokenSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
             document.querySelector('#nftSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            document.querySelector('#multiSendSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
 
             popups.selected.firstElementChild?.remove();
             popupNFT.style.display='none';
+            popupMulti.style.display='none';
             popupToken.style.display='block';
             popups.selected = popupToken;
             await showInputWidget("token");
@@ -224,6 +234,34 @@ document.addEventListener('DOMContentLoaded', async() => {
                                 handleRest();
                             });
         }
+        async function handleMultiSendClick() {
+
+            document.querySelector('#multiSendSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            document.querySelector('#nftSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            document.querySelector('#tokenSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+
+            popups.selected.firstElementChild?.remove();
+            popupNFT.style.display='none';
+            popupToken.style.display='none';
+            popupMulti.style.display='block';
+            popups.selected = popupMulti;
+
+            popupMulti.append(new MultiSendToAnyone().html);
+
+            popupToken.addEventListener('multiSendMoney', e => {
+                                token = e.token;
+                                sendToAnyoneValue = +e.amount;
+                                message = e.message;
+                                assetType = e.assetType;
+                                assetAmount = e.assetAmount;
+                                assetAddress = e.assetAddress;
+                                assetIds = e.assetIds;
+                                selectedNFT = nfts.filter(nft => nft.address == assetAddress).filter(nft => assetIds.contain(nft.id))
+                                nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
+                                multiHandleRest();
+                            });
+
+        }
 
 
         // handle nft button click
@@ -235,7 +273,14 @@ document.addEventListener('DOMContentLoaded', async() => {
         // handle token button click
         let tokenButton = document.querySelector('#tokenSelectButton');
         tokenButton.addEventListener('click', async e => {
+            console.log("Clicked token")
             return await handleTokenClick();
+        })
+
+        let multiSendButton = document.querySelector('#multiSendSelectButton');
+        multiSendButton.addEventListener('click', async e => {
+        console.log("Clicked multi")
+            return await handleMultiSendClick();
         })
 
         await tokenButton.click()
