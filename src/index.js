@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', async() => {
 
             document.querySelector('#nftSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
             document.querySelector('#tokenSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-            document.querySelector('#multiSendSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            //document.querySelector('#multiSendSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
 
             popups.selected.firstElementChild?.remove();
             popupToken.style.display='none';
@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', async() => {
 
             document.querySelector('#tokenSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
             document.querySelector('#nftSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-            document.querySelector('#multiSendSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            //document.querySelector('#multiSendSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
 
             popups.selected.firstElementChild?.remove();
             popupNFT.style.display='none';
@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', async() => {
         }
         async function handleMultiSendClick() {
 
-            document.querySelector('#multiSendSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            //document.querySelector('#multiSendSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
             document.querySelector('#nftSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
             document.querySelector('#tokenSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
 
