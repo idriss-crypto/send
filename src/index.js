@@ -167,9 +167,10 @@ document.addEventListener('DOMContentLoaded', async() => {
                     .filter((v, i, a) => v.title != "")
                     .filter((v, i, a) => v.tokenType == "ERC721" || v.tokenType == "ERC1155")
                     .map((v, i, a) => {
-                        let image = v.media[0].gateway ? v.media[0].gateway : "";
-                        if (image.startsWith("ipfs://")) image = image.replace("ipfs://", "https://ipfs.io/ipfs/");
-                        return {
+                        try {
+                            let image = v.media[0].gateway ? v.media[0].gateway : "";
+                            if (image.startsWith("ipfs://")) image = image.replace("ipfs://", "https://ipfs.io/ipfs/");
+                            return {
                             name: v.title,
                             address: v.contract.address,
                             id: BigInt(v.tokenId).toString(10),
@@ -177,6 +178,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                             image: image,
                             network: network,
                         };
+                        } catch { console.log("NFT loading error") }
                     });
             }
 
