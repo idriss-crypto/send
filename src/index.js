@@ -116,10 +116,21 @@ document.addEventListener('DOMContentLoaded', async() => {
             document.querySelector('#connectedWallet').classList.remove('hidden');
             let accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
             document.querySelector('#connectedWallet').firstElementChild.value = accounts[0].substring(0, 6).concat("...").concat(accounts[0].substr(-4))
+            document.querySelector('#polygon-scan-link').href = POLYGON_BLOCK_EXPLORER_ADDRESS + "/address/" + accounts[0];
+        }
+
+        async function disconnectWallet() {
+            provider = null;
+            document.querySelector('#connectWallet').classList.remove('hidden');
+            document.querySelector('#connectedWallet').classList.add('hidden');
         }
 
         document.querySelector('#connectWallet').addEventListener('click', async () => {
             await connectWallet();
+        });
+
+        document.querySelector('#disconnectWallet').addEventListener('click', async () => {
+            await disconnectWallet();
         });
 
         async function showInputWidget(type) {
