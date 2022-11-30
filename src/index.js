@@ -112,6 +112,10 @@ document.addEventListener('DOMContentLoaded', async() => {
         async function connectWallet() {
             provider = await getProvider();
             await SendToAnyoneLogic.prepareSendToAnyone(provider, network ?? 'Polygon', ALCHEMY_API_KEY)
+            document.querySelector('#connectWallet').classList.add('hidden');
+            document.querySelector('#connectedWallet').classList.remove('hidden');
+            let accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
+            document.querySelector('#connectedWallet').firstElementChild.value = accounts[0].substring(0, 6).concat("...").concat(accounts[0].substr(-4))
         }
 
         document.querySelector('#connectWallet').addEventListener('click', async () => {
@@ -149,8 +153,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             await showInputWidget("nft");
             // connect wallet when needed
             if (!provider) {
-                provider = await getProvider();
-                await SendToAnyoneLogic.prepareSendToAnyone(provider, network ?? 'Polygon', ALCHEMY_API_KEY)
+                await connectWallet()
             }
             console.log(SendToAnyoneLogic.web3)
             const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
@@ -178,7 +181,8 @@ document.addEventListener('DOMContentLoaded', async() => {
                             image: image,
                             network: network,
                         };
-                        } catch { console.log("NFT loading error") }
+                        } catch { return {name: "dummy name" , address:"0x", id: 0, type: "ERC721", img: "https://ipfs.io/ipfs/", network: "polygon"}
+                         }
                     });
             }
 
@@ -186,6 +190,8 @@ document.addEventListener('DOMContentLoaded', async() => {
             nfts = nfts.concat(appendNFTs(addressNFTsEthereum, "ETH"));
 
             console.log(nfts)
+
+            nfts = nfts.filter((v, i, a) => v.address != "0x")
 
             popupNFT.firstElementChild?.remove();
 
@@ -290,10 +296,8 @@ document.addEventListener('DOMContentLoaded', async() => {
         async function handleRest() {
 
             if (!provider) {
-                provider = await getProvider();
+                await connectWallet();
             }
-
-            await SendToAnyoneLogic.prepareSendToAnyone(provider, network ?? 'Polygon', ALCHEMY_API_KEY)
 
             console.log(SendToAnyoneLogic.web3)
             const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
