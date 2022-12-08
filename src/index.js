@@ -335,8 +335,8 @@ document.addEventListener('DOMContentLoaded', async() => {
             let blockNumber;
             let txnHash;
             if (success) {
-                blockNumber = success.blockNumber;
-                txnHash = success.transactionHash;
+                blockNumber = success.transactionReceipt.blockNumber;
+                txnHash = success.transactionReceipt.transactionHash;
                 let explorerLink;
                 if (network == 'ETH')
                     explorerLink = `https://etherscan.io/tx/${success.transactionHash}`
