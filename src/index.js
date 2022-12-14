@@ -265,7 +265,6 @@ document.addEventListener('DOMContentLoaded', async() => {
             popupMulti.style.display='block';
             popups.selected = popupMulti;
 
-            // await showInputWidget("nft");
 
 //            // connect wallet when needed
 //            if (!provider) {
