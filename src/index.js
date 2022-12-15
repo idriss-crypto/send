@@ -13,6 +13,8 @@ import {
     MultiSendToAnyone
 } from "@idriss-crypto/send-to-anyone-core/subpages";
 
+// ToDo: event listener to send transaction is set to popup, which piles up multiple listeners as popups are never deleted, just their children
+
 
 document.addEventListener('DOMContentLoaded', async() => {
     const sendToAnyoneLogicPromise = await
@@ -265,49 +267,49 @@ document.addEventListener('DOMContentLoaded', async() => {
             popupMulti.style.display='block';
             popups.selected = popupMulti;
 
+            // connect wallet when needed
+            if (!provider) {
+                await connectWallet()
+            }
 
-//            // connect wallet when needed
-//            if (!provider) {
-//                await connectWallet()
-//            }
-//            console.log(SendToAnyoneLogic.web3)
-//            const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
-//            let selectedAccount = accounts[0];
-//
-//            let addressNFTsPolygon = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY, 'Polygon')
-//
-//            console.log(addressNFTsPolygon)
-//
-//            function filterNFTs(addressNFTs, network) {
-//                return addressNFTs.ownedNfts
-//                    .filter((v, i, a) => v.title != "")
-//                    .filter((v, i, a) => v.tokenType == "ERC1155")
-//                    .map((v, i, a) => {
-//                        try {
-//                            let image = v.media[0].gateway ? v.media[0].gateway : "";
-//                            if (image.startsWith("ipfs://")) image = image.replace("ipfs://", "https://ipfs.io/ipfs/");
-//                            return {
-//                            name: v.title,
-//                            address: v.contract.address,
-//                            id: BigInt(v.tokenId).toString(10),
-//                            type: v.tokenType,
-//                            image: image,
-//                            network: network,
-//                        };
-//                        } catch { return {name: "dummy name" , address:"0x", id: 0, type: "ERC721", img: "https://ipfs.io/ipfs/", network: "polygon"}
-//                         }
-//                    });
-//            }
-//
-//            nfts = filterNFTs(addressNFTsPolygon);
-//
-//            console.log(nfts)
-//
-//            nfts = nfts.filter((v, i, a) => v.address != "0x")
+            console.log(SendToAnyoneLogic.web3)
+            const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
+            let selectedAccount = accounts[0];
+
+            let addressNFTsPolygon = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY, 'Polygon')
+
+            console.log(addressNFTsPolygon)
+
+            function filterNFTs(addressNFTs, network) {
+                return addressNFTs.ownedNfts
+                    .filter((v, i, a) => v.title != "")
+                    .filter((v, i, a) => v.tokenType == "ERC1155")
+                    .map((v, i, a) => {
+                        try {
+                            let image = v.media[0].gateway ? v.media[0].gateway : "";
+                            if (image.startsWith("ipfs://")) image = image.replace("ipfs://", "https://ipfs.io/ipfs/");
+                            return {
+                            name: v.title,
+                            address: v.contract.address,
+                            id: BigInt(v.tokenId).toString(10),
+                            type: v.tokenType,
+                            image: image,
+                            network: network,
+                        };
+                        } catch { return {name: "dummy name" , address:"0x", id: 0, type: "ERC721", img: "https://ipfs.io/ipfs/", network: "polygon"}
+                         }
+                    });
+            }
+
+            nfts = filterNFTs(addressNFTsPolygon);
+
+            console.log(nfts)
+
+            nfts = nfts.filter((v, i, a) => v.address != "0x")
 
             popupMulti.append(new MultiSendToAnyone().html);
 
-            popupToken.addEventListener('multiSendMoney', e => {
+            popupMulti.addEventListener('multiSendMoney', e => {
                                 token = e.token;
                                 message = e.message;
                                 assetType = e.assetType;
@@ -316,7 +318,6 @@ document.addEventListener('DOMContentLoaded', async() => {
                                 nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
                                 multiHandleRest();
                             });
-
         }
 
 
