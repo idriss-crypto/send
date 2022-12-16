@@ -289,25 +289,25 @@ document.addEventListener('DOMContentLoaded', async() => {
                             let image = v.media[0].gateway ? v.media[0].gateway : "";
                             if (image.startsWith("ipfs://")) image = image.replace("ipfs://", "https://ipfs.io/ipfs/");
                             return {
-                            name: v.title,
-                            address: v.contract.address,
-                            id: BigInt(v.tokenId).toString(10),
-                            type: v.tokenType,
-                            image: image,
-                            network: network,
-                        };
+                                name: v.title,
+                                address: v.contract.address,
+                                id: BigInt(v.tokenId).toString(10),
+                                type: v.tokenType,
+                                image: image,
+                                network: network,
+                            };
                         } catch { return {name: "dummy name" , address:"0x", id: 0, type: "ERC721", img: "https://ipfs.io/ipfs/", network: "polygon"}
                          }
                     });
             }
 
-            nfts = filterNFTs(addressNFTsPolygon);
+            let nfts = filterNFTs(addressNFTsPolygon, "Polygon");
 
             console.log(nfts)
 
             nfts = nfts.filter((v, i, a) => v.address != "0x")
 
-            popupMulti.append(new MultiSendToAnyone().html);
+            popupMulti.append(new MultiSendToAnyone(nfts).html);
 
             popupMulti.addEventListener('multiSendMoney', e => {
                                 token = e.token;
