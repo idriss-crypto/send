@@ -10,7 +10,9 @@ import {
     SendToAnyoneMain,
     SendToAnyoneConnect,
     SendToAnyoneAddress,
-    MultiSendToAnyone
+    MultiSendToAnyone,
+    MultiSendToAnyoneApproval,
+    MultiSendToAnyoneSuccess
 } from "@idriss-crypto/send-to-anyone-core/subpages";
 
 // ToDo: event listener to send transaction is set to popup, which piles up multiple listeners as popups are never deleted, just their children
@@ -209,7 +211,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             popupNFT.firstElementChild?.remove();
 
             popupNFT.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts, true, null, true).html);
-            popupNFT.addEventListener('sendMoney', e => {
+            popupNFT.firstElementChild?.addEventListener('sendMoney', e => {
                                 console.log(e);
                                 network = e.network;
                                 token = e.token;
@@ -240,7 +242,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             let nfts=[]
             popupToken.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts).html);
             // probably not await, as code stops
-            popupToken.addEventListener('sendMoney', e => {
+            popupToken.firstElementChild?.addEventListener('sendMoney', e => {
                                 console.log(e);
                                 network = e.network;
                                 token = e.token;
@@ -309,14 +311,9 @@ document.addEventListener('DOMContentLoaded', async() => {
 
             popupMulti.append(new MultiSendToAnyone(nfts).html);
 
-            popupMulti.addEventListener('multiSendMoney', e => {
-                                token = e.token;
-                                message = e.message;
-                                assetType = e.assetType;
-                                assetAddress = e.assetAddress;
-                                selectedNFT = nfts.filter(nft => nft.address == assetAddress).filter(nft => assetIds.contain(nft.id))
-                                nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
-                                multiHandleRest();
+            popupMulti.firstElementChild?.addEventListener('multiSendMoney', e => {
+                console.log("Got multiSendEvent: ", e)
+                                multiHandleRest(e);
                             });
         }
 
@@ -324,6 +321,7 @@ document.addEventListener('DOMContentLoaded', async() => {
         // handle nft button click
         let nftButton = document.querySelector('#nftSelectButton');
         nftButton.addEventListener('click', async e => {
+            console.log("Clicked NFT")
             return await handleNFTclick();
         })
 
@@ -336,7 +334,7 @@ document.addEventListener('DOMContentLoaded', async() => {
 
         let multiSendButton = document.querySelector('#multiSendSelectButton');
         multiSendButton.addEventListener('click', async e => {
-        console.log("Clicked multi")
+            console.log("Clicked multi")
             return await handleMultiSendClick();
         })
 
@@ -385,6 +383,56 @@ document.addEventListener('DOMContentLoaded', async() => {
                 console.log(explorerLink)
                     // add success.blockNumber to url so we don't have to query
                 popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
+                    assetAmount, assetId, assetType, assetAddress, token, blockNumber, txnHash)).html)
+            } else {
+                popups.selected.append((new SendToAnyoneError({
+                    name: 'Reverted',
+                    message: 'Transaction was not successful'
+                })).html)
+                console.log({
+                    success
+                })
+            }
+        }
+
+        async function multiHandleRest(e) {
+            let recipients = e.multiSendArr;
+            console.log(recipients)
+            let token = e.token;
+
+            if (!provider) {
+                await connectWallet();
+            }
+
+            console.log(SendToAnyoneLogic.web3)
+            const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
+
+            let assetName = recipients[0].asset.type
+
+            popups.selected.firstElementChild.remove();
+            popups.selected.append((new MultiSendToAnyoneApproval(token)).html)
+
+//            let {
+//                integer: amountInteger,
+//                normal: amountNormal
+//            } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
+
+            console.log("Sending to: ", recipients)
+            let success = await SendToAnyoneLogic.multiSendToAnyone(recipients)
+            console.log("Success is: ", success)
+            try {
+                // should be the claim links to download with download button as csv
+                console.log(success.data)
+            } catch {
+                console.log("no data found")
+            }
+            popups.selected.firstElementChild.remove();
+            let txnHash;
+            if (success) {
+                txnHash = success.transactionReceipt.transactionHash;
+                let explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${success.transactionHash}`
+                console.log(explorerLink)
+                popups.selected.append((new MultiSendToAnyoneSuccess(explorerLink, success.claimPassword, isIDrissRegistered,
                     assetAmount, assetId, assetType, assetAddress, token, blockNumber, txnHash)).html)
             } else {
                 popups.selected.append((new SendToAnyoneError({
