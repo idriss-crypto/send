@@ -371,8 +371,8 @@ document.addEventListener('DOMContentLoaded', async() => {
             let blockNumber;
             let txnHash;
             if (success) {
-                blockNumber = success.transactionReceipt.blockNumber;
-                txnHash = success.transactionReceipt.transactionHash;
+                blockNumber = success.blockNumber;
+                txnHash = success.transactionHash;
                 let explorerLink;
                 if (network == 'ETH')
                     explorerLink = `https://etherscan.io/tx/${success.transactionHash}`
@@ -429,9 +429,10 @@ document.addEventListener('DOMContentLoaded', async() => {
             popups.selected.firstElementChild.remove();
             let txnHash;
             if (success) {
-                txnHash = success.transactionReceipt.transactionHash;
+                txnHash = success.transactionHash;
                 let explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${success.transactionHash}`
                 console.log(explorerLink)
+                //ToDo: check eligibility of params
                 popups.selected.append((new MultiSendToAnyoneSuccess(explorerLink, success.claimPassword, isIDrissRegistered,
                     assetAmount, assetId, assetType, assetAddress, token, blockNumber, txnHash)).html)
             } else {
