@@ -371,15 +371,15 @@ document.addEventListener('DOMContentLoaded', async() => {
             let blockNumber;
             let txnHash;
             if (success) {
-                blockNumber = success.blockNumber;
-                txnHash = success.transactionHash;
+                blockNumber = success.blockNumber? success.blockNumber : success.transactionReceipt.blockNumber;
+                txnHash = success.transactionHash? success.transactionHash : success.transactionReceipt.transactionHash;
                 let explorerLink;
                 if (network == 'ETH')
-                    explorerLink = `https://etherscan.io/tx/${success.transactionHash}`
+                    explorerLink = `https://etherscan.io/tx/${txnHash}`
                 else if (network == 'BSC')
-                    explorerLink = `https://bscscan.com/tx/${success.transactionHash}`
+                    explorerLink = `https://bscscan.com/tx/${txnHash}`
                 else if (network == 'Polygon')
-                    explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${success.transactionHash}`
+                    explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${txnHash}`
                 console.log(explorerLink)
                     // add success.blockNumber to url so we don't have to query
                 popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
