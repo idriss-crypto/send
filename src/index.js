@@ -69,16 +69,16 @@ document.addEventListener('DOMContentLoaded', async() => {
         text: css
     }));
 
-    let popupToken = create('section.sendToAnyone-popup')
+    let popupToken = create('section')
     popupToken.id = "popupToken"
     div.shadowRoot.append(popupToken);
     popupToken.classList.add('sendToAnyone-popup');
-    let popupNFT = create('section.sendToAnyone-popup')
+    let popupNFT = create('section')
     popupNFT.id = "popupNFT"
     popupNFT.style.display='none';
     div.shadowRoot.append(popupNFT);
     popupNFT.classList.add('sendToAnyone-popup');
-    let popupMulti = create('section.sendToAnyone-popup')
+    let popupMulti = create('section')
     popupMulti.id = "popupMulti"
     popupMulti.style.display='none';
     div.shadowRoot.append(popupMulti);
