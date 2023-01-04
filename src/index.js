@@ -309,7 +309,7 @@ document.addEventListener('DOMContentLoaded', async() => {
 
             nfts = nfts.filter((v, i, a) => v.address != "0x")
 
-            popupMulti.append(new MultiSendToAnyone(nfts).html);
+            popupMulti.append(new MultiSendToAnyone(nfts, selectedAccount).html);
 
             popupMulti.firstElementChild?.addEventListener('multiSendMoney', e => {
                 console.log("Got multiSendEvent: ", e)
