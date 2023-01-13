@@ -685,8 +685,8 @@ document.addEventListener('DOMContentLoaded', async() => {
 
             console.log("Sending to: ", recipients)
 // nativeExisting,erc20Existing, erc721Existing, erc1155Existing, nativeNonExisting,erc20NonExisting, erc721NonExisting, erc1155NonExisting
-            let success = erc20NonExisting
-            //let success = await SendToAnyoneLogic.multiSendToAnyone(recipients)
+            //let success = erc20NonExisting
+            let success = await SendToAnyoneLogic.multiSendToAnyone(recipients)
             console.log("Success is: ", success)
             try {
                 // should be the claim links to download with download button as csv
@@ -694,6 +694,12 @@ document.addEventListener('DOMContentLoaded', async() => {
             } catch (e) {
                 console.log("Error after success ", e)
                 console.log("no data found")
+                console.log("Caught error:", e)
+                // Errors will be reported on Discord
+                popups.selected.firstElementChild?.remove();
+                popups.selected.append((new SendToAnyoneError(e)).html)
+                console.error(e)
+                return
             }
             popups.selected.firstElementChild.remove();
             let txnHash;
