@@ -15,6 +15,269 @@ import {
     MultiSendToAnyoneSuccess
 } from "@idriss-crypto/send-to-anyone-core/subpages";
 
+const nativeExisting = {
+  transactionHash: '0xc6795e117503cbba61c83be1a08c88e03c46bbd9a6ce4f6bee65cc56a2f77733',
+  transactionIndex: 0,
+  blockHash: '0x3c04639805c2b814de491775641cc917f796ee40e74e97f012d728a6e7760dc6',
+  blockNumber: 38,
+  from: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+  to: '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
+  cumulativeGasUsed: 101728,
+  gasUsed: 101728,
+  contractAddress: null,
+  logsBloom: '0x00000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000800020000000000000100000800000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000002200000004000000000020000000000000000000000000000000000001000000000000000000000000000000',
+  type: '0x2',
+  status: true,
+  effectiveGasPrice: 2507240119
+}
+const erc20Existing ={
+  transactionHash: '0x9f0b797475915120ad0479f2b8572c2c2995946169cd67e3bb998ad0d03845d5',
+  transactionIndex: 0,
+  blockHash: '0xde9e473bde8c92ffd59ef35a105cebffc3affe89dc7e806ac2226d5e52402bcc',
+  blockNumber: 50,
+  from: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+  to: '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
+  cumulativeGasUsed: 155809,
+  gasUsed: 155809,
+  contractAddress: null,
+  logsBloom: '0x00000000000000000002000000000000000000000000000000000000000000000000000000000080400000000000080000000000000000000000000000102001000000000000000000000000000000000000000000000001000000000000000000000800000000000000000100000000000800000000000000000000000000000000000008000000000000000000000000000000000000000000000000000008000000001000200000000000080000000000000000000000000000000000000000000000000000200000000000000000000000002228000004000000000000000000000000000000008000000000000001000001000000000100080000000000',
+  type: '0x2',
+  status: true,
+  effectiveGasPrice: 2501471818,
+  events: {
+    '0': {
+      removed: false,
+      logIndex: 0,
+      transactionIndex: 0,
+      transactionHash: '0x9f0b797475915120ad0479f2b8572c2c2995946169cd67e3bb998ad0d03845d5',
+      blockHash: '0xde9e473bde8c92ffd59ef35a105cebffc3affe89dc7e806ac2226d5e52402bcc',
+      blockNumber: 50,
+      address: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
+      id: 'log_ebca2c8c'
+    },
+    '1': {
+      removed: false,
+      logIndex: 2,
+      transactionIndex: 0,
+      transactionHash: '0x9f0b797475915120ad0479f2b8572c2c2995946169cd67e3bb998ad0d03845d5',
+      blockHash: '0xde9e473bde8c92ffd59ef35a105cebffc3affe89dc7e806ac2226d5e52402bcc',
+      blockNumber: 50,
+      address: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
+      id: 'log_4e8f5c7a'
+    }
+  }
+}
+const erc721Existing ={
+  transactionHash: '0x1b36cd4b0d212b16b9b32f4b301ba4b100a35f49e132d8edbf12c55b5f863494',
+  transactionIndex: 0,
+  blockHash: '0xf7d01de6df808b7195b4e18d10aaecff1a28f18163cf20b12fcd46673c0470ad',
+  blockNumber: 47,
+  from: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+  to: '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
+  cumulativeGasUsed: 159129,
+  gasUsed: 159129,
+  contractAddress: null,
+  logsBloom: '0x04000000000000000002000000000000000000000000000040000000000000000000000000000000000000000000080000000000000000000400000000340001001000000000000000000008000000000000000000040000000000000000000000000800020000000000000100000800000800000000000000000010000000040000000008000000000000000000000000000000000000000000000000000008020000000000200000000100000000000000000000000100000000000000000000000006000000200000000000000000000000002200000004000000000060000010000000000000000000000000000001000000008000000000000000000000',
+  type: '0x2',
+  status: true,
+  effectiveGasPrice: 2502190947,
+  events: {
+    '0': {
+      removed: false,
+      logIndex: 0,
+      transactionIndex: 0,
+      transactionHash: '0x1b36cd4b0d212b16b9b32f4b301ba4b100a35f49e132d8edbf12c55b5f863494',
+      blockHash: '0xf7d01de6df808b7195b4e18d10aaecff1a28f18163cf20b12fcd46673c0470ad',
+      blockNumber: 47,
+      address: '0x0165878A594ca255338adfa4d48449f69242Eb8F',
+      id: 'log_9c8a7aef'
+    },
+    '1': {
+      removed: false,
+      logIndex: 1,
+      transactionIndex: 0,
+      transactionHash: '0x1b36cd4b0d212b16b9b32f4b301ba4b100a35f49e132d8edbf12c55b5f863494',
+      blockHash: '0xf7d01de6df808b7195b4e18d10aaecff1a28f18163cf20b12fcd46673c0470ad',
+      blockNumber: 47,
+      address: '0x0165878A594ca255338adfa4d48449f69242Eb8F',
+      id: 'log_31645b0d'
+    },
+    '2': {
+      removed: false,
+      logIndex: 3,
+      transactionIndex: 0,
+      transactionHash: '0x1b36cd4b0d212b16b9b32f4b301ba4b100a35f49e132d8edbf12c55b5f863494',
+      blockHash: '0xf7d01de6df808b7195b4e18d10aaecff1a28f18163cf20b12fcd46673c0470ad',
+      blockNumber: 47,
+      address: '0x0165878A594ca255338adfa4d48449f69242Eb8F',
+      id: 'log_eb4e4985'
+    },
+    '3': {
+      removed: false,
+      logIndex: 4,
+      transactionIndex: 0,
+      transactionHash: '0x1b36cd4b0d212b16b9b32f4b301ba4b100a35f49e132d8edbf12c55b5f863494',
+      blockHash: '0xf7d01de6df808b7195b4e18d10aaecff1a28f18163cf20b12fcd46673c0470ad',
+      blockNumber: 47,
+      address: '0x0165878A594ca255338adfa4d48449f69242Eb8F',
+      id: 'log_b1e3424d'
+    }
+  }
+}
+const erc1155Existing ={
+  transactionHash: '0x9f0b797475915120ad0479f2b8572c2c2995946169cd67e3bb998ad0d03845d5',
+  transactionIndex: 0,
+  blockHash: '0xde9e473bde8c92ffd59ef35a105cebffc3affe89dc7e806ac2226d5e52402bcc',
+  blockNumber: 50,
+  from: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+  to: '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
+  cumulativeGasUsed: 155809,
+  gasUsed: 155809,
+  contractAddress: null,
+  logsBloom: '0x00000000000000000002000000000000000000000000000000000000000000000000000000000080400000000000080000000000000000000000000000102001000000000000000000000000000000000000000000000001000000000000000000000800000000000000000100000000000800000000000000000000000000000000000008000000000000000000000000000000000000000000000000000008000000001000200000000000080000000000000000000000000000000000000000000000000000200000000000000000000000002228000004000000000000000000000000000000008000000000000001000001000000000100080000000000',
+  type: '0x2',
+  status: true,
+  effectiveGasPrice: 2501471818,
+  events: {
+    '0': {
+      removed: false,
+      logIndex: 0,
+      transactionIndex: 0,
+      transactionHash: '0x9f0b797475915120ad0479f2b8572c2c2995946169cd67e3bb998ad0d03845d5',
+      blockHash: '0xde9e473bde8c92ffd59ef35a105cebffc3affe89dc7e806ac2226d5e52402bcc',
+      blockNumber: 50,
+      address: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
+      id: 'log_ebca2c8c'
+    },
+    '1': {
+      removed: false,
+      logIndex: 2,
+      transactionIndex: 0,
+      transactionHash: '0x9f0b797475915120ad0479f2b8572c2c2995946169cd67e3bb998ad0d03845d5',
+      blockHash: '0xde9e473bde8c92ffd59ef35a105cebffc3affe89dc7e806ac2226d5e52402bcc',
+      blockNumber: 50,
+      address: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
+      id: 'log_4e8f5c7a'
+    }
+  }
+}
+const nativeNonExisting ={
+  transactionReceipt: {
+    transactionHash: '0xf9aa3f3836cf92231d92b41f9cbde87067111c2fc6a83a20bad060824a45c736',
+    transactionIndex: 0,
+    blockHash: '0x326911c4e9942f01d2043184c3e3ac037722f061fa7e5f004233edbae1a814e8',
+    blockNumber: 52,
+    from: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+    to: '0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0',
+    cumulativeGasUsed: 306860,
+    gasUsed: 306860,
+    contractAddress: null,
+    logsBloom: '0x00000020000000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000040200000000000000000000400000000000000000000000000000000000000000000000000000000000000000000020000000000000100000800000000000000000000000000000000200040000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000200000000000000000000000002000000000000200000020000000000000000000000000000000000000000000000000400000000000004000',
+    type: '0x2',
+    status: true,
+    effectiveGasPrice: 2501130376
+  },
+  data: [
+    {
+      beneficiary: '788bfdbc8c8dc376e66df2decf95e205595f97c2998bb664537f87625793ba6f',
+      claimPassword: 'a7f625fc497c0d8356a74c69335ace99',
+      claimUrl: 'https://idriss.xyz/claim?identifier=nonexisting@idriss.xyz&claimPassword=a7f625fc497c0d8356a74c69335ace99&assetType=0&blockNumber=52'
+    },
+    {
+      beneficiary: 'b0bcc16b207f3a0717771ec9d210ca72d87269a12b859a1e7d8a6061578403c5',
+      claimPassword: 'd02954b66e435cb445e2e8b4f2efa42c',
+      claimUrl: 'https://idriss.xyz/claim?identifier=nonexisting2@idriss.xyz&claimPassword=d02954b66e435cb445e2e8b4f2efa42c&assetType=0&blockNumber=52'
+    }
+  ]
+}
+const erc20NonExisting ={
+  transactionReceipt: {
+    transactionHash: '0xd889ac3904c156e510de001b4a74405207970bcddc386df51ceaf259b91649fd',
+    transactionIndex: 0,
+    blockHash: '0xa2bf386ebaea1c4c89324b2d953e4654237f2c0ce0f2c71b523ce6812026c2c9',
+    blockNumber: 56,
+    from: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+    to: '0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0',
+    cumulativeGasUsed: 339258,
+    gasUsed: 339258,
+    contractAddress: null,
+    logsBloom: '0x00000020000000000000000000100000000000000000000000000000000000000000000000080000000402002000000000400000000040200000000000200000000000000000000000000008000000000000000000000000000000000000400000001000000000000000000100000000000000000000000000000090000400000000000000000000000000000000008000000000000050000000000000000000020000000000000000100000000040000000000000000000000000000000008000000002000000200000000000000000000000002000000000000200000000000010000000000000000000000000000000000000000000400000000000000000',
+    type: '0x2',
+    status: true,
+    effectiveGasPrice: 2500666333
+  },
+  data: [
+    {
+      beneficiary: '788bfdbc8c8dc376e66df2decf95e205595f97c2998bb664537f87625793ba6f',
+      claimPassword: '03191facfce6372cc12f079056a49d17',
+      claimUrl: 'https://idriss.xyz/claim?identifier=nonexisting@idriss.xyz&claimPassword=03191facfce6372cc12f079056a49d17&assetType=1&assetAddress=0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6&blockNumber=56'
+    },
+    {
+      beneficiary: 'b0bcc16b207f3a0717771ec9d210ca72d87269a12b859a1e7d8a6061578403c5',
+      claimPassword: 'a3c17508b8150da82996e1a371d85805',
+      claimUrl: 'https://idriss.xyz/claim?identifier=nonexisting2@idriss.xyz&claimPassword=a3c17508b8150da82996e1a371d85805&assetType=1&assetAddress=0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6&blockNumber=56'
+    }
+  ]
+}
+const erc721NonExisting ={
+  transactionReceipt: {
+    transactionHash: '0x222071e764e98d42c9199eb2eb94718d836d230e849b8dd56617445a06db1065',
+    transactionIndex: 0,
+    blockHash: '0x10f6ac617a9169e3fdf06f1daee37e8013e196465cd3041c70101ec209075902',
+    blockNumber: 61,
+    from: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+    to: '0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0',
+    cumulativeGasUsed: 536160,
+    gasUsed: 536160,
+    contractAddress: null,
+    logsBloom: '0x00000020000000000000004000000000000002000000000040000000000000000000000000080200000410000000000000400000000040200400000000200000001000000000000000000008002000000000000001000000000000000000400000000000020000000000000100000800000800000000000000000010000000040000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000100080000000000000000000006000000200010000000000000002000002000000000000200000020200010000000000000000000000000000000000000000000440000000000000000',
+    type: '0x2',
+    status: true,
+    effectiveGasPrice: 2500344356
+  },
+  data: [
+    {
+      beneficiary: '788bfdbc8c8dc376e66df2decf95e205595f97c2998bb664537f87625793ba6f',
+      claimPassword: '7c6b6f6653c43ecf211b1d782c1652a4',
+      claimUrl: 'https://idriss.xyz/claim?identifier=nonexisting@idriss.xyz&claimPassword=7c6b6f6653c43ecf211b1d782c1652a4&assetId=11&assetType=2&assetAddress=0x0165878A594ca255338adfa4d48449f69242Eb8F&blockNumber=61'
+    },
+    {
+      beneficiary: 'b0bcc16b207f3a0717771ec9d210ca72d87269a12b859a1e7d8a6061578403c5',
+      claimPassword: 'a6774f1055dcd05ce5ac41211475f10b',
+      claimUrl: 'https://idriss.xyz/claim?identifier=nonexisting2@idriss.xyz&claimPassword=a6774f1055dcd05ce5ac41211475f10b&assetId=12&assetType=2&assetAddress=0x0165878A594ca255338adfa4d48449f69242Eb8F&blockNumber=61'
+    }
+  ]
+}
+const erc1155NonExisting ={
+  transactionReceipt: {
+    transactionHash: '0x3b5545fab1766edee9549a1b6600f05cdf7691633a680c33d3810122a81e5517',
+    transactionIndex: 0,
+    blockHash: '0x97ffae7a98ceda8c6d4f3d3492ae83e15f2cb9c6fca285c0a2109f7a55225644',
+    blockNumber: 63,
+    from: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+    to: '0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0',
+    cumulativeGasUsed: 654106,
+    gasUsed: 654106,
+    contractAddress: null,
+    logsBloom: '0x00000020000000000080000000000000000000000000000000000000000000000000000000080000400400000000000000400000000040204000000000002000000100000000000000000000000000000000000000000001000000000000400000000800000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000040000200000000000000000000000002028000000000200000000000000000000000000000000000000000000000001000000400100080000000000',
+    type: '0x2',
+    status: true,
+    effectiveGasPrice: 2500265112
+  },
+  data: [
+    {
+      beneficiary: '788bfdbc8c8dc376e66df2decf95e205595f97c2998bb664537f87625793ba6f',
+      claimPassword: '2a84600bf329dee5ece1721e65b8cdc2',
+      claimUrl: 'https://idriss.xyz/claim?identifier=nonexisting@idriss.xyz&claimPassword=2a84600bf329dee5ece1721e65b8cdc2&assetId=2&assetType=3&assetAddress=0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9&blockNumber=63'
+    },
+    {
+      beneficiary: 'b0bcc16b207f3a0717771ec9d210ca72d87269a12b859a1e7d8a6061578403c5',
+      claimPassword: '1b5fceb263c8767afbafc99c2904abe4',
+      claimUrl: 'https://idriss.xyz/claim?identifier=nonexisting2@idriss.xyz&claimPassword=1b5fceb263c8767afbafc99c2904abe4&assetId=3&assetType=3&assetAddress=0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9&blockNumber=63'
+    }
+  ]
+}
+
 // ToDo: event listener to send transaction is set to popup, which piles up multiple listeners as popups are never deleted, just their children
 
 
@@ -364,6 +627,8 @@ document.addEventListener('DOMContentLoaded', async() => {
             //TODO: check price calculation + if it adds $fee properly
             console.log(identifier, `${amountInteger}`, network, token, message,
                 assetType, assetAmount, assetAddress, assetId)
+
+
             let success = await SendToAnyoneLogic.sendToAnyone(identifier, `${amountInteger}`, network, token, message,
                 assetType, assetAmount, assetAddress, assetId, walletTag)
             console.log("Success is: ", success)
@@ -395,6 +660,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             }
         }
 
+
         async function multiHandleRest(e) {
             let recipients = e.multiSendArr;
             console.log(recipients)
@@ -418,23 +684,25 @@ document.addEventListener('DOMContentLoaded', async() => {
 //            } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
 
             console.log("Sending to: ", recipients)
-            let success = await SendToAnyoneLogic.multiSendToAnyone(recipients)
+// nativeExisting,erc20Existing, erc721Existing, erc1155Existing, nativeNonExisting,erc20NonExisting, erc721NonExisting, erc1155NonExisting
+            let success = erc20NonExisting
+            //let success = await SendToAnyoneLogic.multiSendToAnyone(recipients)
             console.log("Success is: ", success)
             try {
                 // should be the claim links to download with download button as csv
-                console.log(success.data)
-            } catch {
+                console.log(success)
+            } catch (e) {
+                console.log("Error after success ", e)
                 console.log("no data found")
             }
             popups.selected.firstElementChild.remove();
             let txnHash;
             if (success) {
                 txnHash = success.transactionHash;
-                let explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${success.transactionHash}`
+                let explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${txnHash}`
                 console.log(explorerLink)
                 //ToDo: check eligibility of params
-                popups.selected.append((new MultiSendToAnyoneSuccess(explorerLink, success.claimPassword, isIDrissRegistered,
-                    assetAmount, assetId, assetType, assetAddress, token, blockNumber, txnHash)).html)
+                popups.selected.append((new MultiSendToAnyoneSuccess(explorerLink, token, success.data?? "")).html)
             } else {
                 popups.selected.append((new SendToAnyoneError({
                     name: 'Reverted',
