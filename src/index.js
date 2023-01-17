@@ -278,6 +278,152 @@ const erc1155NonExisting ={
   ]
 }
 
+const realNonExist = {
+    "transactionReceipt": {
+        "blockHash": "0x27bc213935ed86faf483c0e6d6e127391f5043f3025d8a3d8865a7691906c319",
+        "blockNumber": 38076234,
+        "contractAddress": null,
+        "cumulativeGasUsed": 5308058,
+        "effectiveGasPrice": 63972203300,
+        "from": "0xe75bf5a0aa5bf8891b4b68cbda2e1c12df4f52b2",
+        "gasUsed": 330687,
+        "logsBloom": "0x00000020000000000000000000000008000000000000000000000000000000000000000000080000000000100000000000008000000000000000000000000000000000000000000000008000000000800000000000000000000100002000000000000000020000000000000000000800000000000000000080000000000000000040000000040000000000000000000000000000084204000000100000000000200000000000000000000000000000280000000000000000000100080000004000000000000000000001000000000000000000000000800000128200400020000000000200000000000000000000000000000000400000000000000000100000",
+        "status": true,
+        "to": "0xf333ede8d49dd100f02c946809c9f5d9867d10c0",
+        "transactionHash": "0x975dc8fda70da4ff2c1733c51c082c25e2a1e2663253b1f8a3e03679cd8ef33b",
+        "transactionIndex": 30,
+        "type": "0x0",
+        "events": {
+            "0": {
+                "address": "0x0000000000000000000000000000000000001010",
+                "blockNumber": 38076234,
+                "transactionHash": "0x975dc8fda70da4ff2c1733c51c082c25e2a1e2663253b1f8a3e03679cd8ef33b",
+                "transactionIndex": 30,
+                "blockHash": "0x27bc213935ed86faf483c0e6d6e127391f5043f3025d8a3d8865a7691906c319",
+                "logIndex": 104,
+                "removed": false,
+                "id": "log_746ed473",
+                "returnValues": {},
+                "signature": null,
+                "raw": {
+                    "data": "0x0000000000000000000000000000000000000000000000000b1b3fb349ccd88a0000000000000000000000000000000000000000000000001f170c21425b024e00000000000000000000000000000000000000000000000001bfb7ed98e1d93600000000000000000000000000000000000000000000000013fbcc6df88e29c40000000000000000000000000000000000000000000000000cdaf7a0e2aeb1c0",
+                    "topics": [
+                        "0xe6497e3ee548a3372136af2fcb0696db31fc6cf20260707645068bd3fe97f3c4",
+                        "0x0000000000000000000000000000000000000000000000000000000000001010",
+                        "0x000000000000000000000000e75bf5a0aa5bf8891b4b68cbda2e1c12df4f52b2",
+                        "0x000000000000000000000000f333ede8d49dd100f02c946809c9f5d9867d10c0"
+                    ]
+                }
+            },
+            "1": {
+                "address": "0x0000000000000000000000000000000000001010",
+                "blockNumber": 38076234,
+                "transactionHash": "0x975dc8fda70da4ff2c1733c51c082c25e2a1e2663253b1f8a3e03679cd8ef33b",
+                "transactionIndex": 30,
+                "blockHash": "0x27bc213935ed86faf483c0e6d6e127391f5043f3025d8a3d8865a7691906c319",
+                "logIndex": 107,
+                "removed": false,
+                "id": "log_2f4b7cbb",
+                "returnValues": {},
+                "signature": null,
+                "raw": {
+                    "data": "0x000000000000000000000000000000000000000000000000002a068e2c7128750000000000000000000000000000000000000000000000001f71f514f7a23c4e00000000000000000000000000000000000000000000a3f2b954f457a742fa6c0000000000000000000000000000000000000000000000001f47ee86cb3113d900000000000000000000000000000000000000000000a3f2b97efae5d3b422e1",
+                    "topics": [
+                        "0x4dfe1bbbcf077ddc3e01291eea2d5c70c2b422b415d95645b9adcfd678cb1d63",
+                        "0x0000000000000000000000000000000000000000000000000000000000001010",
+                        "0x000000000000000000000000e75bf5a0aa5bf8891b4b68cbda2e1c12df4f52b2",
+                        "0x0000000000000000000000009ead03f7136fc6b4bdb0780b00a1c14ae5a8b6d0"
+                    ]
+                }
+            },
+            "AssetTransferred": [
+                {
+                    "address": "0xf333EDE8D49dD100F02c946809C9F5D9867D10C0",
+                    "blockNumber": 38076234,
+                    "transactionHash": "0x975dc8fda70da4ff2c1733c51c082c25e2a1e2663253b1f8a3e03679cd8ef33b",
+                    "transactionIndex": 30,
+                    "blockHash": "0x27bc213935ed86faf483c0e6d6e127391f5043f3025d8a3d8865a7691906c319",
+                    "logIndex": 105,
+                    "removed": false,
+                    "id": "log_ce381786",
+                    "returnValues": {
+                        "0": "0x357bccdc86a82db3ce532bf511629ad03ff280b6032ca4b9b7af214bbcd6aa56",
+                        "1": "0xe75bf5A0aA5BF8891b4b68cBdA2e1C12DF4F52b2",
+                        "2": "0x0000000000000000000000000000000000000000",
+                        "3": "400000104188703109",
+                        "4": "0",
+                        "5": "",
+                        "toHash": "0x357bccdc86a82db3ce532bf511629ad03ff280b6032ca4b9b7af214bbcd6aa56",
+                        "from": "0xe75bf5A0aA5BF8891b4b68cBdA2e1C12DF4F52b2",
+                        "assetContractAddress": "0x0000000000000000000000000000000000000000",
+                        "amount": "400000104188703109",
+                        "assetType": "0",
+                        "message": ""
+                    },
+                    "event": "AssetTransferred",
+                    "signature": "0xd89b73431940ba2875cf1fcc289a82b2c1ea2c6200efac052b13ba94adbafd21",
+                    "raw": {
+                        "data": "0x000000000000000000000000000000000000000000000000058d15f9b8497185000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000",
+                        "topics": [
+                            "0xd89b73431940ba2875cf1fcc289a82b2c1ea2c6200efac052b13ba94adbafd21",
+                            "0x357bccdc86a82db3ce532bf511629ad03ff280b6032ca4b9b7af214bbcd6aa56",
+                            "0x000000000000000000000000e75bf5a0aa5bf8891b4b68cbda2e1c12df4f52b2",
+                            "0x0000000000000000000000000000000000000000000000000000000000000000"
+                        ]
+                    }
+                },
+                {
+                    "address": "0xf333EDE8D49dD100F02c946809C9F5D9867D10C0",
+                    "blockNumber": 38076234,
+                    "transactionHash": "0x975dc8fda70da4ff2c1733c51c082c25e2a1e2663253b1f8a3e03679cd8ef33b",
+                    "transactionIndex": 30,
+                    "blockHash": "0x27bc213935ed86faf483c0e6d6e127391f5043f3025d8a3d8865a7691906c319",
+                    "logIndex": 106,
+                    "removed": false,
+                    "id": "log_c361a4fa",
+                    "returnValues": {
+                        "0": "0x69958700200f35c6dfd72406f7f565780027adde1aaa68914caafad27f3aae59",
+                        "1": "0xe75bf5A0aA5BF8891b4b68cBdA2e1C12DF4F52b2",
+                        "2": "0x0000000000000000000000000000000000000000",
+                        "3": "400101236874787251",
+                        "4": "0",
+                        "5": "",
+                        "toHash": "0x69958700200f35c6dfd72406f7f565780027adde1aaa68914caafad27f3aae59",
+                        "from": "0xe75bf5A0aA5BF8891b4b68cBdA2e1C12DF4F52b2",
+                        "assetContractAddress": "0x0000000000000000000000000000000000000000",
+                        "amount": "400101236874787251",
+                        "assetType": "0",
+                        "message": ""
+                    },
+                    "event": "AssetTransferred",
+                    "signature": "0xd89b73431940ba2875cf1fcc289a82b2c1ea2c6200efac052b13ba94adbafd21",
+                    "raw": {
+                        "data": "0x000000000000000000000000000000000000000000000000058d71f4821db9b3000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000",
+                        "topics": [
+                            "0xd89b73431940ba2875cf1fcc289a82b2c1ea2c6200efac052b13ba94adbafd21",
+                            "0x69958700200f35c6dfd72406f7f565780027adde1aaa68914caafad27f3aae59",
+                            "0x000000000000000000000000e75bf5a0aa5bf8891b4b68cbda2e1c12df4f52b2",
+                            "0x0000000000000000000000000000000000000000000000000000000000000000"
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    "data": [
+        {
+            "beneficiary": "8a1b88bd3163ed6419278982e4764c56b30662ae53581c3d93d407f61e504dad",
+            "claimPassword": "11695538cee582378bdfc13b6d4b5795",
+            "claimUrl": "https://idriss.xyz/claim?identifier=@IDriss_xyz_bot&claimPassword=11695538cee582378bdfc13b6d4b5795&assetType=0&blockNumber=38076234"
+        },
+        {
+            "beneficiary": "5920bf82673fcc3128aa388f437f465a7256bf3302f9ef379b0a96cd709b112a",
+            "claimPassword": "a098a88f962cf634db040b431b4952a6",
+            "claimUrl": "https://idriss.xyz/claim?identifier=@elonmusk&claimPassword=a098a88f962cf634db040b431b4952a6&assetType=0&blockNumber=38076234"
+        }
+    ]
+}
+
 // ToDo: event listener to send transaction is set to popup, which piles up multiple listeners as popups are never deleted, just their children
 
 
@@ -414,14 +560,17 @@ document.addEventListener('DOMContentLoaded', async() => {
                 }
 
                 popups.selected.firstElementChild.addEventListener('next', nextEventHandler);
+                adjustButtonActions()
             });
         }
 
         async function handleNFTclick() {
 
+            adjustButtonActions();
+
             document.querySelector('#nftSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
             document.querySelector('#tokenSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-            //document.querySelector('#multiSendSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            document.querySelector('#multiSendSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
 
             popups.selected.firstElementChild?.remove();
             popupToken.style.display='none';
@@ -488,12 +637,15 @@ document.addEventListener('DOMContentLoaded', async() => {
                                 nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
                                 handleRest();
                             });
+            adjustButtonActions();
         }
         async function handleTokenClick() {
 
+            adjustButtonActions();
+
             document.querySelector('#tokenSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
             document.querySelector('#nftSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-            //document.querySelector('#multiSendSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            document.querySelector('#multiSendSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
 
             popups.selected.firstElementChild?.remove();
             popupNFT.style.display='none';
@@ -522,85 +674,96 @@ document.addEventListener('DOMContentLoaded', async() => {
         }
         async function handleMultiSendClick() {
 
-            //document.querySelector('#multiSendSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-            document.querySelector('#nftSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-            document.querySelector('#tokenSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            try {
 
-            popups.selected.firstElementChild?.remove();
-            popupNFT.style.display='none';
-            popupToken.style.display='none';
-            popupMulti.style.display='block';
-            popups.selected = popupMulti;
+                adjustButtonActions();
 
-            // connect wallet when needed
-            if (!provider) {
-                await connectWallet()
+                document.querySelector('#multiSendSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+                document.querySelector('#nftSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+                document.querySelector('#tokenSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+
+                popups.selected.firstElementChild?.remove();
+                popupNFT.style.display='none';
+                popupToken.style.display='none';
+                popupMulti.style.display='block';
+                popups.selected = popupMulti;
+
+                // connect wallet when needed
+                if (!provider) {
+                    await connectWallet()
+                }
+
+                console.log(SendToAnyoneLogic.web3)
+                const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
+                let selectedAccount = accounts[0];
+
+                let addressNFTsPolygon = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY, 'Polygon')
+
+                console.log(addressNFTsPolygon)
+
+                function filterNFTs(addressNFTs, network) {
+                    return addressNFTs.ownedNfts
+                        .filter((v, i, a) => v.title != "")
+                        .filter((v, i, a) => v.tokenType == "ERC1155")
+                        .map((v, i, a) => {
+                            try {
+                                let image = v.media[0].gateway ? v.media[0].gateway : "";
+                                if (image.startsWith("ipfs://")) image = image.replace("ipfs://", "https://ipfs.io/ipfs/");
+                                return {
+                                    name: v.title,
+                                    address: v.contract.address,
+                                    id: BigInt(v.tokenId).toString(10),
+                                    type: v.tokenType,
+                                    image: image,
+                                    network: network,
+                                };
+                            } catch { return {name: "dummy name" , address:"0x", id: 0, type: "ERC721", img: "https://ipfs.io/ipfs/", network: "polygon"}
+                             }
+                        });
+                }
+
+                let nfts = filterNFTs(addressNFTsPolygon, "Polygon");
+
+                console.log(nfts)
+
+                nfts = nfts.filter((v, i, a) => v.address != "0x")
+
+                popupMulti.append(new MultiSendToAnyone(nfts, selectedAccount).html);
+
+                popupMulti.firstElementChild?.addEventListener('multiSendMoney', e => {
+                    console.log("Got multiSendEvent: ", e)
+                                    multiHandleRest(e);
+                                });
+
+                adjustButtonActions();
+
             }
 
-            console.log(SendToAnyoneLogic.web3)
-            const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
-            let selectedAccount = accounts[0];
-
-            let addressNFTsPolygon = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY, 'Polygon')
-
-            console.log(addressNFTsPolygon)
-
-            function filterNFTs(addressNFTs, network) {
-                return addressNFTs.ownedNfts
-                    .filter((v, i, a) => v.title != "")
-                    .filter((v, i, a) => v.tokenType == "ERC1155")
-                    .map((v, i, a) => {
-                        try {
-                            let image = v.media[0].gateway ? v.media[0].gateway : "";
-                            if (image.startsWith("ipfs://")) image = image.replace("ipfs://", "https://ipfs.io/ipfs/");
-                            return {
-                                name: v.title,
-                                address: v.contract.address,
-                                id: BigInt(v.tokenId).toString(10),
-                                type: v.tokenType,
-                                image: image,
-                                network: network,
-                            };
-                        } catch { return {name: "dummy name" , address:"0x", id: 0, type: "ERC721", img: "https://ipfs.io/ipfs/", network: "polygon"}
-                         }
-                    });
+            catch {
+                // refresh screen so we are not stuck on error
+                adjustButtonActions();
+                document.querySelector('#tokenSelectButton').click()
             }
+        }
 
-            let nfts = filterNFTs(addressNFTsPolygon, "Polygon");
+        function adjustButtonActions(){
+            let nftButton = document.querySelector('#nftSelectButton');
+            let tokenButton = document.querySelector('#tokenSelectButton');
+            let multiSendButton = document.querySelector('#multiSendSelectButton');
 
-            console.log(nfts)
+            console.log(nftButton.onclick, tokenButton.onclick, multiSendButton.onclick)
 
-            nfts = nfts.filter((v, i, a) => v.address != "0x")
+            nftButton.onclick= nftButton.onclick? '' : function () { handleNFTclick() };
+            tokenButton.onclick= tokenButton.onclick? '' : function () { handleTokenClick() };
+            multiSendButton.onclick= multiSendButton.onclick? '' : function () { handleMultiSendClick() };
 
-            popupMulti.append(new MultiSendToAnyone(nfts, selectedAccount).html);
-
-            popupMulti.firstElementChild?.addEventListener('multiSendMoney', e => {
-                console.log("Got multiSendEvent: ", e)
-                                multiHandleRest(e);
-                            });
+            console.log(nftButton.onclick, tokenButton.onclick, multiSendButton.onclick)
         }
 
 
-        // handle nft button click
-        let nftButton = document.querySelector('#nftSelectButton');
-        nftButton.addEventListener('click', async e => {
-            console.log("Clicked NFT")
-            return await handleNFTclick();
-        })
-
-        // handle token button click
+        // initialize page
         let tokenButton = document.querySelector('#tokenSelectButton');
-        tokenButton.addEventListener('click', async e => {
-            console.log("Clicked token")
-            return await handleTokenClick();
-        })
-
-        let multiSendButton = document.querySelector('#multiSendSelectButton');
-        multiSendButton.addEventListener('click', async e => {
-            console.log("Clicked multi")
-            return await handleMultiSendClick();
-        })
-
+        adjustButtonActions();
         await tokenButton.click()
 
         async function handleRest() {
@@ -640,11 +803,11 @@ document.addEventListener('DOMContentLoaded', async() => {
                 txnHash = success.transactionHash? success.transactionHash : success.transactionReceipt.transactionHash;
                 let explorerLink;
                 if (network == 'ETH')
-                    explorerLink = `https://etherscan.io/tx/${txnHash}`
+                    explorerLink = 'https://etherscan.io/tx/' + txnHash
                 else if (network == 'BSC')
-                    explorerLink = `https://bscscan.com/tx/${txnHash}`
+                    explorerLink = 'https://bscscan.com/tx/' + txnHash
                 else if (network == 'Polygon')
-                    explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${txnHash}`
+                    explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + '/tx/' + txnHash
                 console.log(explorerLink)
                     // add success.blockNumber to url so we don't have to query
                 popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
