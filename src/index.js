@@ -453,6 +453,9 @@ document.addEventListener('DOMContentLoaded', async() => {
     let nftName;
     let provider;
     let walletTag;
+    let nftButton = document.querySelector('#nftSelectButton');
+    let tokenButton = document.querySelector('#tokenSelectButton');
+    let multiSendButton = document.querySelector('#multiSendSelectButton');
 
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
@@ -465,6 +468,9 @@ document.addEventListener('DOMContentLoaded', async() => {
         else if (params.get('back'))
             return document.location = params.get('back');
         else
+            if (popups.selected == popupMulti) multiSendButton.click();
+            if (popups.selected == popupNFT) nftButton.click();
+            if (popups.selected == popupToken) tokenButton.click();
             return document.location = '/send';
     })
     div.shadowRoot.addEventListener('closeError', () => {
@@ -747,10 +753,6 @@ document.addEventListener('DOMContentLoaded', async() => {
         }
 
         function adjustButtonActions(){
-            let nftButton = document.querySelector('#nftSelectButton');
-            let tokenButton = document.querySelector('#tokenSelectButton');
-            let multiSendButton = document.querySelector('#multiSendSelectButton');
-
             console.log(nftButton.onclick, tokenButton.onclick, multiSendButton.onclick)
 
             nftButton.onclick= nftButton.onclick? '' : function () { handleNFTclick() };
@@ -867,7 +869,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             popups.selected.firstElementChild.remove();
             let txnHash;
             if (success) {
-                txnHash = success.transactionHash;
+                txnHash = success.transactionHash? success.transactionHash : success.transactionReceipt.transactionHash;
                 let explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + `/tx/${txnHash}`
                 console.log(explorerLink)
                 //ToDo: check eligibility of params
