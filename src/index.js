@@ -847,13 +847,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             popups.selected.firstElementChild.remove();
             popups.selected.append((new MultiSendToAnyoneApproval(token)).html)
 
-//            let {
-//                integer: amountInteger,
-//                normal: amountNormal
-//            } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
-
             console.log("Sending to: ", recipients)
-// nativeExisting,erc20Existing, erc721Existing, erc1155Existing, nativeNonExisting,erc20NonExisting, erc721NonExisting, erc1155NonExisting
             //let success = erc20NonExisting
             let success = await SendToAnyoneLogic.multiSendToAnyone(recipients)
             console.log("Success is: ", success)
