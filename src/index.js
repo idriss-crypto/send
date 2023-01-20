@@ -456,6 +456,7 @@ document.addEventListener('DOMContentLoaded', async() => {
     let nftButton = document.querySelector('#nftSelectButton');
     let tokenButton = document.querySelector('#tokenSelectButton');
     let multiSendButton = document.querySelector('#multiSendSelectButton');
+    let selectedTab = "token";
 
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
@@ -468,9 +469,9 @@ document.addEventListener('DOMContentLoaded', async() => {
         else if (params.get('back'))
             return document.location = params.get('back');
         else
-            if (popups.selected == popupMulti) multiSendButton.click();
-            if (popups.selected == popupNFT) nftButton.click();
-            if (popups.selected == popupToken) tokenButton.click();
+            if (selectedTab == "multi") multiSendButton.click();
+            if (selectedTab == "nft") nftButton.click();
+            if (selectedTab == "token") tokenButton.click();
             return document.location = '/send';
     })
     div.shadowRoot.addEventListener('closeError', () => {
@@ -571,6 +572,7 @@ document.addEventListener('DOMContentLoaded', async() => {
         }
 
         async function handleNFTclick() {
+            selectedTab = "nft";
 
             adjustButtonActions();
 
@@ -646,6 +648,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             adjustButtonActions();
         }
         async function handleTokenClick() {
+            selectedTab = "token";
 
             adjustButtonActions();
 
@@ -679,6 +682,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                             });
         }
         async function handleMultiSendClick() {
+            selectedTab = "multi";
 
             try {
 
