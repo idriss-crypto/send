@@ -757,13 +757,11 @@ document.addEventListener('DOMContentLoaded', async() => {
         }
 
         function adjustButtonActions(){
-            console.log(nftButton.onclick, tokenButton.onclick, multiSendButton.onclick)
 
             nftButton.onclick= nftButton.onclick? '' : function () { handleNFTclick() };
             tokenButton.onclick= tokenButton.onclick? '' : function () { handleTokenClick() };
             multiSendButton.onclick= multiSendButton.onclick? '' : function () { handleMultiSendClick() };
 
-            console.log(nftButton.onclick, tokenButton.onclick, multiSendButton.onclick)
         }
 
 
