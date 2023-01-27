@@ -424,8 +424,6 @@ const realNonExist = {
     ]
 }
 
-// ToDo: event listener to send transaction is set to popup, which piles up multiple listeners as popups are never deleted, just their children
-
 
 document.addEventListener('DOMContentLoaded', async() => {
     const sendToAnyoneLogicPromise = await
@@ -764,7 +762,6 @@ document.addEventListener('DOMContentLoaded', async() => {
 
         }
 
-
         // initialize page
         let tokenButton = document.querySelector('#tokenSelectButton');
         adjustButtonActions();
@@ -779,7 +776,6 @@ document.addEventListener('DOMContentLoaded', async() => {
             console.log(SendToAnyoneLogic.web3)
             const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
 
-            // ToDo: approval screen will never be rendered completely as it is overwritten by the waitingConfirmation screen
             popups.selected.firstElementChild?.remove();
             popups.selected.append(new SendToAnyoneWaitingApproval(token).html);
             popups.selected.firstElementChild.remove();
