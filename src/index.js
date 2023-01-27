@@ -533,7 +533,9 @@ document.addEventListener('DOMContentLoaded', async() => {
             document.querySelector('#connectWallet').classList.add('hidden');
             document.querySelector('#connectedWallet').classList.remove('hidden');
             let accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
-            document.querySelector('#connectedWallet').firstElementChild.value = accounts[0].substring(0, 6).concat("...").concat(accounts[0].substr(-4))
+            let reverse = await SendToAnyoneLogic.idriss.reverseResolve(accounts[0]);
+            let loginDisplay = reverse? reverse : accounts[0].substring(0, 6).concat("...").concat(accounts[0].substr(-4))
+            document.querySelector('#connectedWallet').firstElementChild.value = loginDisplay
             document.querySelector('#polygon-scan-link').href = POLYGON_BLOCK_EXPLORER_ADDRESS + "/address/" + accounts[0];
         }
 
