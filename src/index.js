@@ -470,12 +470,10 @@ document.addEventListener('DOMContentLoaded', async() => {
             if (selectedTab == "multi") multiSendButton.click();
             if (selectedTab == "nft") nftButton.click();
             if (selectedTab == "token") tokenButton.click();
-            return document.location = '/send';
     })
-    div.shadowRoot.addEventListener('closeError', () => {
-        return document.location = '/send';
-    })
+
     div.shadowRoot.addEventListener('discordSendError', () => {
+        // ToDo: change url and add tooltip "Copied"
         const url = 'https://discord.gg/VMcJ9uF6u8';
         window.open(url, '_blank');
     })
@@ -500,13 +498,13 @@ document.addEventListener('DOMContentLoaded', async() => {
 
 
     document.querySelector('#triggerSuccessButton').addEventListener('click', () => {
-        popupToken.firstElementChild.remove();
-        popupToken.append((new SendToAnyoneSuccess("@test", "https://www.idriss.xyz", "abc", false, 1, 1, 1, "0x", "Matic", 1, "0x")).html);
+        popupMulti.firstElementChild.remove();
+        popupMulti.append((new MultiSendToAnyoneSuccess("@test", "https://www.idriss.xyz", "abc", false, 1, 1, 1, "0x", "Matic", 1, "0x")).html);
     });
 
     document.querySelector('#triggerErrorButton').addEventListener('click', () => {
-        popupToken.firstElementChild.remove();
-        popupToken.append((new SendToAnyoneError({
+        popupMulti.firstElementChild.remove();
+        popupMulti.append((new SendToAnyoneError({
             name: 'Reverted',
             message: 'Transaction was not successful'
         })).html)
