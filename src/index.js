@@ -436,6 +436,7 @@ document.addEventListener('DOMContentLoaded', async() => {
 
 
     let params = new URL(document.location).searchParams;
+    let navSelection = new URL(document.location).pathname.split('/')[2];
     let identifier = params.get('identifier');
     let recipient = params.get('recipient');
     let token = params.get('token');
@@ -763,9 +764,13 @@ document.addEventListener('DOMContentLoaded', async() => {
         }
 
         // initialize page
-        let tokenButton = document.querySelector('#tokenSelectButton');
         adjustButtonActions();
-        await tokenButton.click()
+
+        console.log(navSelection)
+        console.log(navSelection  == 'nft')
+        if (navSelection  == 'nft') await nftButton.click();
+        else if (navSelection  == 'multi') await multiSendButton.click()
+        else await tokenButton.click()
 
         async function handleRest() {
 
