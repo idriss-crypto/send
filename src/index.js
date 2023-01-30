@@ -725,6 +725,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                                     type: v.tokenType,
                                     image: image,
                                     network: network,
+                                    balance: v.balance
                                 };
                             } catch { return {name: "dummy name" , address:"0x", id: 0, type: "ERC721", img: "https://ipfs.io/ipfs/", network: "polygon"}
                              }
