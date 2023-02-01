@@ -749,7 +749,8 @@ document.addEventListener('DOMContentLoaded', async() => {
 
             }
 
-            catch {
+            catch (e){
+                console.log(e)
                 // refresh screen so we are not stuck on error
                 adjustButtonActions();
                 document.querySelector('#tokenSelectButton').click()
