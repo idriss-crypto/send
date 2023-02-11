@@ -12,7 +12,8 @@ import {
     SendToAnyoneAddress,
     MultiSendToAnyone,
     MultiSendToAnyoneApproval,
-    MultiSendToAnyoneSuccess
+    MultiSendToAnyoneSuccess,
+    RevertPayment
 } from "@idriss-crypto/send-to-anyone-core/subpages";
 
 const nativeExisting = {
@@ -277,7 +278,6 @@ const erc1155NonExisting ={
     }
   ]
 }
-
 const realNonExist = {
     "transactionReceipt": {
         "blockHash": "0x27bc213935ed86faf483c0e6d6e127391f5043f3025d8a3d8865a7691906c319",
@@ -434,7 +434,6 @@ document.addEventListener('DOMContentLoaded', async() => {
         import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneUtils")
 
 
-
     let params = new URL(document.location).searchParams;
     let navSelection = new URL(document.location).pathname.split('/')[2];
     let identifier = params.get('identifier');
@@ -455,6 +454,7 @@ document.addEventListener('DOMContentLoaded', async() => {
     let nftButton = document.querySelector('#nftSelectButton');
     let tokenButton = document.querySelector('#tokenSelectButton');
     let multiSendButton = document.querySelector('#multiSendSelectButton');
+    let revertButton = document.querySelector('#revertSelectButton');
     let selectedTab = "token";
 
     let div = document.createElement('div')
@@ -463,6 +463,7 @@ document.addEventListener('DOMContentLoaded', async() => {
         mode: 'open'
     })
     div.shadowRoot.addEventListener('close', () => {
+        console.log("Close triggered")
         if (params.get('back') == 'close')
             window.close()
         else if (params.get('back'))
@@ -471,6 +472,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             if (selectedTab == "multi") multiSendButton.click();
             if (selectedTab == "nft") nftButton.click();
             if (selectedTab == "token") tokenButton.click();
+            if (selectedTab == "revert") revertButton.click();
     })
 
     div.shadowRoot.addEventListener('discordSendError', () => {
@@ -496,7 +498,12 @@ document.addEventListener('DOMContentLoaded', async() => {
     popupMulti.style.display='none';
     div.shadowRoot.append(popupMulti);
     popupMulti.classList.add('multiSendToAnyone-popup');
-
+    //ToDo: change class names
+    let popupRevert = create('section')
+    popupRevert.id = "popupRevert"
+    popupRevert.style.display='none';
+    div.shadowRoot.append(popupRevert);
+    popupRevert.classList.add('sendToAnyone-popup');
 
     document.querySelector('#triggerSuccessButton').addEventListener('click', () => {
         popupMulti.firstElementChild.remove();
@@ -552,24 +559,6 @@ document.addEventListener('DOMContentLoaded', async() => {
             await disconnectWallet();
         });
 
-        async function showInputWidget(type) {
-            popups.selected.append(new SendToAnyoneAddress(type).html);
-            return await new Promise((res) => {
-
-                async function nextEventHandler(e) {
-                    console.log(e);
-                    identifier = e.identifier;
-                    recipient = e.recipient;
-                    isIDrissRegistered = e.isIDrissRegistered;
-                    walletTag = e.walletTag ? e.walletTag : "Public ETH";
-                    res()
-                }
-
-                popups.selected.firstElementChild.addEventListener('next', nextEventHandler);
-                adjustButtonActions()
-            });
-        }
-
         async function handleNFTclick() {
             selectedTab = "nft";
 
@@ -578,12 +567,15 @@ document.addEventListener('DOMContentLoaded', async() => {
             document.querySelector('#nftSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
             document.querySelector('#tokenSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
             document.querySelector('#multiSendSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            //document.querySelector('#revertSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
 
             popups.selected.firstElementChild?.remove();
             popupToken.style.display='none';
             popupMulti.style.display='none';
+            popupRevert.style.display='none';
             popupNFT.style.display='block';
             popups.selected = popupNFT
+
             await showInputWidget("nft");
             // connect wallet when needed
             if (!provider) {
@@ -644,7 +636,6 @@ document.addEventListener('DOMContentLoaded', async() => {
                                 nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
                                 handleRest();
                             });
-            adjustButtonActions();
         }
         async function handleTokenClick() {
             selectedTab = "token";
@@ -654,12 +645,15 @@ document.addEventListener('DOMContentLoaded', async() => {
             document.querySelector('#tokenSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
             document.querySelector('#nftSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
             document.querySelector('#multiSendSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            //document.querySelector('#revertSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
 
             popups.selected.firstElementChild?.remove();
             popupNFT.style.display='none';
             popupMulti.style.display='none';
+            popupRevert.style.display='none';
             popupToken.style.display='block';
             popups.selected = popupToken;
+
             await showInputWidget("token");
             popupToken.firstElementChild?.remove();
             let nfts=[]
@@ -679,6 +673,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                                 nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
                                 handleRest();
                             });
+            adjustButtonActions();
         }
         async function handleMultiSendClick() {
             selectedTab = "multi";
@@ -690,11 +685,14 @@ document.addEventListener('DOMContentLoaded', async() => {
                 document.querySelector('#multiSendSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
                 document.querySelector('#nftSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
                 document.querySelector('#tokenSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+                //document.querySelector('#revertSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
 
                 popups.selected.firstElementChild?.remove();
                 popupNFT.style.display='none';
                 popupToken.style.display='none';
+                popupRevert.style.display='none';
                 popupMulti.style.display='block';
+
                 popups.selected = popupMulti;
 
                 // connect wallet when needed
@@ -753,7 +751,43 @@ document.addEventListener('DOMContentLoaded', async() => {
                 console.log(e)
                 // refresh screen so we are not stuck on error
                 adjustButtonActions();
-                document.querySelector('#tokenSelectButton').click()
+                multiSendButton.click()
+            }
+        }
+        async function handleRevertClick() {
+            selectedTab = "revert";
+            try {
+                adjustButtonActions();
+
+                //document.querySelector('#revertSelectButton').className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+                document.querySelector('#nftSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+                document.querySelector('#tokenSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+                document.querySelector('#multiSendSelectButton').className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+
+                popups.selected.firstElementChild?.remove();
+                popupNFT.style.display='none';
+                popupToken.style.display='none';
+                popupMulti.style.display='none';
+                popupRevert.style.display='block';
+                popups.selected = popupRevert;
+
+                // connect wallet when needed
+                if (!provider) {
+                    await connectWallet()
+                }
+
+                const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
+                let selectedAccount = accounts[0];
+
+                popupRevert.append(new RevertPayment(SendToAnyoneLogic.idriss).html);
+                adjustButtonActions();
+            }
+
+            catch (e){
+                console.log("Revert error ", e)
+                // refresh screen so we are not stuck on error
+                adjustButtonActions();
+                revertButton.click()
             }
         }
 
@@ -762,17 +796,35 @@ document.addEventListener('DOMContentLoaded', async() => {
             nftButton.onclick= nftButton.onclick? '' : function () { handleNFTclick() };
             tokenButton.onclick= tokenButton.onclick? '' : function () { handleTokenClick() };
             multiSendButton.onclick= multiSendButton.onclick? '' : function () { handleMultiSendClick() };
+            revertButton.onclick= revertButton.onclick? '' : function () { handleRevertClick() };
 
         }
 
         // initialize page
         adjustButtonActions();
-
-        console.log(navSelection)
-        console.log(navSelection  == 'nft')
         if (navSelection  == 'nft') await nftButton.click();
         else if (navSelection  == 'multi') await multiSendButton.click()
+        else if (navSelection  == 'revert') await revertButton.click()
         else await tokenButton.click()
+        // add param version of tipping-page here and call tokenButton(params)
+
+        async function showInputWidget(type) {
+            popups.selected.append(new SendToAnyoneAddress(type).html);
+            return await new Promise((res) => {
+
+                async function nextEventHandler(e) {
+                    console.log(e);
+                    identifier = e.identifier;
+                    recipient = e.recipient;
+                    isIDrissRegistered = e.isIDrissRegistered;
+                    walletTag = e.walletTag ? e.walletTag : "Public ETH";
+                    res()
+                }
+
+                popups.selected.firstElementChild.addEventListener('next', nextEventHandler);
+                adjustButtonActions()
+            });
+        }
 
         async function handleRest() {
 
@@ -780,13 +832,12 @@ document.addEventListener('DOMContentLoaded', async() => {
                 await connectWallet();
             }
 
-            console.log(SendToAnyoneLogic.web3)
             const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
 
-            popups.selected.firstElementChild?.remove();
-            popups.selected.append(new SendToAnyoneWaitingApproval(token).html);
+            console.log(isIDrissRegistered)
+
             popups.selected.firstElementChild.remove();
-            popups.selected.append((new SendToAnyoneWaitingConfirmation(identifier, sendToAnyoneValue, token, assetAmount, assetId, assetType, nftName)).html)
+            popups.selected.append((new SendToAnyoneWaitingConfirmation(identifier, isIDrissRegistered, sendToAnyoneValue, token, assetAmount, assetId, assetType, nftName)).html)
             let {
                 integer: amountInteger,
                 normal: amountNormal
@@ -824,12 +875,9 @@ document.addEventListener('DOMContentLoaded', async() => {
                     name: 'Reverted',
                     message: 'Transaction was not successful'
                 })).html)
-                console.log({
-                    success
-                })
+                adjustButtonActions();
             }
         }
-
 
         async function multiHandleRest(e) {
             let recipients = e.multiSendArr;
@@ -846,7 +894,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             let assetName = recipients[0].asset.type
 
             popups.selected.firstElementChild.remove();
-            popups.selected.append((new MultiSendToAnyoneApproval(token)).html)
+            popups.selected.append((new MultiSendToAnyoneApproval(token, recipients, SendToAnyoneLogic.idriss)).html)
 
             console.log("Sending to: ", recipients)
             //let success = erc20NonExisting
@@ -883,12 +931,14 @@ document.addEventListener('DOMContentLoaded', async() => {
                 })
             }
         }
+
     } catch (e) {
         console.log("Caught error:", e)
         // ToDo: catch different error types here
         // Errors will be reported on Discord
         popups.selected.firstElementChild?.remove();
         popups.selected.append((new SendToAnyoneError(e)).html)
+        adjustButtonActions();
         console.error(e)
     }
 });
