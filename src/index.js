@@ -444,7 +444,6 @@ document.addEventListener('DOMContentLoaded', async() => {
     let message = params.get('message') || '';
     let isIDrissRegistered;
     let assetType;
-    let assetAmount;
     let assetAddress;
     let assetId;
     let selectedNFT;
@@ -629,7 +628,6 @@ document.addEventListener('DOMContentLoaded', async() => {
                                 sendToAnyoneValue = +e.amount;
                                 message = e.message;
                                 assetType = e.assetType;
-                                assetAmount = e.assetAmount;
                                 assetAddress = e.assetAddress;
                                 assetId = e.assetId;
                                 selectedNFT = nfts.filter(nft => nft.address == assetAddress).filter(nft => nft.id == assetId)
@@ -666,7 +664,6 @@ document.addEventListener('DOMContentLoaded', async() => {
                                 sendToAnyoneValue = +e.amount;
                                 message = e.message;
                                 assetType = e.assetType;
-                                assetAmount = e.assetAmount;
                                 assetAddress = e.assetAddress;
                                 assetId = e.assetId;
                                 selectedNFT = nfts.filter(nft => nft.address == assetAddress).filter(nft => nft.id == assetId)
@@ -806,6 +803,8 @@ document.addEventListener('DOMContentLoaded', async() => {
         else if (navSelection  == 'multi') await multiSendButton.click()
         else if (navSelection  == 'revert') await revertButton.click()
         else await tokenButton.click()
+        // disconnect all providers
+        disconnectWallet();
         // add param version of tipping-page here and call tokenButton(params)
 
         async function showInputWidget(type) {
@@ -834,24 +833,21 @@ document.addEventListener('DOMContentLoaded', async() => {
 
             const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
 
-            console.log(isIDrissRegistered)
-
-            popups.selected.firstElementChild.remove();
-            popups.selected.append((new SendToAnyoneWaitingConfirmation(identifier, isIDrissRegistered, sendToAnyoneValue, token, assetAmount, assetId, assetType, nftName)).html)
             let {
                 integer: amountInteger,
                 normal: amountNormal
             } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
 
+            console.log(isIDrissRegistered)
+            console.log(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal, assetId, assetType, nftName)
+            popups.selected.firstElementChild.remove();
+            popups.selected.append((new SendToAnyoneWaitingConfirmation(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal.toString(), assetId, assetType, nftName)).html)
 
-            popups.selected.querySelector('.amountCoin').textContent = amountNormal;
-            //TODO: check price calculation + if it adds $fee properly
-            console.log(identifier, `${amountInteger}`, network, token, message,
-                assetType, assetAmount, assetAddress, assetId)
+            console.log(identifier, amountInteger.toString(), network, token, message,
+                assetType, assetAddress, assetId)
 
-
-            let success = await SendToAnyoneLogic.sendToAnyone(identifier, `${amountInteger}`, network, token, message,
-                assetType, assetAmount, assetAddress, assetId, walletTag)
+            let success = await SendToAnyoneLogic.sendToAnyone(identifier, amountInteger.toString(), network, token, message,
+                assetType, assetAddress, assetId, walletTag)
             console.log("Success is: ", success)
             popups.selected.firstElementChild.remove();
             let blockNumber;
@@ -869,7 +865,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                 console.log(explorerLink)
                     // add success.blockNumber to url so we don't have to query
                 popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
-                    assetAmount, assetId, assetType, assetAddress, token, blockNumber, txnHash)).html)
+                    assetId, assetType, assetAddress, token, blockNumber, txnHash)).html)
             } else {
                 popups.selected.append((new SendToAnyoneError({
                     name: 'Reverted',
