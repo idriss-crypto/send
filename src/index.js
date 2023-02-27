@@ -505,13 +505,13 @@ document.addEventListener('DOMContentLoaded', async() => {
     popupRevert.classList.add('sendToAnyone-popup');
 
     document.querySelector('#triggerSuccessButton').addEventListener('click', () => {
-        popupMulti.firstElementChild.remove();
-        popupMulti.append((new MultiSendToAnyoneSuccess("@test", "https://www.idriss.xyz", "abc", false, 1, 1, 1, "0x", "Matic", 1, "0x")).html);
+        popupToken.firstElementChild.remove();
+        popupToken.append((new SendToAnyoneSuccess("@test", "https://www.idriss.xyz", "abc", false, 1, 1, "0x", "Matic", 1, "0x")).html);
     });
 
     document.querySelector('#triggerErrorButton').addEventListener('click', () => {
-        popupMulti.firstElementChild.remove();
-        popupMulti.append((new SendToAnyoneError({
+        popupToken.firstElementChild.remove();
+        popupToken.append((new SendToAnyoneError({
             name: 'Reverted',
             message: 'Transaction was not successful'
         })).html)
@@ -789,7 +789,6 @@ document.addEventListener('DOMContentLoaded', async() => {
         }
 
         function adjustButtonActions(){
-
             nftButton.onclick= nftButton.onclick? '' : function () { handleNFTclick() };
             tokenButton.onclick= tokenButton.onclick? '' : function () { handleTokenClick() };
             multiSendButton.onclick= multiSendButton.onclick? '' : function () { handleMultiSendClick() };
