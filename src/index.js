@@ -576,19 +576,17 @@ document.addEventListener('DOMContentLoaded', async() => {
             popups.selected = popupNFT
 
             await showInputWidget("nft");
+
             // connect wallet when needed
             if (!provider) {
                 await connectWallet()
             }
-            console.log(SendToAnyoneLogic.web3)
+
             const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
             let selectedAccount = accounts[0];
 
             let addressNFTsPolygon = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY, 'Polygon')
             let addressNFTsEthereum = await getNFTsForAddress(selectedAccount, ALCHEMY_API_KEY, 'Ethereum')
-
-            console.log(addressNFTsPolygon)
-            console.log(addressNFTsEthereum)
 
             function appendNFTs(addressNFTs, network) {
                 return addressNFTs.ownedNfts
@@ -614,13 +612,12 @@ document.addEventListener('DOMContentLoaded', async() => {
             let nfts = appendNFTs(addressNFTsPolygon, "Polygon");
             nfts = nfts.concat(appendNFTs(addressNFTsEthereum, "ETH"));
 
-            console.log(nfts)
-
             nfts = nfts.filter((v, i, a) => v.address != "0x")
 
             popupNFT.firstElementChild?.remove();
 
             popupNFT.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts, true, null, true).html);
+
             popupNFT.firstElementChild?.addEventListener('sendMoney', e => {
                                 console.log(e);
                                 network = e.network;
@@ -635,6 +632,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                                 handleRest();
                             });
         }
+
         async function handleTokenClick() {
             selectedTab = "token";
 
@@ -656,6 +654,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             popupToken.firstElementChild?.remove();
             let nfts=[]
             popupToken.append(new SendToAnyoneMain(identifier, isIDrissRegistered, nfts).html);
+
             // probably not await, as code stops
             popupToken.firstElementChild?.addEventListener('sendMoney', e => {
                                 console.log(e);
@@ -670,7 +669,6 @@ document.addEventListener('DOMContentLoaded', async() => {
                                 nftName = (selectedNFT[0] != undefined) ? selectedNFT[0].name : "";
                                 handleRest();
                             });
-            adjustButtonActions();
         }
         async function handleMultiSendClick() {
             selectedTab = "multi";
@@ -788,13 +786,26 @@ document.addEventListener('DOMContentLoaded', async() => {
             }
         }
 
-        function adjustButtonActions(){
+        function adjustButtonActions(force=''){
 
-            nftButton.onclick= nftButton.onclick? '' : function () { handleNFTclick() };
-            tokenButton.onclick= tokenButton.onclick? '' : function () { handleTokenClick() };
-            multiSendButton.onclick= multiSendButton.onclick? '' : function () { handleMultiSendClick() };
-            revertButton.onclick= revertButton.onclick? '' : function () { handleRevertClick() };
-
+            if (force==='on') {
+                nftButton.onclick = function () { handleNFTclick() };
+                tokenButton.onclick = function () { handleTokenClick() };
+                multiSendButton.onclick = function () { handleMultiSendClick() };
+                revertButton.onclick = function () { handleRevertClick() };
+            }
+            else if (force==='off') {
+                nftButton.onclick = '';
+                tokenButton.onclick = '';
+                multiSendButton.onclick = '';
+                revertButton.onclick = '';
+            }
+            else {
+                nftButton.onclick = nftButton.onclick? '' : function () { handleNFTclick() };
+                tokenButton.onclick = tokenButton.onclick? '' : function () { handleTokenClick() };
+                multiSendButton.onclick = multiSendButton.onclick? '' : function () { handleMultiSendClick() };
+                revertButton.onclick = revertButton.onclick? '' : function () { handleRevertClick() };
+            }
         }
 
         // initialize page
@@ -809,6 +820,7 @@ document.addEventListener('DOMContentLoaded', async() => {
 
         async function showInputWidget(type) {
             popups.selected.append(new SendToAnyoneAddress(type).html);
+            adjustButtonActions();
             return await new Promise((res) => {
 
                 async function nextEventHandler(e) {
@@ -821,7 +833,6 @@ document.addEventListener('DOMContentLoaded', async() => {
                 }
 
                 popups.selected.firstElementChild.addEventListener('next', nextEventHandler);
-                adjustButtonActions()
             });
         }
 
