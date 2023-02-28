@@ -116,11 +116,6 @@ document.addEventListener('DOMContentLoaded', async() => {
         dropdownMenu.classList.toggle("hidden");
     });
 
-    dropdownMenu.addEventListener("blur", () => {
-        dropdownMenu.classList.toggle("hidden");
-    });
-
-
     try {
         const {
             getProvider
@@ -162,18 +157,22 @@ document.addEventListener('DOMContentLoaded', async() => {
         });
 
         document.querySelector('#dropdownTokenButton').addEventListener('click', async () => {
+            dropdownMenu.classList.toggle("hidden");
             tokenButton.click()
         });
 
         document.querySelector('#dropdownNFTButton').addEventListener('click', async () => {
+            dropdownMenu.classList.toggle("hidden");
             nftButton.click()
         });
 
         document.querySelector('#dropdownMultiButton').addEventListener('click', async () => {
+            dropdownMenu.classList.toggle("hidden");
             multiSendButton.click()
         });
 
         document.querySelector('#dropdownRevertButton').addEventListener('click', async () => {
+            dropdownMenu.classList.toggle("hidden");
             revertButton.click()
         });
 
