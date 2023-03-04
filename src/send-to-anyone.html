@@ -22,6 +22,13 @@
 			    align-content: center;
 			    height: 100vh;
 			}
+			#multiSendSelectButton {
+			  z-index: 1;
+			}
+
+			#connectWalletDiv {
+			  z-index: 0;
+			}
 		</style>
 	</head>
 
@@ -100,7 +107,7 @@
 								</div>
 							</div>
 						</div>
-						<div class=" flex items-center md:ml-6 justify-end w-full">
+						<div id="connectWalletDiv" class="flex items-center md:ml-6 justify-end w-full">
 							<div class=" relative">
 								<div class="sm:flex items-center justify-end md:flex-1">
 									<input
