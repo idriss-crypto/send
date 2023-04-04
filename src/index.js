@@ -358,6 +358,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         // nftName =
         // showInputWidget("token");
         handleRest();
+      } else if (identifier) {
+        console.log("With identifiter");
+        // popups.selected.firstElementChild.dispatchEvent(
+        //   Object.assign(new Event("next", { bubbles: true }), {
+        //     identifier,
+        //     recipient,
+        //     isIDrissRegistered: false,
+        //   })
+        // );
+        const content = new SendToAnyoneMain(
+          identifier,
+          isIDrissRegistered,
+          nfts
+        );
+        console.log({ content });
+        await showInputWidget("token", identifier);
+        console.log("after");
+        popupToken.firstElementChild?.remove();
+
+        popupToken.append(content.html);
       } else {
         await showInputWidget("token");
         popupToken.firstElementChild?.remove();
@@ -576,8 +596,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     disconnectWallet();
     // add param version of tipping-page here and call tokenButton(params)
 
-    async function showInputWidget(type) {
-      popups.selected.append(new SendToAnyoneAddress(type).html);
+    async function showInputWidget(type, identifiter) {
+      const content = new SendToAnyoneAddress(type, identifiter);
+      console.log({ content });
+      popups.selected.append(content.html);
+      popups.selected.firstElementChild.dispatchEvent(
+        Object.assign(new Event("next", { bubbles: true }), {
+          identifier: "@elonmusk",
+          recipient: undefined,
+          isIDrissRegistered: false,
+        })
+      );
       adjustButtonActions();
       return await new Promise((res) => {
         async function nextEventHandler(e) {
