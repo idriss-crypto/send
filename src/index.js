@@ -510,6 +510,8 @@ import {
                     explorerLink = 'https://bscscan.com/tx/' + txnHash
                 else if (network == 'Polygon')
                     explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + '/tx/' + txnHash
+                else if (network == 'zkSync')
+                    explorerLink = 'https://goerli.explorer.zksync.io/tx/' + txnHash
                 console.log(explorerLink)
                     // add success.blockNumber to url so we don't have to query
                 popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
