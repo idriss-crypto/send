@@ -24,21 +24,27 @@ import {
         import ("@idriss-crypto/send-to-anyone-core/getWeb3Provider")
     const sendToAnyoneUtilsPromise =
         import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneUtils")
-  
+
+    function getAssetType() {
+        if (network==="ETH" && token==="ETH") return "native"
+        if (network==="Polygon" && token==="MATIC") return "native"
+        if (network==="BSC" && token==="BNB") return "native"
+        if (!assetId) return "erc20"
+    }
   
     let params = new URL(document.location).searchParams;
     let navSelection = new URL(document.location).pathname.split("/")[2];
     let identifier = params.get("identifier");
     let recipient = params.get("recipient");
-    let tippingValue = params.get("tippingValue");
+    let sendToAnyoneValue = params.get("tippingValue");
     let token = params.get("token");
-    let sendToAnyoneValue = +params.get("sendToAnyoneValue");
+    //let sendToAnyoneValue = +params.get("sendToAnyoneValue");
     let network = params.get("network");
     let message = params.get("message") || "";
-    let isIDrissRegistered;
-    let assetType = params.get("assetType") || "native";
+    let isIDrissRegistered = recipient ? true : false;
     let assetAddress = params.get("assetAddress");
     let assetId = params.get("assetId");
+    let assetType = params.get("assetType") || params? getAssetType() : "";
     let selectedNFT;
     let nftName;
     let provider;
@@ -50,6 +56,8 @@ import {
     let selectedTab = "token";
     let dropdownMenu = document.getElementById("dropdownMenu");
     let menuButton = document.getElementById("menuButton");
+
+    const shouldSkipInputWidget = !!recipient && !!identifier && !!sendToAnyoneValue && !!network && !!token;
   
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
@@ -271,10 +279,10 @@ import {
   
             let nfts=[]
   
-            const shouldSkipInputWidget = !!recipient && !!identifier && !!tippingValue && !!network && !!token;
+            const shouldSkipInputWidget = !!recipient && !!identifier && !!sendToAnyoneValue && !!network && !!token;
   
             if (shouldSkipInputWidget) {
-              showInputWidget("token");
+              //showInputWidget("token");
               handleRest();
             } else {
               await showInputWidget("token");
@@ -488,7 +496,7 @@ import {
   
             console.log(isIDrissRegistered)
             console.log(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal, assetId, assetType, nftName)
-            popups.selected.firstElementChild.remove();
+            if (!shouldSkipInputWidget) popups.selected.firstElementChild.remove();
             popups.selected.append((new SendToAnyoneWaitingConfirmation(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal.toString(), assetId, assetType, nftName)).html)
   
             console.log(identifier, amountInteger.toString(), network, token, message,
