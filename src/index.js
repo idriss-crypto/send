@@ -29,6 +29,7 @@ import {
         if (network==="ETH" && token==="ETH") return "native"
         if (network==="Polygon" && token==="MATIC") return "native"
         if (network==="BSC" && token==="BNB") return "native"
+        if (network==="zkSync" && token==="ETH") return "native"
         if (!assetId) return "erc20"
     }
   
