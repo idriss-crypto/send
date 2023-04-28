@@ -289,7 +289,7 @@ import {
               await showInputWidget("token");
               popupToken.firstElementChild?.remove();
               popupToken.append(
-                new SendToAnyoneMain(identifier, isIDrissRegistered, nfts).html
+                new SendToAnyoneMain(identifier, isIDrissRegistered, nfts, showMessageBox = isIDrissRegistered? false : true).html
               );
             }
   
@@ -502,8 +502,11 @@ import {
   
             console.log(identifier, amountInteger.toString(), network, token, message,
                 assetType, assetAddress, assetId)
+
+            let sendToHandle = identifier;
+            if (await SendToAnyoneLogic.defaultWeb3.utils.isAddress(recipient)) sendToHandle = recipient;
   
-            let success = await SendToAnyoneLogic.sendToAnyone(identifier, amountInteger.toString(), network, token, message,
+            let success = await SendToAnyoneLogic.sendToAnyone(sendToHandle, amountInteger.toString(), network, token, message,
                 assetType, assetAddress, assetId, walletTag)
             console.log("Success is: ", success)
             popups.selected.firstElementChild.remove();
