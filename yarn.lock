@@ -993,20 +993,9 @@
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
 
-"@idriss-crypto/send-to-anyone-core@^0.4.2":
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/@idriss-crypto/send-to-anyone-core/-/send-to-anyone-core-0.4.2.tgz#8b3f29affd4d7aa77a9057fb7a8592ea08fde6cc"
-  integrity sha512-lS5Dkr5g5XbrUUza4rIw5SxG63TyCC2LYhyCcAZDKJ18+mar/ZiEmfVV26vloO6zP6U8Dn6amTms+usJzKNZdw==
-  dependencies:
-    "@depay/coinbase-wallet-sdk" "^1.0.5"
-    "@magic-ext/connect" "^3.1.0"
-    "@walletconnect/web3-provider" "^1.7.8"
-    alchemy-sdk "^2.0.2"
-    fast-creator "^1.6.0"
-    idriss-crypto "^1.8.10"
-    magic-sdk "^10.1.0"
-    web3 "^1.7.0"
-    web3modal "^1.9.7"
+"@idriss-crypto/send-to-anyone-core@link:../send-to-anyone-core":
+  version "0.0.0"
+  uid ""
 
 "@jridgewell/gen-mapping@^0.1.0":
   version "0.1.1"

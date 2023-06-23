@@ -39,9 +39,21 @@ import {
     let identifier = params.get("identifier");
     let recipient = params.get("recipient");
     let sendToAnyoneValue = params.get("tippingValue");
-    let token = params.get("token");
+    let token = params.get("token").split(",");
     //let sendToAnyoneValue = +params.get("sendToAnyoneValue");
-    let network = params.get("network");
+    let network = params.get("network").split(",");
+    console.log(network)
+    console.log(Array.isArray(network))
+    let tokenFilter = {}
+    if ((network && Array.isArray(network)) || (token && Array.isArray(token))) {
+        if (network.length > 1 || token.length > 1) {
+            tokenFilter.network = network;
+            tokenFilter.token = token;
+        } else {
+            network = network[0];
+            token = token[0];
+        }
+    }
     let message = params.get("message") || "";
     let isIDrissRegistered = recipient ? true : false;
     let assetAddress = params.get("assetAddress");
@@ -59,8 +71,10 @@ import {
     let dropdownMenu = document.getElementById("dropdownMenu");
     let menuButton = document.getElementById("menuButton");
 
-    const shouldSkipInputWidget = !!recipient && !!identifier && !!sendToAnyoneValue && !!network && !!token;
-  
+    let shouldSkipInputWidget = !!recipient && !!identifier;
+    let shouldSkipAnyWidget = !!recipient && !!identifier && !!sendToAnyoneValue && !!network && !!token;
+    if (Object.keys(tokenFilter).length > 0) shouldSkipAnyWidget = false;
+
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
     div.attachShadow({
@@ -281,16 +295,22 @@ import {
   
             let nfts=[]
   
-            const shouldSkipInputWidget = !!recipient && !!identifier && !!sendToAnyoneValue && !!network && !!token;
+            console.log(tokenFilter, shouldSkipAnyWidget)
+            if (Object.keys(tokenFilter).length > 0) shouldSkipAnyWidget = false;
+            console.log(shouldSkipAnyWidget, shouldSkipInputWidget)
   
-            if (shouldSkipInputWidget) {
-              //showInputWidget("token");
+            if (shouldSkipAnyWidget) {
               handleRest();
+            } else if (shouldSkipInputWidget) {
+            console.log(identifier, isIDrissRegistered, nfts, isIDrissRegistered? false : true, tokenFilter, false)
+                popupToken.append(
+                    new SendToAnyoneMain(identifier, isIDrissRegistered, nfts, isIDrissRegistered? false : true, tokenFilter, false).html
+                  );
             } else {
               await showInputWidget("token");
               popupToken.firstElementChild?.remove();
               popupToken.append(
-                new SendToAnyoneMain(identifier, isIDrissRegistered, nfts, isIDrissRegistered? false : true, null, false).html
+                new SendToAnyoneMain(identifier, isIDrissRegistered, nfts, isIDrissRegistered? false : true, tokenFilter, false).html
               );
             }
   
@@ -497,8 +517,8 @@ import {
             } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
   
             console.log(isIDrissRegistered)
-            console.log(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal, assetId, assetType, nftName)
-            if (!shouldSkipInputWidget) popups.selected.firstElementChild.remove();
+            console.log(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal, assetId, assetType, nftName, shouldSkipAnyWidget)
+            if (!shouldSkipAnyWidget) popups.selected.firstElementChild.remove();
             popups.selected.append((new SendToAnyoneWaitingConfirmation(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal.toString(), assetId, assetType, nftName)).html)
   
             console.log(identifier, amountInteger.toString(), network, token, message,
