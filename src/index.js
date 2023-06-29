@@ -39,9 +39,15 @@ import {
     let identifier = params.get("identifier");
     let recipient = params.get("recipient");
     let sendToAnyoneValue = params.get("tippingValue");
-    let token = params.get("token").split(",");
+    let token = params.get("token");
+    let network = params.get("network")
+    if (token) {
+      token = token.split(",");
+    }
+    if (network) {
+        network = network.split(",")
+    }
     //let sendToAnyoneValue = +params.get("sendToAnyoneValue");
-    let network = params.get("network").split(",");
     console.log(network)
     console.log(Array.isArray(network))
     let tokenFilter = {}
@@ -302,16 +308,16 @@ import {
             if (shouldSkipAnyWidget) {
               handleRest();
             } else if (shouldSkipInputWidget) {
-            console.log(identifier, isIDrissRegistered, nfts, isIDrissRegistered? false : true, tokenFilter, false)
+                console.log(identifier, isIDrissRegistered, nfts, isIDrissRegistered? false : true, tokenFilter, false)
                 popupToken.append(
                     new SendToAnyoneMain(identifier, isIDrissRegistered, nfts, isIDrissRegistered? false : true, tokenFilter, false).html
-                  );
+                );
             } else {
-              await showInputWidget("token");
-              popupToken.firstElementChild?.remove();
-              popupToken.append(
-                new SendToAnyoneMain(identifier, isIDrissRegistered, nfts, isIDrissRegistered? false : true, tokenFilter, false).html
-              );
+                await showInputWidget("token");
+                popupToken.firstElementChild?.remove();
+                popupToken.append(
+                    new SendToAnyoneMain(identifier, isIDrissRegistered, nfts, isIDrissRegistered? false : true, tokenFilter, false).html
+                );
             }
   
             // probably not await, as code stops
