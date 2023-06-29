@@ -1,7 +1,7 @@
 import css from "!!style-loader!css-loader!sass-loader!./generateSendToAnyoneCode.scss";
 
 addEventListener('input', e => {
-    let link = 'https://idriss.xyz/sendToAnyone';
+    let link = 'https://idriss.xyz/send';
     let params = {};
     if (document.querySelector('input[name="identifier"]').value) {
         params.identifier = document.querySelector('input[name="identifier"]').value;
