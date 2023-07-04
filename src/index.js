@@ -41,25 +41,20 @@ import {
     let sendToAnyoneValue = params.get("tippingValue");
     let token = params.get("token");
     let network = params.get("network")
-    if (token) {
-      token = token.split(",");
-    }
-    if (network) {
-        network = network.split(",")
-    }
-    //let sendToAnyoneValue = +params.get("sendToAnyoneValue");
-    console.log(network)
-    console.log(Array.isArray(network))
+
     let tokenFilter = {}
-    if ((network && Array.isArray(network)) || (token && Array.isArray(token))) {
-        if (network.length > 1 || token.length > 1) {
-            tokenFilter.network = network;
-            tokenFilter.token = token;
-        } else {
-            network = network[0];
-            token = token[0];
-        }
+    if (token) {
+      const tokenArray = token.split(",");
+      tokenFilter.token = tokenArray;
+      token = (tokenArray.length === 1) ? tokenArray[0] : tokenArray;
     }
+
+    if (network) {
+      const networkArray = network.split(",");
+      tokenFilter.network = networkArray;
+      network = (networkArray.length === 1) ? networkArray[0] : networkArray;
+    }
+
     let message = params.get("message") || "";
     let isIDrissRegistered = recipient ? true : false;
     let assetAddress = params.get("assetAddress");
@@ -79,7 +74,7 @@ import {
 
     let shouldSkipInputWidget = !!recipient && !!identifier;
     let shouldSkipAnyWidget = !!recipient && !!identifier && !!sendToAnyoneValue && !!network && !!token;
-    if (Object.keys(tokenFilter).length > 0) shouldSkipAnyWidget = false;
+    if (Array.isArray(token) || Array.isArray(network)) shouldSkipAnyWidget = false;
 
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
@@ -302,7 +297,7 @@ import {
             let nfts=[]
   
             console.log(tokenFilter, shouldSkipAnyWidget)
-            if (Object.keys(tokenFilter).length > 0) shouldSkipAnyWidget = false;
+            if (Array.isArray(token) || Array.isArray(network)) shouldSkipAnyWidget = false;
             console.log(shouldSkipAnyWidget, shouldSkipInputWidget)
   
             if (shouldSkipAnyWidget) {
