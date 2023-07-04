@@ -56,7 +56,7 @@ import {
     }
 
     let message = params.get("message") || "";
-    let isIDrissRegistered = recipient ? true : false;
+    let isIDrissRegistered = recipient ? (recipient !== 'undefined' ? true : false) : false;
     let assetAddress = params.get("assetAddress");
     let assetId = params.get("assetId");
     let assetType = params.get("assetType") || params? getAssetType() : "";
@@ -72,9 +72,15 @@ import {
     let dropdownMenu = document.getElementById("dropdownMenu");
     let menuButton = document.getElementById("menuButton");
 
+    // return to index if !isIDrissRegistered and ssa
     let shouldSkipInputWidget = !!recipient && !!identifier;
     let shouldSkipAnyWidget = !!recipient && !!identifier && !!sendToAnyoneValue && !!network && !!token;
     if (Array.isArray(token) || Array.isArray(network)) shouldSkipAnyWidget = false;
+    if (!isIDrissRegistered && !shouldSkipAnyWidget) {
+        console.log("is new")
+        shouldSkipAnyWidget = false;
+        shouldSkipInputWidget = false;
+    }
 
     let div = document.createElement('div')
     document.querySelector('.container').append(div);
@@ -298,6 +304,11 @@ import {
   
             console.log(tokenFilter, shouldSkipAnyWidget)
             if (Array.isArray(token) || Array.isArray(network)) shouldSkipAnyWidget = false;
+            if (!isIDrissRegistered && !shouldSkipAnyWidget) {
+                console.log("is new 2")
+                shouldSkipAnyWidget = false;
+                shouldSkipInputWidget = false;
+            }
             console.log(shouldSkipAnyWidget, shouldSkipInputWidget)
   
             if (shouldSkipAnyWidget) {
