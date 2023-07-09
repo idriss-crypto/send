@@ -520,26 +520,26 @@ import {
             if (!provider) {
                 await connectWallet();
             }
-  
+
             const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
-  
+
             let {
                 integer: amountInteger,
                 normal: amountNormal
             } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
-  
+
             console.log(isIDrissRegistered)
             console.log(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal, assetId, assetType, nftName, shouldSkipAnyWidget)
             if (!shouldSkipAnyWidget) popups.selected.firstElementChild.remove();
             popups.selected.append((new SendToAnyoneWaitingConfirmation(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal.toString(), assetId, assetType, nftName)).html)
-  
+
             console.log(identifier, amountInteger.toString(), network, token, message,
                 assetType, assetAddress, assetId)
 
             let sendToHandle = identifier;
             console.log(SendToAnyoneLogic.web3)
             if (await SendToAnyoneLogic.web3.utils.isAddress(recipient)) sendToHandle = recipient;
-  
+
             let success = await SendToAnyoneLogic.sendToAnyone(sendToHandle, amountInteger.toString(), network, token, message,
                 assetType, assetAddress, assetId, walletTag)
             console.log("Success is: ", success)
