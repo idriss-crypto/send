@@ -559,7 +559,7 @@ import {
                 else if (network == 'zkSync')
                     explorerLink = 'https://explorer.zksync.io/tx/' + txnHash
                 else if (network == 'linea')
-                    explorerLink = 'https://explorer.goerli.linea.build/tx/' + txnHash
+                    explorerLink = 'https://explorer.linea.build/tx/' + txnHash
                 console.log(explorerLink)
                     // add success.blockNumber to url so we don't have to query
                 popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
