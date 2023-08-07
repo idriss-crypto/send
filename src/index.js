@@ -31,6 +31,7 @@ import {
         if (network==="BSC" && token==="BNB") return "native"
         if (network==="zkSync" && token==="ETH") return "native"
         if (network==="linea" && token==="ETH") return "native"
+        if (network==="optimism" && token==="ETH") return "native"
         if (!assetId) return "erc20"
     }
   
@@ -560,6 +561,8 @@ import {
                     explorerLink = 'https://explorer.zksync.io/tx/' + txnHash
                 else if (network == 'linea')
                     explorerLink = 'https://explorer.linea.build/tx/' + txnHash
+                else if (network == 'optimism')
+                    explorerLink = 'https://optimistic.etherscan.io/tx/' + txnHash
                 console.log(explorerLink)
                     // add success.blockNumber to url so we don't have to query
                 popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
