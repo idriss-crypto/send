@@ -61,6 +61,9 @@ import {
     let assetAddress = params.get("assetAddress");
     let assetId = params.get("assetId");
     let assetType = params.get("assetType") || params? getAssetType() : "";
+    let isGitcoin = params.get("isGitcoin");
+    let applicationIndex = params.get("applicationIndex");
+    let projectId = params.get("projectId");
     let selectedNFT;
     let nftName;
     let provider;
@@ -311,9 +314,12 @@ import {
                 shouldSkipInputWidget = false;
             }
             console.log(shouldSkipAnyWidget, shouldSkipInputWidget)
-  
-            if (shouldSkipAnyWidget) {
-              handleRest();
+
+//            ToDo: add isGitcoinDonation here with vote()
+            if (isGitcoin) {
+                vote();
+            } else if (shouldSkipAnyWidget) {
+                handleRest();
             } else if (shouldSkipInputWidget) {
                 console.log(identifier, isIDrissRegistered, nfts, isIDrissRegistered? false : true, tokenFilter, false)
                 popupToken.append(
@@ -543,6 +549,73 @@ import {
 
             let success = await SendToAnyoneLogic.sendToAnyone(sendToHandle, amountInteger.toString(), network, token, message,
                 assetType, assetAddress, assetId, walletTag)
+            console.log("Success is: ", success)
+            popups.selected.firstElementChild.remove();
+            let blockNumber;
+            let txnHash;
+            if (success) {
+                blockNumber = success.blockNumber? success.blockNumber : success.transactionReceipt.blockNumber;
+                txnHash = success.transactionHash? success.transactionHash : success.transactionReceipt.transactionHash;
+                let explorerLink;
+                if (network == 'ETH')
+                    explorerLink = 'https://etherscan.io/tx/' + txnHash
+                else if (network == 'BSC')
+                    explorerLink = 'https://bscscan.com/tx/' + txnHash
+                else if (network == 'Polygon')
+                    explorerLink = POLYGON_BLOCK_EXPLORER_ADDRESS + '/tx/' + txnHash
+                else if (network == 'zkSync')
+                    explorerLink = 'https://explorer.zksync.io/tx/' + txnHash
+                else if (network == 'linea')
+                    explorerLink = 'https://explorer.linea.build/tx/' + txnHash
+                else if (network == 'optimism')
+                    explorerLink = 'https://optimistic.etherscan.io/tx/' + txnHash
+                console.log(explorerLink)
+                    // add success.blockNumber to url so we don't have to query
+                popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
+                    assetId, assetType, assetAddress, token, blockNumber, txnHash)).html)
+            } else {
+                popups.selected.append((new SendToAnyoneError({
+                    name: 'Reverted',
+                    message: 'Transaction was not successful'
+                })).html)
+                adjustButtonActions();
+            }
+        }
+
+        async function vote() {
+
+            if (!provider) {
+                await connectWallet();
+            }
+
+            const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
+
+            let {
+                integer: amountInteger,
+                normal: amountNormal
+            } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
+
+            // from handleRest(), check if needed
+            popups.selected.firstElementChild.remove();
+            popups.selected.append((new SendToAnyoneWaitingConfirmation(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal.toString(), assetId, assetType, nftName)).html)
+
+            console.log(identifier, amountInteger.toString(), network, token, message,
+                assetType, assetAddress, assetId)
+
+            let sendToHandle = identifier;
+            console.log(SendToAnyoneLogic.web3)
+            if (await SendToAnyoneLogic.web3.utils.isAddress(recipient)) sendToHandle = recipient;
+
+            // todo: vote() call here
+
+            const encodedVotes = [
+                SendToAnyoneLogic.web3.eth.abi.encodeParameters(
+                    ['address', 'uint256', 'address', 'bytes32', 'uint256'],
+                    [assetAddress, amountInteger.toString(), sendToHandle, projectId, applicationIndex]
+                )
+            ];
+            console.log(assetAddress, amountInteger.toString(), sendToHandle, projectId, applicationIndex)
+            let success = await SendToAnyoneLogic.vote(encodedVotes);
             console.log("Success is: ", success)
             popups.selected.firstElementChild.remove();
             let blockNumber;
