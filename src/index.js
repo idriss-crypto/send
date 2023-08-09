@@ -607,15 +607,8 @@ import {
             if (await SendToAnyoneLogic.web3.utils.isAddress(recipient)) sendToHandle = recipient;
 
             // todo: vote() call here
-
-            const encodedVotes = [
-                SendToAnyoneLogic.web3.eth.abi.encodeParameters(
-                    ['address', 'uint256', 'address', 'bytes32', 'uint256'],
-                    [assetAddress, amountInteger.toString(), sendToHandle, projectId, applicationIndex]
-                )
-            ];
-            console.log(assetAddress, amountInteger.toString(), sendToHandle, projectId, applicationIndex)
-            let success = await SendToAnyoneLogic.vote(encodedVotes);
+            console.log(sendToHandle, amountInteger.toString(), network, token, assetType, assetAddress, projectId, applicationIndex)
+            let success = await SendToAnyoneLogic.vote(sendToHandle, amountInteger.toString(), network, token, assetType, assetAddress, projectId, applicationIndex);
             console.log("Success is: ", success)
             popups.selected.firstElementChild.remove();
             let blockNumber;
