@@ -5,6 +5,7 @@ import {
   import {
     SendToAnyoneSuccess,
     SendToAnyoneWaitingConfirmation,
+    SendToAnyoneWaitingConfirmationCustom,
     SendToAnyoneWaitingApproval,
     SendToAnyoneError,
     SendToAnyoneMain,
@@ -595,8 +596,7 @@ import {
             } = await SendToAnyoneLogic.calculateAmount(token, sendToAnyoneValue)
 
             // from handleRest(), check if needed
-            popups.selected.firstElementChild.remove();
-            popups.selected.append((new SendToAnyoneWaitingConfirmation(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal.toString(), assetId, assetType, nftName)).html)
+            popups.selected.append((new SendToAnyoneWaitingConfirmationCustom(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal.toString(), assetId, assetType, nftName)).html)
 
             console.log(identifier, amountInteger.toString(), network, token, message,
                 assetType, assetAddress, assetId)
