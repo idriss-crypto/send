@@ -61,7 +61,7 @@ import {
     let assetAddress = params.get("assetAddress");
     let assetId = params.get("assetId");
     let assetType = params.get("assetType") || params? getAssetType() : "";
-    let isGitcoin = params.get("isGitcoin");
+    let isGrantee = params.get("isGrantee");
     let applicationIndex = params.get("applicationIndex");
     let projectId = params.get("projectId");
     let selectedNFT;
@@ -315,8 +315,7 @@ import {
             }
             console.log(shouldSkipAnyWidget, shouldSkipInputWidget)
 
-//            ToDo: add isGitcoinDonation here with vote()
-            if (isGitcoin) {
+            if (isGrantee) {
                 vote();
             } else if (shouldSkipAnyWidget) {
                 handleRest();
