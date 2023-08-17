@@ -17,7 +17,7 @@ import {
     RevertPayment
   } from "@idriss-crypto/send-to-anyone-core/subpages";
   
-  
+
   document.addEventListener('DOMContentLoaded', async() => {
     const sendToAnyoneLogicPromise = await
     import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneLogic")
@@ -33,6 +33,7 @@ import {
         if (network==="zkSync" && token==="ETH") return "native"
         if (network==="linea" && token==="ETH") return "native"
         if (network==="optimism" && token==="ETH") return "native"
+        if (network==="pgn" && token==="ETH") return "native"
         if (!assetId) return "erc20"
     }
   
@@ -65,6 +66,7 @@ import {
     let isGrantee = params.get("isGrantee");
     let applicationIndex = params.get("applicationIndex");
     let projectId = params.get("projectId");
+    let roundContract = params.get("roundIndex");
     let selectedNFT;
     let nftName;
     let provider;
@@ -569,6 +571,8 @@ import {
                     explorerLink = 'https://explorer.linea.build/tx/' + txnHash
                 else if (network == 'optimism')
                     explorerLink = 'https://optimistic.etherscan.io/tx/' + txnHash
+                else if (network == 'pgn')
+                    explorerLink = 'https://explorer.publicgoods.network/tx/' + txnHash
                 console.log(explorerLink)
                     // add success.blockNumber to url so we don't have to query
                 popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
@@ -605,9 +609,8 @@ import {
             console.log(SendToAnyoneLogic.web3)
             if (await SendToAnyoneLogic.web3.utils.isAddress(recipient)) sendToHandle = recipient;
 
-            // todo: vote() call here
-            console.log(sendToHandle, amountInteger.toString(), network, token, assetType, assetAddress, projectId, applicationIndex)
-            let success = await SendToAnyoneLogic.vote(sendToHandle, amountInteger.toString(), network, token, assetType, assetAddress, projectId, applicationIndex);
+            console.log(sendToHandle, amountInteger.toString(), network, token, assetType, assetAddress, projectId, applicationIndex, roundContract)
+            let success = await SendToAnyoneLogic.vote(sendToHandle, amountInteger.toString(), network, token, assetType, assetAddress, projectId, applicationIndex, roundContract);
             console.log("Success is: ", success)
             popups.selected.firstElementChild.remove();
             let blockNumber;
@@ -628,8 +631,19 @@ import {
                     explorerLink = 'https://explorer.linea.build/tx/' + txnHash
                 else if (network == 'optimism')
                     explorerLink = 'https://optimistic.etherscan.io/tx/' + txnHash
+                else if (network == 'pgn')
+                    explorerLink = 'https://explorer.publicgoods.network/tx/' + txnHash
                 console.log(explorerLink)
-                    // add success.blockNumber to url so we don't have to query
+                const voteBody = {
+                    'txnHash': txnHash
+                }
+                const voteOptions = {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    mode: 'cors',
+                    body: JSON.stringify(voteBody)
+                }
+                fetch('https://www.idriss.xyz/gtc-txn', voteOptions)
                 popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
                     assetId, assetType, assetAddress, token, blockNumber, txnHash)).html)
             } else {
