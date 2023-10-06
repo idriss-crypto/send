@@ -539,8 +539,6 @@ import {
 
             console.log(isIDrissRegistered)
             console.log(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal, assetId, assetType, nftName, shouldSkipAnyWidget)
-            if (!shouldSkipAnyWidget) popups.selected.firstElementChild.remove();
-            popups.selected.append((new SendToAnyoneWaitingConfirmation(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal.toString(), assetId, assetType, nftName)).html)
 
             console.log(identifier, amountInteger.toString(), network, token, message,
                 assetType, assetAddress, assetId)
@@ -548,6 +546,18 @@ import {
             let sendToHandle = identifier;
             console.log(SendToAnyoneLogic.web3)
             if (await SendToAnyoneLogic.web3.utils.isAddress(recipient)) sendToHandle = recipient;
+            let isPG = false
+            try {
+                let tippingC = await SendToAnyoneLogic.idriss.tippingContractPromise;
+                isPG = await tippingC.methods.publicGoods(sendToHandle).call();
+                message = amountInteger.toString()
+            } catch {
+                isPG=false;
+            }
+
+            if (!shouldSkipAnyWidget) popups.selected.firstElementChild.remove();
+            if (isPG) popups.selected.append((new SendToAnyoneWaitingConfirmationCustom(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal.toString(), assetId, assetType, nftName)).html)
+            else popups.selected.append((new SendToAnyoneWaitingConfirmation(identifier, isIDrissRegistered, sendToAnyoneValue, token, amountNormal.toString(), assetId, assetType, nftName)).html)
 
             let success = await SendToAnyoneLogic.sendToAnyone(sendToHandle, amountInteger.toString(), network, token, message,
                 assetType, assetAddress, assetId, walletTag)
