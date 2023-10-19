@@ -33,6 +33,7 @@ import {
         if (network==="zkSync" && token==="ETH") return "native"
         if (network==="linea" && token==="ETH") return "native"
         if (network==="optimism" && token==="ETH") return "native"
+        if (network==="mantle" && token==="MNT") return "native"
         if (network==="pgn" && token==="ETH") return "native"
         if (!assetId) return "erc20"
     }
@@ -581,6 +582,8 @@ import {
                     explorerLink = 'https://explorer.linea.build/tx/' + txnHash
                 else if (network == 'optimism')
                     explorerLink = 'https://optimistic.etherscan.io/tx/' + txnHash
+                else if (network == 'mantle')
+                    explorerLink = 'https://explorer.mantle.xyz/tx/' + txnHash
                 else if (network == 'pgn')
                     explorerLink = 'https://explorer.publicgoods.network/tx/' + txnHash
                 console.log(explorerLink)
@@ -641,6 +644,8 @@ import {
                     explorerLink = 'https://explorer.linea.build/tx/' + txnHash
                 else if (network == 'optimism')
                     explorerLink = 'https://optimistic.etherscan.io/tx/' + txnHash
+                else if (network == 'mantle')
+                    explorerLink = 'https://explorer.mantle.xyz/tx/' + txnHash
                 else if (network == 'pgn')
                     explorerLink = 'https://explorer.publicgoods.network/tx/' + txnHash
                 console.log(explorerLink)
