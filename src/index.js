@@ -34,6 +34,7 @@ import {
         if (network==="linea" && token==="ETH") return "native"
         if (network==="optimism" && token==="ETH") return "native"
         if (network==="pgn" && token==="ETH") return "native"
+        if (network==="arbitrum" && token==="ETH") return "native"
         if (!assetId) return "erc20"
     }
   
@@ -583,6 +584,8 @@ import {
                     explorerLink = 'https://optimistic.etherscan.io/tx/' + txnHash
                 else if (network == 'pgn')
                     explorerLink = 'https://explorer.publicgoods.network/tx/' + txnHash
+                else if (network == 'arbitrum')
+                    explorerLink = 'https://arbiscan.io/tx/' + txnHash
                 console.log(explorerLink)
                     // add success.blockNumber to url so we don't have to query
                 popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
@@ -643,6 +646,8 @@ import {
                     explorerLink = 'https://optimistic.etherscan.io/tx/' + txnHash
                 else if (network == 'pgn')
                     explorerLink = 'https://explorer.publicgoods.network/tx/' + txnHash
+                else if (network == 'arbitrum')
+                    explorerLink = 'https://arbiscan.io/tx/' + txnHash
                 console.log(explorerLink)
                 const voteBody = {
                     'txnHash': txnHash
