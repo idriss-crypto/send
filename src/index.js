@@ -35,6 +35,7 @@ import {
         if (network==="optimism" && token==="ETH") return "native"
         if (network==="base" && token==="ETH") return "native"
         if (network==="pgn" && token==="ETH") return "native"
+        if (network==="arbitrum" && token==="ETH") return "native"
         if (!assetId) return "erc20"
     }
   
@@ -584,6 +585,8 @@ import {
                     explorerLink = 'https://optimistic.etherscan.io/tx/' + txnHash
                 else if (network == 'pgn')
                     explorerLink = 'https://explorer.publicgoods.network/tx/' + txnHash
+                else if (network == 'arbitrum')
+                    explorerLink = 'https://arbiscan.io/tx/' + txnHash
                 else if (network == 'base')
                     explorerLink = 'https://basescan.org/tx/' + txnHash
                 console.log(explorerLink)
@@ -646,6 +649,8 @@ import {
                     explorerLink = 'https://optimistic.etherscan.io/tx/' + txnHash
                 else if (network == 'pgn')
                     explorerLink = 'https://explorer.publicgoods.network/tx/' + txnHash
+                else if (network == 'arbitrum')
+                    explorerLink = 'https://arbiscan.io/tx/' + txnHash
                 else if (network == 'base')
                     explorerLink = 'https://basescan.org/tx/' + txnHash
                 console.log(explorerLink)
