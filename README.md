@@ -8,3 +8,7 @@ yarn buildOnce
 ```
 
 Results will appear in buildResults directory.
+
+## License
+
+This project is licensed under [GPLv3](https://github.com/idrisssystem/send-to-anyone-page/blob/master/LICENSE).
