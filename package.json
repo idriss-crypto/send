@@ -9,7 +9,14 @@
   },
   "dependencies": {
     "@idriss-crypto/send-to-anyone-core": "link:../send-to-anyone-core",
+    "assert": "^2.1.0",
+    "crypto-browserify": "^3.12.0",
     "fast-creator": "^1.6.0",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.3",
     "web3": "^1.7.0",
     "web3modal": "^1.9.7"
   },
