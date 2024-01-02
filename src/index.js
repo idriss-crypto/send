@@ -1,3 +1,4 @@
+import { createWeb3Name } from '@web3-name-sdk/core'
 import {
     create
   } from "fast-creator";
@@ -168,6 +169,8 @@ import {
         const {
             SendToAnyoneLogic
         } = await sendToAnyoneLogicPromise;
+
+        const web3Name = createWeb3Name()
   
         let popups = { 'selected': popupToken }
   
@@ -179,6 +182,11 @@ import {
             document.querySelector('#connectedWallet').classList.remove('hidden');
             let accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
             let reverse = await SendToAnyoneLogic.idriss.reverseResolve(accounts[0]);
+            if (!reverse) {
+                reverse =  await web3Name.getDomainName({
+                  address: accounts[0]
+                })
+            }
             let loginDisplay = reverse? reverse : accounts[0].substring(0, 6).concat("...").concat(accounts[0].substr(-4))
             document.querySelector('#connectedWallet').firstElementChild.value = loginDisplay
             document.querySelector('#polygon-scan-link').href = POLYGON_BLOCK_EXPLORER_ADDRESS + "/address/" + accounts[0];
