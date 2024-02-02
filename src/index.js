@@ -1,3 +1,4 @@
+import { createWeb3Name } from '@web3-name-sdk/core'
 import {
     create
   } from "fast-creator";
@@ -16,13 +17,12 @@ import {
     MultiSendToAnyoneSuccess,
     RevertPayment
   } from "@idriss-crypto/send-to-anyone-core/subpages";
+import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider';
   
 
   document.addEventListener('DOMContentLoaded', async() => {
     const sendToAnyoneLogicPromise = await
     import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneLogic")
-    const getProviderPromise =
-        import ("@idriss-crypto/send-to-anyone-core/getWeb3Provider")
     const sendToAnyoneUtilsPromise =
         import ("@idriss-crypto/send-to-anyone-core/sendToAnyoneUtils")
 
@@ -160,14 +160,13 @@ import {
   
     try {
         const {
-            getProvider
-        } = await getProviderPromise;
-        const {
             getNFTsForAddress
         } = await sendToAnyoneUtilsPromise;
         const {
             SendToAnyoneLogic
         } = await sendToAnyoneLogicPromise;
+
+        const web3Name = createWeb3Name()
   
         let popups = { 'selected': popupToken }
   
@@ -179,6 +178,11 @@ import {
             document.querySelector('#connectedWallet').classList.remove('hidden');
             let accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
             let reverse = await SendToAnyoneLogic.idriss.reverseResolve(accounts[0]);
+            if (!reverse) {
+                reverse =  await web3Name.getDomainName({
+                  address: accounts[0]
+                })
+            }
             let loginDisplay = reverse? reverse : accounts[0].substring(0, 6).concat("...").concat(accounts[0].substr(-4))
             document.querySelector('#connectedWallet').firstElementChild.value = loginDisplay
             document.querySelector('#polygon-scan-link').href = POLYGON_BLOCK_EXPLORER_ADDRESS + "/address/" + accounts[0];
@@ -239,7 +243,8 @@ import {
   
             // connect wallet when needed
             if (!provider) {
-                await connectWallet()
+              console.log('handleNftClick')
+              await connectWallet()
             }
   
             const accounts = await SendToAnyoneLogic.web3.eth.getAccounts();
@@ -375,6 +380,7 @@ import {
   
                 // connect wallet when needed
                 if (!provider) {
+                    console.log('multiSendClick')
                     await connectWallet()
                 }
   
@@ -451,6 +457,7 @@ import {
   
                 // connect wallet when needed
                 if (!provider) {
+                    console.log('revertClick')
                     await connectWallet()
                 }
   
@@ -528,7 +535,6 @@ import {
         }
   
         async function handleRest() {
-  
             if (!provider) {
                 await connectWallet();
             }
@@ -608,6 +614,7 @@ import {
         async function vote() {
 
             if (!provider) {
+                console.log('vote')
                 await connectWallet();
             }
 
@@ -686,6 +693,7 @@ import {
             let token = e.token;
   
             if (!provider) {
+                console.log('multiHandleRest')
                 await connectWallet();
             }
   
