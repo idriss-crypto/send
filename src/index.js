@@ -598,9 +598,9 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
                 else if (network == 'arbitrum')
                     explorerLink = 'https://arbiscan.io/tx/' + txnHash
                 else if (network == 'base')
-                    explorerLink = 'https://basescan.org/tx/' + txnHash
+                    explorerLink = 'https://base.blockscout.com/tx/' + txnHash
                 else if (network == 'scroll')
-                    explorerLink = 'https://scrollscan.com/tx/' + txnHash
+                    explorerLink = 'https://blockscout.scroll.io/tx/' + txnHash
                 console.log(explorerLink)
                     // add success.blockNumber to url so we don't have to query
                 popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
@@ -667,11 +667,9 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
                 else if (network == 'arbitrum')
                     explorerLink = 'https://arbiscan.io/tx/' + txnHash
                 else if (network == 'base')
-                    explorerLink = 'https://basescan.org/tx/' + txnHash
+                    explorerLink = 'https://base.blockscout.com/tx/' + txnHash
                 else if (network == 'scroll')
-                    explorerLink = 'https://scrollscan.com/tx/' + txnHash
-                else if (network == 'scroll')
-                    explorerLink = 'https://scrollscan.com/tx/' + txnHash
+                    explorerLink = 'https://blockscout.scroll.io/tx/' + txnHash
                 console.log(explorerLink)
                 const voteBody = {
                     'txnHash': txnHash
