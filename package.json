@@ -8,7 +8,7 @@
     "dev": "webpack-dev-server --mode none"
   },
   "dependencies": {
-    "@idriss-crypto/send-to-anyone-core": "link:../send-to-anyone-core",
+    "@idriss-crypto/send-to-anyone-core": "^0.4.10",
     "@web3-name-sdk/core": "^0.1.13",
     "fast-creator": "^1.6.0",
     "viem": "^1.21.4",

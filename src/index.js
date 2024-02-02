@@ -18,7 +18,7 @@ import {
     RevertPayment
   } from "@idriss-crypto/send-to-anyone-core/subpages";
 import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider';
-  
+
 
   document.addEventListener('DOMContentLoaded', async() => {
     const sendToAnyoneLogicPromise = await
@@ -32,6 +32,7 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
         if (network==="BSC" && token==="BNB") return "native"
         if (network==="zkSync" && token==="ETH") return "native"
         if (network==="linea" && token==="ETH") return "native"
+        if (network==="scroll" && token==="ETH") return "native"
         if (network==="optimism" && token==="ETH") return "native"
         if (network==="base" && token==="ETH") return "native"
         if (network==="mantle" && token==="MNT") return "native"
@@ -167,7 +168,7 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
         } = await sendToAnyoneLogicPromise;
 
         const web3Name = createWeb3Name()
-  
+
         let popups = { 'selected': popupToken }
   
   
@@ -597,7 +598,9 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
                 else if (network == 'arbitrum')
                     explorerLink = 'https://arbiscan.io/tx/' + txnHash
                 else if (network == 'base')
-                    explorerLink = 'https://basescan.org/tx/' + txnHash
+                    explorerLink = 'https://base.blockscout.com/tx/' + txnHash
+                else if (network == 'scroll')
+                    explorerLink = 'https://blockscout.scroll.io/tx/' + txnHash
                 console.log(explorerLink)
                     // add success.blockNumber to url so we don't have to query
                 popups.selected.append((new SendToAnyoneSuccess(identifier, explorerLink, success.claimPassword, isIDrissRegistered,
@@ -664,7 +667,9 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
                 else if (network == 'arbitrum')
                     explorerLink = 'https://arbiscan.io/tx/' + txnHash
                 else if (network == 'base')
-                    explorerLink = 'https://basescan.org/tx/' + txnHash
+                    explorerLink = 'https://base.blockscout.com/tx/' + txnHash
+                else if (network == 'scroll')
+                    explorerLink = 'https://blockscout.scroll.io/tx/' + txnHash
                 console.log(explorerLink)
                 const voteBody = {
                     'txnHash': txnHash
