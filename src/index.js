@@ -79,9 +79,14 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
     let tokenButton = document.querySelector('#tokenSelectButton');
     let multiSendButton = document.querySelector('#multiSendSelectButton');
     let revertButton = document.querySelector('#revertSelectButton');
+    let flyoutMenuButton = document.querySelector('#flyoutMenuButton');
+    let smallScreenNFTButton = document.querySelector('#dropdownNFTButton');
+    let smallScreenTokenButton = document.querySelector('#dropdownTokenButton');
+    let smallScreenMultiSendButton = document.querySelector('#dropdownMultiButton');
+    let smallScreenFlyoutButton = document.querySelector('#dropdownFlyoutMenuButton');
     let selectedTab = "token";
-    let dropdownMenu = document.getElementById("dropdownMenu");
-    let menuButton = document.getElementById("menuButton");
+    //let dropdownMenu = document.getElementById("dropdownMenu");
+    //let menuButton = document.getElementById("menuButton");
 
     // return to index if !isIDrissRegistered and ssa
     let shouldSkipInputWidget = !!recipient && !!identifier;
@@ -154,9 +159,35 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
             message: 'Transaction was not successful'
         })).html)
     });
-  
-    menuButton.addEventListener("click", () => {
-        dropdownMenu.classList.toggle("hidden");
+
+    // IDs
+    // (new) flyoutMenuButton - the outer part of the button, gets different styling when inner element (like revert tab) clicked
+    // (new) flyoutMenuSelectButton - inner part of the same button, triggers the menu
+    // (new) flyoutMenuBody - body of the flyout menu
+    // revertSelectButton - old button that handles selecting revert tab (now clicking the transaction reversal option)
+
+    let toggleFlyoutMenu = document.getElementById('flyoutMenuSelectButton');
+    let dropdownToggleFlyoutMenu = document.getElementById('dropdownFlyoutMenuSelectButton');
+    let flyoutMenu = document.getElementById('flyoutMenuBody');
+    let flyoutMenuElement1 = document.getElementById('revertSelectButton');
+    flyoutMenuButton.addEventListener('click', () => {
+      flyoutMenu.classList.toggle('hidden');
+    });
+
+    smallScreenFlyoutButton.addEventListener('click', () => {
+      flyoutMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (event) => {
+      const targetElement = event.target;
+      if (!flyoutMenu.contains(targetElement) && !(targetElement === toggleFlyoutMenu || targetElement === flyoutMenuButton || targetElement === dropdownToggleFlyoutMenu || targetElement === smallScreenFlyoutButton)) {
+        flyoutMenu.classList.add('hidden');
+      }
+    });
+
+    // ToDo: when there is more elements in the flyout menu, add them here
+    flyoutMenuElement1.addEventListener('click', () => {
+      flyoutMenu.classList.add('hidden');
     });
   
     try {
@@ -195,6 +226,45 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
             document.querySelector('#connectedWallet').classList.add('hidden');
         }
   
+        function toggleNavButtonClasses(selection) {
+          // Reset the class names of all buttons to the default state
+          tokenButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+          nftButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+          multiSendButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+          flyoutMenuButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+          smallScreenTokenButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+          smallScreenNFTButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+          smallScreenMultiSendButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+          smallScreenFlyoutButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+
+          // Update the class names based on the clicked button
+          switch (selection) {
+            case "token":
+              tokenButton.className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+              smallScreenTokenButton.className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+              break;
+            case "nft":
+              nftButton.className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+              smallScreenNFTButton.className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+              break;
+            case "multi":
+              multiSendButton.className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+              smallScreenMultiSendButton.className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+              break;
+            case "flyoutMenuButton":
+              flyoutMenuButton.className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+              smallScreenFlyoutButton.className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+              break;
+            case "revert":
+              flyoutMenuButton.className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+              smallScreenFlyoutButton.className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer";
+              break;
+            default:
+              break;
+          }
+
+        }
+
         document.querySelector('#connectWallet').addEventListener('click', async () => {
             await connectWallet();
         });
@@ -204,23 +274,15 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
         });
   
         document.querySelector('#dropdownTokenButton').addEventListener('click', async () => {
-            dropdownMenu.classList.toggle("hidden");
             tokenButton.click()
         });
   
         document.querySelector('#dropdownNFTButton').addEventListener('click', async () => {
-            dropdownMenu.classList.toggle("hidden");
             nftButton.click()
         });
   
         document.querySelector('#dropdownMultiButton').addEventListener('click', async () => {
-            dropdownMenu.classList.toggle("hidden");
             multiSendButton.click()
-        });
-  
-        document.querySelector('#dropdownRevertButton').addEventListener('click', async () => {
-            dropdownMenu.classList.toggle("hidden");
-            revertButton.click()
         });
   
         async function handleNFTclick() {
@@ -228,11 +290,7 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
   
             adjustButtonActions();
   
-            nftButton.className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-            tokenButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-            multiSendButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-            //revertButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-  
+            toggleNavButtonClasses(selectedTab)
             popups.selected.firstElementChild?.remove();
             popupToken.style.display='none';
             popupMulti.style.display='none';
@@ -304,10 +362,7 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
   
             adjustButtonActions();
   
-            tokenButton.className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-            nftButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-            multiSendButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-            //revertButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+            toggleNavButtonClasses(selectedTab)
   
             popups.selected.firstElementChild?.remove();
             popupNFT.style.display='none';
@@ -366,10 +421,7 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
   
                 adjustButtonActions();
   
-                multiSendButton.className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-                nftButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-                tokenButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-                //revertButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+                toggleNavButtonClasses(selectedTab)
   
                 popups.selected.firstElementChild?.remove();
                 popupNFT.style.display='none';
@@ -444,10 +496,7 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
             try {
                 adjustButtonActions();
   
-                //revertButton.className = "text-center bg-indigo-50 text-[#5865F2] hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-                nftButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-                tokenButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
-                multiSendButton.className = "self-center text-gray-500 hover:bg-indigo-50 hover:text-[#5865F2] px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+                toggleNavButtonClasses(selectedTab)
   
                 popups.selected.firstElementChild?.remove();
                 popupNFT.style.display='none';
@@ -504,7 +553,6 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
             if (option === 'nft') nftButton.click()
             if (option === 'multi') multiSendButton.click()
             if (option === 'revert') revertSelectButton.click()
-            dropdownMenu.classList.add("hidden");
         }
   
         // initialize page
