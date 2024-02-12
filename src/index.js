@@ -179,8 +179,12 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
     });
 
     document.addEventListener('click', (event) => {
+      const targetElems = [flyoutMenuButton, smallScreenFlyoutButton]
       const targetElement = event.target;
-      if (!flyoutMenu.contains(targetElement) && !(targetElement === toggleFlyoutMenu || targetElement === flyoutMenuButton || targetElement === dropdownToggleFlyoutMenu || targetElement === smallScreenFlyoutButton)) {
+      const isTargetOrContainedInTargets = targetElems.some(el => el === targetElement || el.contains(targetElement));
+      console.log(targetElement)
+      if (!(flyoutMenu.contains(targetElement) || isTargetOrContainedInTargets)) {
+        console.log("Not the element")
         flyoutMenu.classList.add('hidden');
       }
     });
