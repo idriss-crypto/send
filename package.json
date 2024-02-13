@@ -3,12 +3,12 @@
     "build": "webpack --watch --mode none",
     "build-local": "webpack --mode none",
     "build-dev": "webpack --mode development",
-    "build-prod": "webpack --mode production",
-    "buildOnce": "webpack --mode development",
+    "build-prod": "webpack --mode production --watch",
+    "buildOnce": "webpack --mode production",
     "dev": "webpack-dev-server --mode none"
   },
   "dependencies": {
-    "@idriss-crypto/send-to-anyone-core": "^0.4.11",
+    "@idriss-crypto/send-to-anyone-core": "^0.4.12",
     "@web3-name-sdk/core": "^0.1.13",
     "fast-creator": "^1.6.0",
     "viem": "^1.21.4",
