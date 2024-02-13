@@ -1033,9 +1033,16 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.2.tgz#d9fae00a2d5cb40f92cfe64b47ad749fbc38f917"
   integrity sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==
 
-"@idriss-crypto/send-to-anyone-core@link:../send-to-anyone-core":
-  version "0.0.0"
-  uid ""
+"@idriss-crypto/send-to-anyone-core@^0.4.12":
+  version "0.4.12"
+  resolved "https://registry.yarnpkg.com/@idriss-crypto/send-to-anyone-core/-/send-to-anyone-core-0.4.12.tgz#323f33a7647b8faca5e34d098db201edc1989966"
+  integrity sha512-jLl11y3Zx3pbeB4qUezUc7IBVl1wwcgdnbMxISn1SaYPWpMlanHFFEUrUdejeJA2YAqJuLFdu9BD3ThSUBPY4A==
+  dependencies:
+    "@web3modal/ethers5" "^3.5.3"
+    alchemy-sdk "^2.0.2"
+    fast-creator "^1.6.0"
+    idriss-crypto "^1.9.2"
+    web3 "^1.7.0"
 
 "@ioredis/commands@^1.1.1":
   version "1.2.0"
