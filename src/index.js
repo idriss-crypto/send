@@ -179,9 +179,7 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
       const targetElems = [flyoutMenuButton, smallScreenFlyoutButton]
       const targetElement = event.target;
       const isTargetOrContainedInTargets = targetElems.some(el => el === targetElement || el.contains(targetElement));
-      console.log(targetElement)
       if (!(flyoutMenu.contains(targetElement) || isTargetOrContainedInTargets)) {
-        console.log("Not the element")
         flyoutMenu.classList.add('hidden');
       }
     });
