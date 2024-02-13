@@ -85,8 +85,6 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
     let smallScreenMultiSendButton = document.querySelector('#dropdownMultiButton');
     let smallScreenFlyoutButton = document.querySelector('#dropdownFlyoutMenuButton');
     let selectedTab = "token";
-    //let dropdownMenu = document.getElementById("dropdownMenu");
-    //let menuButton = document.getElementById("menuButton");
 
     // return to index if !isIDrissRegistered and ssa
     let shouldSkipInputWidget = !!recipient && !!identifier;
@@ -139,7 +137,6 @@ import { getProvider } from '@idriss-crypto/send-to-anyone-core/getWeb3Provider'
     popupMulti.style.display='none';
     div.shadowRoot.append(popupMulti);
     popupMulti.classList.add('multiSendToAnyone-popup');
-    //ToDo: change class names
     let popupRevert = create('section')
     popupRevert.id = "popupRevert"
     popupRevert.style.display='none';
