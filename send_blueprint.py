@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 
-streamer_blueprint = Blueprint('streamer', __name__,
+send_blueprint = Blueprint('streamer', __name__,
                                template_folder='templates',
                                static_folder='static',
                                static_url_path='/frontend/send-to-anyone-page/static')
