@@ -48,21 +48,16 @@ module.exports = (env, argv) => {
         },
         devtool: "inline-source-map",
         output: {
-            path: path.resolve(__dirname, "../IDriss/static/js/send"),
+            path: path.resolve(__dirname, "./static/js"),
             publicPath: "auto",
             filename: "[name].js",
         },
         plugins: [
             new CopyPlugin({
                 patterns: [
-                    {
-                        from: "./src/send-to-anyone.html",
-                        to: "../../../templates",
-                    },
-                    {
-                        from: "./src/generateSendToAnyoneCode.html",
-                        to: "../../../templates",
-                    },
+                    {from: "./src/send-to-anyone.html", to: "../../templates"},
+                    {from: "./src/generateSendToAnyoneCode.html", to: "../../templates"},
+
                 ],
             }),
             new HtmlWebpackPlugin({
