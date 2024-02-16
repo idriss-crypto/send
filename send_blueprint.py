@@ -8,7 +8,6 @@ send_blueprint = Blueprint('send', __name__,
 
 @send_blueprint.route('/send', methods=["GET"])
 def send_index():
-    print("blueprint triggered")
     return render_template('send-to-anyone.html')
 
 
