@@ -1,6 +1,6 @@
 import {createWeb3Name} from "@web3-name-sdk/core";
 import {create} from "fast-creator";
-import css from "@idriss-crypto/send-to-anyone-core/sendToAnyoneStyle";
+import css from "@idriss-crypto/send-core/sendToAnyoneStyle";
 import {
     SendToAnyoneSuccess,
     SendToAnyoneWaitingConfirmation,
@@ -14,15 +14,15 @@ import {
     MultiSendToAnyoneApproval,
     MultiSendToAnyoneSuccess,
     RevertPayment,
-} from "@idriss-crypto/send-to-anyone-core/subpages";
-import {getProvider} from "@idriss-crypto/send-to-anyone-core/getWeb3Provider";
+} from "@idriss-crypto/send-core/subpages";
+import {getProvider} from "@idriss-crypto/send-core/getWeb3Provider";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const sendToAnyoneLogicPromise = await import(
-        "@idriss-crypto/send-to-anyone-core/sendToAnyoneLogic"
+        "@idriss-crypto/send-core/sendToAnyoneLogic"
     );
     const sendToAnyoneUtilsPromise = import(
-        "@idriss-crypto/send-to-anyone-core/sendToAnyoneUtils"
+        "@idriss-crypto/send-core/sendToAnyoneUtils"
     );
 
     function getAssetType() {
