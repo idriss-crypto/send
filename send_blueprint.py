@@ -12,5 +12,5 @@ def send_index():
 
 
 @send_blueprint.route('/send/<nav>', methods=["GET"])
-def send_nav():
+def send_nav(nav):
     return render_template('send-to-anyone.html')
