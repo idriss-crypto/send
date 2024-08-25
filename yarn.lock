@@ -1033,10 +1033,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.2.tgz#d9fae00a2d5cb40f92cfe64b47ad749fbc38f917"
   integrity sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==
 
-"@idriss-crypto/send-core@^0.4.16":
-  version "0.4.16"
-  resolved "https://registry.yarnpkg.com/@idriss-crypto/send-core/-/send-core-0.4.16.tgz#c891309d7e5b5c78e4b237f6c098b5b2c2dd77db"
-  integrity sha512-steA7hBozQineaswY4k5DD+h8UhNqwxUAmWaa5fU3e42V/kC3l6AgIYEEPVDVUMAw0BiCzJ1BC+fdeqWEW2Wfw==
+"@idriss-crypto/send-core@^0.4.17":
+  version "0.4.17"
+  resolved "https://registry.yarnpkg.com/@idriss-crypto/send-core/-/send-core-0.4.17.tgz#14ef0808f18f07f227c3b4da49e4e621bb98be89"
+  integrity sha512-96tXWa/mWnR/nuxJGR6nwb2gpNM2DlHMTqbHLhvIpn4sj5niEgIk4hyH3pWMYxEu5zc+9+Gg2HRqaREWCvPXvg==
   dependencies:
     "@web3modal/ethers5" "^3.5.3"
     alchemy-sdk "^2.0.2"

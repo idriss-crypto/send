@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (network === "zkSync" && token === "ETH") return "native";
         if (network === "linea" && token === "ETH") return "native";
         if (network === "scroll" && token === "ETH") return "native";
+        if (network === "aleph" && token === "AZERO") return "native";
         if (network === "optimism" && token === "ETH") return "native";
         if (network === "base" && token === "ETH") return "native";
         if (network === "mantle" && token === "MNT") return "native";
@@ -891,6 +892,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                     explorerLink = "https://base.blockscout.com/tx/" + txnHash;
                 else if (network == "scroll")
                     explorerLink = "https://blockscout.scroll.io/tx/" + txnHash;
+                else if (network == "aleph")
+                    explorerLink = "https://evm-explorer.alephzero.org/tx/" + txnHash;
                 console.log(explorerLink);
                 // add success.blockNumber to url so we don't have to query
                 popups.selected.append(
@@ -1021,6 +1024,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                     explorerLink = "https://base.blockscout.com/tx/" + txnHash;
                 else if (network == "scroll")
                     explorerLink = "https://blockscout.scroll.io/tx/" + txnHash;
+                else if (network == "aleph")
+                    explorerLink = "https://evm-explorer.alephzero.org/tx/" + txnHash
                 console.log(explorerLink);
                 const voteBody = {
                     txnHash: txnHash,
