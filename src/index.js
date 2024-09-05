@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function getAssetType() {
         if (network === "ETH" && token === "ETH") return "native";
-        if (network === "Polygon" && token === "MATIC") return "native";
+        if (network === "Polygon" && token === "POL") return "native";
         if (network === "BSC" && token === "BNB") return "native";
         if (network === "zkSync" && token === "ETH") return "native";
         if (network === "linea" && token === "ETH") return "native";
@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     1,
                     1,
                     "0x",
-                    "Matic",
+                    "Pol",
                     1,
                     "0x"
                 ).html
